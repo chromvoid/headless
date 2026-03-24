@@ -50,31 +50,31 @@ All signals are reactive (Reatom atoms/computed).
 
 ### Proxied from spinbutton
 
-| Signal | Type | Source |
-|---|---|---|
-| `value()` | `number` | spinbutton `state.value` |
-| `min()` | `number \| undefined` | spinbutton `state.min` |
-| `max()` | `number \| undefined` | spinbutton `state.max` |
-| `step()` | `number` | spinbutton `state.step` |
-| `largeStep()` | `number` | spinbutton `state.largeStep` |
-| `isDisabled()` | `boolean` | spinbutton `state.isDisabled` |
-| `isReadOnly()` | `boolean` | spinbutton `state.isReadOnly` |
-| `hasMin()` | `boolean` | spinbutton `state.hasMin` |
-| `hasMax()` | `boolean` | spinbutton `state.hasMax` |
+| Signal         | Type                  | Source                        |
+| -------------- | --------------------- | ----------------------------- |
+| `value()`      | `number`              | spinbutton `state.value`      |
+| `min()`        | `number \| undefined` | spinbutton `state.min`        |
+| `max()`        | `number \| undefined` | spinbutton `state.max`        |
+| `step()`       | `number`              | spinbutton `state.step`       |
+| `largeStep()`  | `number`              | spinbutton `state.largeStep`  |
+| `isDisabled()` | `boolean`             | spinbutton `state.isDisabled` |
+| `isReadOnly()` | `boolean`             | spinbutton `state.isReadOnly` |
+| `hasMin()`     | `boolean`             | spinbutton `state.hasMin`     |
+| `hasMax()`     | `boolean`             | spinbutton `state.hasMax`     |
 
 ### Number-specific
 
-| Signal | Type | Description |
-|---|---|---|
-| `focused()` | `boolean` | Whether the input currently has focus |
-| `filled()` | `boolean` | **Derived**: `true` when `value !== defaultValue` |
-| `clearable()` | `boolean` | Whether the clear button feature is enabled |
-| `showClearButton()` | `boolean` | **Derived**: `clearable && filled && !isDisabled && !isReadOnly` |
-| `stepper()` | `boolean` | Whether stepper (increment/decrement) buttons are visible |
-| `draftText()` | `string \| null` | Transient editing text before commit; `null` when not actively editing |
-| `placeholder()` | `string` | Placeholder text for the input |
-| `required()` | `boolean` | Whether the field is required |
-| `defaultValue()` | `number` | The value to reset to on clear |
+| Signal              | Type             | Description                                                            |
+| ------------------- | ---------------- | ---------------------------------------------------------------------- |
+| `focused()`         | `boolean`        | Whether the input currently has focus                                  |
+| `filled()`          | `boolean`        | **Derived**: `true` when `value !== defaultValue`                      |
+| `clearable()`       | `boolean`        | Whether the clear button feature is enabled                            |
+| `showClearButton()` | `boolean`        | **Derived**: `clearable && filled && !isDisabled && !isReadOnly`       |
+| `stepper()`         | `boolean`        | Whether stepper (increment/decrement) buttons are visible              |
+| `draftText()`       | `string \| null` | Transient editing text before commit; `null` when not actively editing |
+| `placeholder()`     | `string`         | Placeholder text for the input                                         |
+| `required()`        | `boolean`        | Whether the field is required                                          |
+| `defaultValue()`    | `number`         | The value to reset to on clear                                         |
 
 ## Actions
 
@@ -82,32 +82,32 @@ All state transitions go through actions. UIKit must only call actions, never mu
 
 ### Proxied from spinbutton
 
-| Action | Description |
-|---|---|
-| `setValue(value: number)` | Sets the numeric value with clamping and snapping; clears draft text |
-| `increment()` | Increments value by `step` |
-| `decrement()` | Decrements value by `step` |
-| `incrementLarge()` | Increments value by `largeStep` |
-| `decrementLarge()` | Decrements value by `largeStep` |
-| `setFirst()` | Jumps to `min` (if defined) |
-| `setLast()` | Jumps to `max` (if defined) |
-| `handleKeyDown(event)` | Handles spinbutton keys (ArrowUp/Down, PageUp/Down, Home/End) AND Escape for clear |
+| Action                    | Description                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| `setValue(value: number)` | Sets the numeric value with clamping and snapping; clears draft text               |
+| `increment()`             | Increments value by `step`                                                         |
+| `decrement()`             | Decrements value by `step`                                                         |
+| `incrementLarge()`        | Increments value by `largeStep`                                                    |
+| `decrementLarge()`        | Decrements value by `largeStep`                                                    |
+| `setFirst()`              | Jumps to `min` (if defined)                                                        |
+| `setLast()`               | Jumps to `max` (if defined)                                                        |
+| `handleKeyDown(event)`    | Handles spinbutton keys (ArrowUp/Down, PageUp/Down, Home/End) AND Escape for clear |
 
 ### Number-specific
 
-| Action | Description |
-|---|---|
-| `setDisabled(v: boolean)` | Updates disabled state; delegates to spinbutton |
-| `setReadOnly(v: boolean)` | Updates readonly state; delegates to spinbutton |
-| `setRequired(v: boolean)` | Updates required state |
-| `setClearable(v: boolean)` | Updates clearable state |
-| `setStepper(v: boolean)` | Updates stepper visibility state |
-| `setFocused(v: boolean)` | Updates focus state; on `false` (blur), auto-commits draft |
-| `setPlaceholder(v: string)` | Updates placeholder text |
-| `setDraftText(v: string \| null)` | Updates transient draft text directly |
-| `commitDraft()` | Parses `draftText` as a number; if valid, calls `setValue`; if empty, calls `clear()`; if invalid, reverts draft to current value display; always clears draft to `null` |
-| `clear()` | Resets value to `defaultValue`, calls `onClear` callback; no-op when `isDisabled` or `isReadOnly` |
-| `handleInput(text: string)` | Processes native input event; updates `draftText` to `text` |
+| Action                            | Description                                                                                                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setDisabled(v: boolean)`         | Updates disabled state; delegates to spinbutton                                                                                                                          |
+| `setReadOnly(v: boolean)`         | Updates readonly state; delegates to spinbutton                                                                                                                          |
+| `setRequired(v: boolean)`         | Updates required state                                                                                                                                                   |
+| `setClearable(v: boolean)`        | Updates clearable state                                                                                                                                                  |
+| `setStepper(v: boolean)`          | Updates stepper visibility state                                                                                                                                         |
+| `setFocused(v: boolean)`          | Updates focus state; on `false` (blur), auto-commits draft                                                                                                               |
+| `setPlaceholder(v: string)`       | Updates placeholder text                                                                                                                                                 |
+| `setDraftText(v: string \| null)` | Updates transient draft text directly                                                                                                                                    |
+| `commitDraft()`                   | Parses `draftText` as a number; if valid, calls `setValue`; if empty, calls `clear()`; if invalid, reverts draft to current value display; always clears draft to `null` |
+| `clear()`                         | Resets value to `defaultValue`, calls `onClear` callback; no-op when `isDisabled` or `isReadOnly`                                                                        |
+| `handleInput(text: string)`       | Processes native input event; updates `draftText` to `text`                                                                                                              |
 
 ### Action semantics
 
@@ -124,103 +124,103 @@ Contracts return ready-to-spread attribute maps for UIKit to apply directly to D
 
 Returns attributes for the native `<input>` element:
 
-| Attribute | Value |
-|---|---|
-| `id` | `"{idBase}-input"` |
-| `role` | `"spinbutton"` |
-| `tabindex` | `"0"` when interactive, `"-1"` when `isDisabled` |
-| `inputmode` | `"decimal"` |
-| `aria-valuenow` | `String(value)` |
-| `aria-valuemin` | `String(min)` when defined, otherwise omitted |
-| `aria-valuemax` | `String(max)` when defined, otherwise omitted |
-| `aria-valuetext` | Custom formatted text via `formatValueText`, otherwise omitted |
-| `aria-disabled` | `"true"` when `isDisabled`, otherwise omitted |
-| `aria-readonly` | `"true"` when `isReadOnly`, otherwise omitted |
-| `aria-required` | `"true"` when `required`, otherwise omitted |
-| `aria-label` | From options, when provided |
-| `aria-labelledby` | From options, when provided |
-| `aria-describedby` | From options, when provided |
-| `placeholder` | Current placeholder value, omitted when empty |
-| `autocomplete` | `"off"` |
+| Attribute          | Value                                                          |
+| ------------------ | -------------------------------------------------------------- |
+| `id`               | `"{idBase}-input"`                                             |
+| `role`             | `"spinbutton"`                                                 |
+| `tabindex`         | `"0"` when interactive, `"-1"` when `isDisabled`               |
+| `inputmode`        | `"decimal"`                                                    |
+| `aria-valuenow`    | `String(value)`                                                |
+| `aria-valuemin`    | `String(min)` when defined, otherwise omitted                  |
+| `aria-valuemax`    | `String(max)` when defined, otherwise omitted                  |
+| `aria-valuetext`   | Custom formatted text via `formatValueText`, otherwise omitted |
+| `aria-disabled`    | `"true"` when `isDisabled`, otherwise omitted                  |
+| `aria-readonly`    | `"true"` when `isReadOnly`, otherwise omitted                  |
+| `aria-required`    | `"true"` when `required`, otherwise omitted                    |
+| `aria-label`       | From options, when provided                                    |
+| `aria-labelledby`  | From options, when provided                                    |
+| `aria-describedby` | From options, when provided                                    |
+| `placeholder`      | Current placeholder value, omitted when empty                  |
+| `autocomplete`     | `"off"`                                                        |
 
 ### `getIncrementButtonProps()`
 
 Proxied from spinbutton's `getIncrementButtonProps()`, with `hidden` and `aria-hidden` added based on `stepper` state:
 
-| Attribute | Value |
-|---|---|
-| `id` | `"{idBase}-increment"` |
-| `tabindex` | `"-1"` |
-| `aria-label` | `"Increment value"` |
+| Attribute       | Value                                               |
+| --------------- | --------------------------------------------------- |
+| `id`            | `"{idBase}-increment"`                              |
+| `tabindex`      | `"-1"`                                              |
+| `aria-label`    | `"Increment value"`                                 |
 | `aria-disabled` | `"true"` when disabled or at max, otherwise omitted |
-| `hidden` | `true` when `stepper` is `false` |
-| `aria-hidden` | `"true"` when `hidden` |
-| `onClick` | `increment` handler |
+| `hidden`        | `true` when `stepper` is `false`                    |
+| `aria-hidden`   | `"true"` when `hidden`                              |
+| `onClick`       | `increment` handler                                 |
 
 ### `getDecrementButtonProps()`
 
 Proxied from spinbutton's `getDecrementButtonProps()`, with `hidden` and `aria-hidden` added based on `stepper` state:
 
-| Attribute | Value |
-|---|---|
-| `id` | `"{idBase}-decrement"` |
-| `tabindex` | `"-1"` |
-| `aria-label` | `"Decrement value"` |
+| Attribute       | Value                                               |
+| --------------- | --------------------------------------------------- |
+| `id`            | `"{idBase}-decrement"`                              |
+| `tabindex`      | `"-1"`                                              |
+| `aria-label`    | `"Decrement value"`                                 |
 | `aria-disabled` | `"true"` when disabled or at min, otherwise omitted |
-| `hidden` | `true` when `stepper` is `false` |
-| `aria-hidden` | `"true"` when `hidden` |
-| `onClick` | `decrement` handler |
+| `hidden`        | `true` when `stepper` is `false`                    |
+| `aria-hidden`   | `"true"` when `hidden`                              |
+| `onClick`       | `decrement` handler                                 |
 
 ### `getClearButtonProps()`
 
 Returns attributes for the clear button:
 
-| Attribute | Value |
-|---|---|
-| `role` | `"button"` |
-| `aria-label` | `"Clear value"` |
-| `tabindex` | `"-1"` (not in tab order; activated by Escape key or pointer) |
-| `hidden` | `true` when `showClearButton` is `false` |
-| `aria-hidden` | `"true"` when `hidden` |
-| `onClick` | `clear` handler |
+| Attribute     | Value                                                         |
+| ------------- | ------------------------------------------------------------- |
+| `role`        | `"button"`                                                    |
+| `aria-label`  | `"Clear value"`                                               |
+| `tabindex`    | `"-1"` (not in tab order; activated by Escape key or pointer) |
+| `hidden`      | `true` when `showClearButton` is `false`                      |
+| `aria-hidden` | `"true"` when `hidden`                                        |
+| `onClick`     | `clear` handler                                               |
 
 ## Transitions Table
 
-| Event / Action | Guard | Effect | Next State |
-|---|---|---|---|
-| `setValue(v)` | -- | spinbutton `setValue(v)`, clear draft | `value = clamped/snapped v`; `draftText = null`; `onValueChange(v)` if changed |
-| `increment()` | `!isDisabled && !isReadOnly` | spinbutton `increment()`, clear draft | `value = value + step`; `draftText = null` |
-| `decrement()` | `!isDisabled && !isReadOnly` | spinbutton `decrement()`, clear draft | `value = value - step`; `draftText = null` |
-| `incrementLarge()` | `!isDisabled && !isReadOnly` | spinbutton `incrementLarge()`, clear draft | `value = value + largeStep`; `draftText = null` |
-| `decrementLarge()` | `!isDisabled && !isReadOnly` | spinbutton `decrementLarge()`, clear draft | `value = value - largeStep`; `draftText = null` |
-| `setFirst()` | `!isDisabled && !isReadOnly && hasMin` | spinbutton `setFirst()`, clear draft | `value = min`; `draftText = null` |
-| `setLast()` | `!isDisabled && !isReadOnly && hasMax` | spinbutton `setLast()`, clear draft | `value = max`; `draftText = null` |
-| `handleInput(text)` | `!isDisabled && !isReadOnly` | set draft | `draftText = text` |
-| `handleInput(text)` | `isDisabled \|\| isReadOnly` | -- | no change |
-| `setDraftText(v)` | -- | set draft | `draftText = v` |
-| `commitDraft()` | `draftText !== null && parseable` | parse, `setValue(parsed)` | `value = parsed`; `draftText = null` |
-| `commitDraft()` | `draftText !== null && empty` | `clear()` | `value = defaultValue`; `draftText = null`; `onClear()` called |
-| `commitDraft()` | `draftText !== null && invalid` | revert draft | `draftText = null` |
-| `commitDraft()` | `draftText === null` | -- | no change |
-| `clear()` | `!isDisabled && !isReadOnly` | reset to default | `value = defaultValue`; `draftText = null`; `onClear()` called |
-| `clear()` | `isDisabled \|\| isReadOnly` | -- | no change |
-| `keydown Escape` | `clearable && filled && !isDisabled && !isReadOnly` | `clear()` | `value = defaultValue`; `draftText = null`; `onClear()` called |
-| `keydown Escape` | `!(clearable && filled) \|\| isDisabled \|\| isReadOnly` | -- | no change |
-| `keydown Enter` | `draftText !== null` | `commitDraft()` | draft committed or reverted |
-| `keydown ArrowUp` | -- | delegate to spinbutton | `value = value + step` |
-| `keydown ArrowDown` | -- | delegate to spinbutton | `value = value - step` |
-| `keydown PageUp` | -- | delegate to spinbutton | `value = value + largeStep` |
-| `keydown PageDown` | -- | delegate to spinbutton | `value = value - largeStep` |
-| `keydown Home` | -- | delegate to spinbutton | `value = min` or unchanged |
-| `keydown End` | -- | delegate to spinbutton | `value = max` or unchanged |
-| `setFocused(true)` | -- | set focused | `focused = true` |
-| `setFocused(false)` | -- | set focused, commit draft | `focused = false`; `commitDraft()` triggered |
-| `setDisabled(d)` | -- | delegate to spinbutton | `isDisabled = d` |
-| `setReadOnly(r)` | -- | delegate to spinbutton | `isReadOnly = r` |
-| `setRequired(r)` | -- | set required | `required = r` |
-| `setClearable(c)` | -- | set clearable | `clearable = c` |
-| `setStepper(s)` | -- | set stepper | `stepper = s` |
-| `setPlaceholder(p)` | -- | set placeholder | `placeholder = p` |
+| Event / Action      | Guard                                                    | Effect                                     | Next State                                                                     |
+| ------------------- | -------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------ |
+| `setValue(v)`       | --                                                       | spinbutton `setValue(v)`, clear draft      | `value = clamped/snapped v`; `draftText = null`; `onValueChange(v)` if changed |
+| `increment()`       | `!isDisabled && !isReadOnly`                             | spinbutton `increment()`, clear draft      | `value = value + step`; `draftText = null`                                     |
+| `decrement()`       | `!isDisabled && !isReadOnly`                             | spinbutton `decrement()`, clear draft      | `value = value - step`; `draftText = null`                                     |
+| `incrementLarge()`  | `!isDisabled && !isReadOnly`                             | spinbutton `incrementLarge()`, clear draft | `value = value + largeStep`; `draftText = null`                                |
+| `decrementLarge()`  | `!isDisabled && !isReadOnly`                             | spinbutton `decrementLarge()`, clear draft | `value = value - largeStep`; `draftText = null`                                |
+| `setFirst()`        | `!isDisabled && !isReadOnly && hasMin`                   | spinbutton `setFirst()`, clear draft       | `value = min`; `draftText = null`                                              |
+| `setLast()`         | `!isDisabled && !isReadOnly && hasMax`                   | spinbutton `setLast()`, clear draft        | `value = max`; `draftText = null`                                              |
+| `handleInput(text)` | `!isDisabled && !isReadOnly`                             | set draft                                  | `draftText = text`                                                             |
+| `handleInput(text)` | `isDisabled \|\| isReadOnly`                             | --                                         | no change                                                                      |
+| `setDraftText(v)`   | --                                                       | set draft                                  | `draftText = v`                                                                |
+| `commitDraft()`     | `draftText !== null && parseable`                        | parse, `setValue(parsed)`                  | `value = parsed`; `draftText = null`                                           |
+| `commitDraft()`     | `draftText !== null && empty`                            | `clear()`                                  | `value = defaultValue`; `draftText = null`; `onClear()` called                 |
+| `commitDraft()`     | `draftText !== null && invalid`                          | revert draft                               | `draftText = null`                                                             |
+| `commitDraft()`     | `draftText === null`                                     | --                                         | no change                                                                      |
+| `clear()`           | `!isDisabled && !isReadOnly`                             | reset to default                           | `value = defaultValue`; `draftText = null`; `onClear()` called                 |
+| `clear()`           | `isDisabled \|\| isReadOnly`                             | --                                         | no change                                                                      |
+| `keydown Escape`    | `clearable && filled && !isDisabled && !isReadOnly`      | `clear()`                                  | `value = defaultValue`; `draftText = null`; `onClear()` called                 |
+| `keydown Escape`    | `!(clearable && filled) \|\| isDisabled \|\| isReadOnly` | --                                         | no change                                                                      |
+| `keydown Enter`     | `draftText !== null`                                     | `commitDraft()`                            | draft committed or reverted                                                    |
+| `keydown ArrowUp`   | --                                                       | delegate to spinbutton                     | `value = value + step`                                                         |
+| `keydown ArrowDown` | --                                                       | delegate to spinbutton                     | `value = value - step`                                                         |
+| `keydown PageUp`    | --                                                       | delegate to spinbutton                     | `value = value + largeStep`                                                    |
+| `keydown PageDown`  | --                                                       | delegate to spinbutton                     | `value = value - largeStep`                                                    |
+| `keydown Home`      | --                                                       | delegate to spinbutton                     | `value = min` or unchanged                                                     |
+| `keydown End`       | --                                                       | delegate to spinbutton                     | `value = max` or unchanged                                                     |
+| `setFocused(true)`  | --                                                       | set focused                                | `focused = true`                                                               |
+| `setFocused(false)` | --                                                       | set focused, commit draft                  | `focused = false`; `commitDraft()` triggered                                   |
+| `setDisabled(d)`    | --                                                       | delegate to spinbutton                     | `isDisabled = d`                                                               |
+| `setReadOnly(r)`    | --                                                       | delegate to spinbutton                     | `isReadOnly = r`                                                               |
+| `setRequired(r)`    | --                                                       | set required                               | `required = r`                                                                 |
+| `setClearable(c)`   | --                                                       | set clearable                              | `clearable = c`                                                                |
+| `setStepper(s)`     | --                                                       | set stepper                                | `stepper = s`                                                                  |
+| `setPlaceholder(p)` | --                                                       | set placeholder                            | `placeholder = p`                                                              |
 
 ## Invariants
 
@@ -303,6 +303,7 @@ UIKit reads `state.draftText()` and `state.value()` to determine what to display
 ## Minimum Test Matrix
 
 ### Value management
+
 - Set initial value via options and verify `state.value()`
 - Default value defaults to `min` when provided, otherwise `0`
 - `setValue(v)` updates value with clamping and snapping
@@ -310,6 +311,7 @@ UIKit reads `state.draftText()` and `state.value()` to determine what to display
 - `setValue(v)` works even when disabled (programmatic/controlled update)
 
 ### Spinbutton behavior
+
 - `increment()` / `decrement()` behavior with step
 - `incrementLarge()` / `decrementLarge()` behavior with largeStep
 - `Home` / `End` behavior with defined/undefined boundaries
@@ -318,6 +320,7 @@ UIKit reads `state.draftText()` and `state.value()` to determine what to display
 - Disabled and readonly state prevent spinbutton mutations
 
 ### Draft text management
+
 - `handleInput(text)` sets `draftText` to the provided text
 - `handleInput(text)` is no-op when disabled
 - `handleInput(text)` is no-op when readonly
@@ -328,6 +331,7 @@ UIKit reads `state.draftText()` and `state.value()` to determine what to display
 - `setFocused(false)` triggers `commitDraft()`
 
 ### Clearable
+
 - `clear()` sets value to `defaultValue` and calls `onClear`
 - `clear()` is no-op when disabled
 - `clear()` is no-op when readonly
@@ -337,20 +341,24 @@ UIKit reads `state.draftText()` and `state.value()` to determine what to display
 - `Escape` key does nothing when value equals defaultValue (not filled)
 
 ### Keyboard
+
 - `Enter` key calls `commitDraft()`
 - `ArrowUp` / `ArrowDown` delegate to spinbutton increment/decrement
 - `PageUp` / `PageDown` delegate to spinbutton large step
 - `Home` / `End` delegate to spinbutton setFirst/setLast
 
 ### Focus
+
 - `setFocused(true)` sets focused to `true`
 - `setFocused(false)` sets focused to `false` and commits draft
 
 ### Derived state
+
 - `filled` is `true` when value differs from defaultValue, `false` when equal
 - `showClearButton` reflects `clearable && filled && !isDisabled && !isReadOnly`
 
 ### Contracts
+
 - `getInputProps()` returns correct `role`, `inputmode`, `aria-valuenow`, `aria-disabled`, `aria-readonly`, `aria-required`
 - `getInputProps()` returns `tabindex "-1"` when disabled, `"0"` otherwise
 - `getInputProps()` returns placeholder when non-empty, omitted when empty
@@ -360,15 +368,16 @@ UIKit reads `state.draftText()` and `state.value()` to determine what to display
 - `getClearButtonProps()` returns correct `aria-label`
 
 ### Stepper
+
 - Stepper buttons hidden by default (`stepper` defaults to `false`)
 - `setStepper(true)` makes stepper buttons visible
 - `setStepper(false)` hides stepper buttons
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings. The number module sits in the interactions layer, composing the spinbutton core.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules. Only imports from `../spinbutton` (intra-package) and `@reatom/core`.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules. Only imports from `../spinbutton` (intra-package) and `@reatom/core`.
 - **Composition**: `createNumber` internally creates a `createSpinbutton` instance. It does NOT duplicate spinbutton logic.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 

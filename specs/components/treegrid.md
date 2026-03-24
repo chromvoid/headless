@@ -80,18 +80,18 @@ interface TreegridModel {
 
 ## Options (`CreateTreegridOptions`)
 
-| Option                  | Type                        | Default        | Description                                                  |
-|-------------------------|-----------------------------|----------------|--------------------------------------------------------------|
-| `rows`                  | `readonly TreegridRow[]`    | required       | Hierarchical row definitions (children nested recursively)   |
-| `columns`               | `readonly TreegridColumn[]` | required       | Column definitions with optional role and disabled state      |
-| `disabledCells`         | `readonly TreegridCellId[]` | `[]`           | Individual cells disabled beyond row/column level            |
-| `idBase`                | `string`                    | `'treegrid'`   | Prefix for all generated DOM ids and atom names              |
-| `ariaLabel`             | `string`                    | `undefined`    | `aria-label` for the root treegrid element                   |
-| `ariaLabelledBy`        | `string`                    | `undefined`    | `aria-labelledby` for the root treegrid element              |
-| `selectionMode`         | `TreegridSelectionMode`     | `'single'`     | Single or multi-row selection                                |
-| `initialExpandedRowIds` | `readonly string[]`         | `[]`           | Row ids that begin expanded; invalid/leaf ids are filtered   |
-| `initialActiveCellId`   | `TreegridCellId \| null`    | `null`         | Initially active cell; normalized to first enabled cell      |
-| `initialSelectedRowIds` | `readonly string[]`         | `[]`           | Initially selected rows; trimmed to 1 for single mode        |
+| Option                  | Type                        | Default      | Description                                                |
+| ----------------------- | --------------------------- | ------------ | ---------------------------------------------------------- |
+| `rows`                  | `readonly TreegridRow[]`    | required     | Hierarchical row definitions (children nested recursively) |
+| `columns`               | `readonly TreegridColumn[]` | required     | Column definitions with optional role and disabled state   |
+| `disabledCells`         | `readonly TreegridCellId[]` | `[]`         | Individual cells disabled beyond row/column level          |
+| `idBase`                | `string`                    | `'treegrid'` | Prefix for all generated DOM ids and atom names            |
+| `ariaLabel`             | `string`                    | `undefined`  | `aria-label` for the root treegrid element                 |
+| `ariaLabelledBy`        | `string`                    | `undefined`  | `aria-labelledby` for the root treegrid element            |
+| `selectionMode`         | `TreegridSelectionMode`     | `'single'`   | Single or multi-row selection                              |
+| `initialExpandedRowIds` | `readonly string[]`         | `[]`         | Row ids that begin expanded; invalid/leaf ids are filtered |
+| `initialActiveCellId`   | `TreegridCellId \| null`    | `null`       | Initially active cell; normalized to first enabled cell    |
+| `initialSelectedRowIds` | `readonly string[]`         | `[]`         | Initially selected rows; trimmed to 1 for single mode      |
 
 ## Public API
 
@@ -101,40 +101,40 @@ Returns a `TreegridModel` with three namespaces:
 
 ### `state` (signal-backed)
 
-| Signal        | Type                      | Description                                         |
-|---------------|---------------------------|-----------------------------------------------------|
-| `activeCellId`  | `Atom<TreegridCellId \| null>` | Currently focused cell; `null` when grid is empty |
-| `expandedRowIds` | `Atom<Set<string>>`      | Set of expanded branch row identifiers              |
-| `selectedRowIds` | `Atom<Set<string>>`      | Set of selected row identifiers                     |
-| `rowCount`      | `Computed<number>`         | Total number of rows (all, not just visible)        |
-| `columnCount`   | `Computed<number>`         | Total number of columns                             |
+| Signal           | Type                           | Description                                       |
+| ---------------- | ------------------------------ | ------------------------------------------------- |
+| `activeCellId`   | `Atom<TreegridCellId \| null>` | Currently focused cell; `null` when grid is empty |
+| `expandedRowIds` | `Atom<Set<string>>`            | Set of expanded branch row identifiers            |
+| `selectedRowIds` | `Atom<Set<string>>`            | Set of selected row identifiers                   |
+| `rowCount`       | `Computed<number>`             | Total number of rows (all, not just visible)      |
+| `columnCount`    | `Computed<number>`             | Total number of columns                           |
 
 ### `actions`
 
-| Action                          | Description                                                              |
-|---------------------------------|--------------------------------------------------------------------------|
-| `moveUp()`                      | Move active cell to the same column in the previous visible enabled row  |
-| `moveDown()`                    | Move active cell to the same column in the next visible enabled row      |
-| `moveLeft()`                    | APG ArrowLeft behavior (see Keyboard Contract)                           |
-| `moveRight()`                   | APG ArrowRight behavior (see Keyboard Contract)                          |
-| `moveRowStart()`                | Move active cell to the first enabled cell in the current row            |
-| `moveRowEnd()`                  | Move active cell to the last enabled cell in the current row             |
-| `expandRow(rowId: string)`      | Expand a branch row; no-op on leaf rows or already-expanded rows         |
-| `collapseRow(rowId: string)`    | Collapse a branch row; migrates focus if active cell is a descendant     |
-| `toggleRowExpanded(rowId: string)` | Toggle expanded state of a branch row                               |
-| `selectRow(rowId: string)`      | Replace selection with the given row (single and multiple modes)         |
-| `toggleRowSelection(rowId: string)` | In multiple mode: add/remove from selection; in single mode: set   |
-| `handleKeyDown(event: TreegridKeyboardEventLike)` | Dispatch keyboard events to the appropriate action       |
+| Action                                            | Description                                                             |
+| ------------------------------------------------- | ----------------------------------------------------------------------- |
+| `moveUp()`                                        | Move active cell to the same column in the previous visible enabled row |
+| `moveDown()`                                      | Move active cell to the same column in the next visible enabled row     |
+| `moveLeft()`                                      | APG ArrowLeft behavior (see Keyboard Contract)                          |
+| `moveRight()`                                     | APG ArrowRight behavior (see Keyboard Contract)                         |
+| `moveRowStart()`                                  | Move active cell to the first enabled cell in the current row           |
+| `moveRowEnd()`                                    | Move active cell to the last enabled cell in the current row            |
+| `expandRow(rowId: string)`                        | Expand a branch row; no-op on leaf rows or already-expanded rows        |
+| `collapseRow(rowId: string)`                      | Collapse a branch row; migrates focus if active cell is a descendant    |
+| `toggleRowExpanded(rowId: string)`                | Toggle expanded state of a branch row                                   |
+| `selectRow(rowId: string)`                        | Replace selection with the given row (single and multiple modes)        |
+| `toggleRowSelection(rowId: string)`               | In multiple mode: add/remove from selection; in single mode: set        |
+| `handleKeyDown(event: TreegridKeyboardEventLike)` | Dispatch keyboard events to the appropriate action                      |
 
 Note: `moveGridStart` (Ctrl+Home) and `moveGridEnd` (Ctrl+End) are internal actions invoked via `handleKeyDown` and are not exposed on the `actions` interface.
 
 ### `contracts`
 
-| Contract                                    | Description                                              |
-|---------------------------------------------|----------------------------------------------------------|
-| `getTreegridProps(): TreegridProps`         | Props to spread on the root `[role=treegrid]` element    |
-| `getRowProps(rowId: string): TreegridRowProps` | Props to spread on each `[role=row]` element          |
-| `getCellProps(rowId: string, colId: string): TreegridCellProps` | Props to spread on each cell element |
+| Contract                                                        | Description                                           |
+| --------------------------------------------------------------- | ----------------------------------------------------- |
+| `getTreegridProps(): TreegridProps`                             | Props to spread on the root `[role=treegrid]` element |
+| `getRowProps(rowId: string): TreegridRowProps`                  | Props to spread on each `[role=row]` element          |
+| `getCellProps(rowId: string, colId: string): TreegridCellProps` | Props to spread on each cell element                  |
 
 ## Contract Prop Shapes
 
@@ -142,14 +142,14 @@ Note: `moveGridStart` (Ctrl+Home) and `moveGridEnd` (Ctrl+End) are internal acti
 
 ```ts
 interface TreegridProps {
-  id: string                         // `${idBase}-root`
+  id: string // `${idBase}-root`
   role: 'treegrid'
   tabindex: '-1'
   'aria-label'?: string
   'aria-labelledby'?: string
   'aria-multiselectable': 'true' | 'false'
-  'aria-rowcount': number            // total row count (all rows, not just visible)
-  'aria-colcount': number            // total column count
+  'aria-rowcount': number // total row count (all rows, not just visible)
+  'aria-colcount': number // total column count
 }
 ```
 
@@ -157,15 +157,15 @@ interface TreegridProps {
 
 ```ts
 interface TreegridRowProps {
-  id: string                         // `${idBase}-row-${rowId}`
+  id: string // `${idBase}-row-${rowId}`
   role: 'row'
-  'aria-level': number               // starts at 1 for root rows
-  'aria-posinset': number            // 1-based position within sibling set
-  'aria-setsize': number             // total siblings count
-  'aria-rowindex': number            // row.index if provided, else 1-based declaration order
+  'aria-level': number // starts at 1 for root rows
+  'aria-posinset': number // 1-based position within sibling set
+  'aria-setsize': number // total siblings count
+  'aria-rowindex': number // row.index if provided, else 1-based declaration order
   'aria-expanded'?: 'true' | 'false' // only present on branch rows
   'aria-selected': 'true' | 'false'
-  'aria-disabled'?: 'true'           // only present when row is disabled
+  'aria-disabled'?: 'true' // only present when row is disabled
 }
 ```
 
@@ -173,14 +173,14 @@ interface TreegridRowProps {
 
 ```ts
 interface TreegridCellProps {
-  id: string                         // `${idBase}-cell-${rowId}-${colId}`
-  role: TreegridCellRole             // from column.cellRole, defaults to 'gridcell'
-  tabindex: '0' | '-1'              // '0' only for the active non-disabled cell
-  'aria-colindex': number            // column.index if provided, else 1-based declaration order
+  id: string // `${idBase}-cell-${rowId}-${colId}`
+  role: TreegridCellRole // from column.cellRole, defaults to 'gridcell'
+  tabindex: '0' | '-1' // '0' only for the active non-disabled cell
+  'aria-colindex': number // column.index if provided, else 1-based declaration order
   'aria-selected': 'true' | 'false'
-  'aria-disabled'?: 'true'          // only present when cell is disabled
+  'aria-disabled'?: 'true' // only present when cell is disabled
   'data-active': 'true' | 'false'
-  onFocus: () => void               // calls setActiveCell to sync focus with state
+  onFocus: () => void // calls setActiveCell to sync focus with state
 }
 ```
 
@@ -235,40 +235,40 @@ UIKit bindings (e.g., `cv-treegrid` web component) MUST interact with the headle
 
 ### Signals UIKit reads
 
-| Signal                              | When to read                                               |
-|-------------------------------------|------------------------------------------------------------|
-| `state.activeCellId()`              | To derive which cell has `tabindex="0"` and `data-active="true"` (already embedded in `getCellProps`) |
-| `state.expandedRowIds()`            | To compute which child rows are visible / to drive `aria-expanded` (already embedded in `getRowProps`) |
-| `state.selectedRowIds()`            | To drive selection styling beyond ARIA (already embedded in `getRowProps` / `getCellProps`) |
-| `state.rowCount()`                  | If UIKit renders a virtual list and needs the total count  |
-| `state.columnCount()`               | If UIKit renders a virtual list and needs the total count  |
+| Signal                   | When to read                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `state.activeCellId()`   | To derive which cell has `tabindex="0"` and `data-active="true"` (already embedded in `getCellProps`)  |
+| `state.expandedRowIds()` | To compute which child rows are visible / to drive `aria-expanded` (already embedded in `getRowProps`) |
+| `state.selectedRowIds()` | To drive selection styling beyond ARIA (already embedded in `getRowProps` / `getCellProps`)            |
+| `state.rowCount()`       | If UIKit renders a virtual list and needs the total count                                              |
+| `state.columnCount()`    | If UIKit renders a virtual list and needs the total count                                              |
 
 ### Actions UIKit calls
 
-| Action                                   | Trigger                                                      |
-|------------------------------------------|--------------------------------------------------------------|
-| `actions.handleKeyDown(event)`           | `keydown` event on any focusable cell or the root element    |
-| `actions.toggleRowExpanded(rowId)`       | Click on expand/collapse toggle affordance                   |
-| `actions.toggleRowSelection(rowId)`      | Pointer click on a row (accumulate for multi-select)         |
-| `actions.selectRow(rowId)`               | Programmatic selection replacement (replaces current set)    |
-| `actions.expandRow(rowId)`               | Programmatic expand                                          |
-| `actions.collapseRow(rowId)`             | Programmatic collapse                                        |
+| Action                              | Trigger                                                   |
+| ----------------------------------- | --------------------------------------------------------- |
+| `actions.handleKeyDown(event)`      | `keydown` event on any focusable cell or the root element |
+| `actions.toggleRowExpanded(rowId)`  | Click on expand/collapse toggle affordance                |
+| `actions.toggleRowSelection(rowId)` | Pointer click on a row (accumulate for multi-select)      |
+| `actions.selectRow(rowId)`          | Programmatic selection replacement (replaces current set) |
+| `actions.expandRow(rowId)`          | Programmatic expand                                       |
+| `actions.collapseRow(rowId)`        | Programmatic collapse                                     |
 
 ### Contracts UIKit spreads
 
-| Contract                                    | Spread target                     |
-|---------------------------------------------|-----------------------------------|
-| `contracts.getTreegridProps()`              | Root `<div role="treegrid">` or `<table>` wrapper |
-| `contracts.getRowProps(rowId)`              | Each `<tr role="row">` or `<div role="row">` |
-| `contracts.getCellProps(rowId, colId)`      | Each `<td role="gridcell/rowheader">` or `<div role="gridcell">` |
+| Contract                               | Spread target                                                    |
+| -------------------------------------- | ---------------------------------------------------------------- |
+| `contracts.getTreegridProps()`         | Root `<div role="treegrid">` or `<table>` wrapper                |
+| `contracts.getRowProps(rowId)`         | Each `<tr role="row">` or `<div role="row">`                     |
+| `contracts.getCellProps(rowId, colId)` | Each `<td role="gridcell/rowheader">` or `<div role="gridcell">` |
 
 Note: `getCellProps` includes an `onFocus` handler that must be wired to the cell's `focus` event so that mouse-driven focus is reflected back into headless state.
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

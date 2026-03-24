@@ -19,14 +19,14 @@ createTooltip(options?: CreateTooltipOptions): TooltipModel
 
 ### Options
 
-| Option         | Type      | Default          | Description                                                                                                      |
-|----------------|-----------|------------------|------------------------------------------------------------------------------------------------------------------|
-| `idBase`       | `string`  | `'tooltip'`      | Prefix used for all generated IDs.                                                                               |
-| `initialOpen`  | `boolean` | `false`          | Whether the tooltip is visible on first render.                                                                  |
-| `isDisabled`   | `boolean` | `false`          | When `true`, all trigger interactions and `open` are no-ops; `aria-describedby` is removed from trigger props.  |
-| `showDelay`    | `number`  | `0`              | Milliseconds before the tooltip opens (clamped to `>= 0`).                                                       |
-| `hideDelay`    | `number`  | `0`              | Milliseconds before the tooltip closes (clamped to `>= 0`).                                                      |
-| `trigger`      | `string`  | `'hover focus'`  | Space-separated list of trigger modes. Supported tokens: `hover`, `focus`, `click`, `manual`.                   |
+| Option        | Type      | Default         | Description                                                                                                    |
+| ------------- | --------- | --------------- | -------------------------------------------------------------------------------------------------------------- |
+| `idBase`      | `string`  | `'tooltip'`     | Prefix used for all generated IDs.                                                                             |
+| `initialOpen` | `boolean` | `false`         | Whether the tooltip is visible on first render.                                                                |
+| `isDisabled`  | `boolean` | `false`         | When `true`, all trigger interactions and `open` are no-ops; `aria-describedby` is removed from trigger props. |
+| `showDelay`   | `number`  | `0`             | Milliseconds before the tooltip opens (clamped to `>= 0`).                                                     |
+| `hideDelay`   | `number`  | `0`             | Milliseconds before the tooltip closes (clamped to `>= 0`).                                                    |
+| `trigger`     | `string`  | `'hover focus'` | Space-separated list of trigger modes. Supported tokens: `hover`, `focus`, `click`, `manual`.                  |
 
 #### Trigger Mode Semantics
 
@@ -39,26 +39,26 @@ createTooltip(options?: CreateTooltipOptions): TooltipModel
 
 ### Signals (State)
 
-| Signal       | Type              | Description                                 |
-|--------------|-------------------|---------------------------------------------|
-| `isOpen`     | `Atom<boolean>`   | Whether the tooltip is currently visible.   |
-| `isDisabled` | `Atom<boolean>`   | Whether all interactions are suppressed.    |
+| Signal       | Type            | Description                               |
+| ------------ | --------------- | ----------------------------------------- |
+| `isOpen`     | `Atom<boolean>` | Whether the tooltip is currently visible. |
+| `isDisabled` | `Atom<boolean>` | Whether all interactions are suppressed.  |
 
 ### Actions
 
-| Action                    | Signature                                          | Description                                                                                                                 |
-|---------------------------|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| `open`                    | `() => void`                                       | Immediately opens the tooltip (no delay). No-op when `isDisabled` is `true`.                                               |
-| `close`                   | `() => void`                                       | Immediately closes the tooltip (clears pending timers).                                                                     |
-| `show`                    | `() => void`                                       | Programmatic open respecting `showDelay`. Intended as the primary action for `manual` mode. No-op when disabled.            |
-| `hide`                    | `() => void`                                       | Programmatic close respecting `hideDelay`. Intended as the primary action for `manual` mode.                                |
-| `setDisabled`             | `(value: boolean) => void`                         | Updates `isDisabled`. When set to `true`, calls `close()`.                                                                  |
-| `handleKeyDown`           | `(event: Pick<KeyboardEvent, 'key'>) => void`      | `Escape` calls `close()`. Other keys are no-ops. Always active regardless of trigger mode (enables keyboard dismissal).     |
-| `handlePointerEnter`      | `() => void`                                       | Schedules open when `hover` is in trigger modes; otherwise no-op.                                                           |
-| `handlePointerLeave`      | `() => void`                                       | Schedules close when `hover` is in trigger modes; otherwise no-op.                                                          |
-| `handleFocus`             | `() => void`                                       | Schedules open when `focus` is in trigger modes; otherwise no-op.                                                           |
-| `handleBlur`              | `() => void`                                       | Schedules close when `focus` is in trigger modes; otherwise no-op.                                                          |
-| `handleClick`             | `() => void`                                       | Toggles `isOpen` when `click` is in trigger modes; otherwise no-op. Clears any pending timers on toggle.                   |
+| Action               | Signature                                     | Description                                                                                                             |
+| -------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `open`               | `() => void`                                  | Immediately opens the tooltip (no delay). No-op when `isDisabled` is `true`.                                            |
+| `close`              | `() => void`                                  | Immediately closes the tooltip (clears pending timers).                                                                 |
+| `show`               | `() => void`                                  | Programmatic open respecting `showDelay`. Intended as the primary action for `manual` mode. No-op when disabled.        |
+| `hide`               | `() => void`                                  | Programmatic close respecting `hideDelay`. Intended as the primary action for `manual` mode.                            |
+| `setDisabled`        | `(value: boolean) => void`                    | Updates `isDisabled`. When set to `true`, calls `close()`.                                                              |
+| `handleKeyDown`      | `(event: Pick<KeyboardEvent, 'key'>) => void` | `Escape` calls `close()`. Other keys are no-ops. Always active regardless of trigger mode (enables keyboard dismissal). |
+| `handlePointerEnter` | `() => void`                                  | Schedules open when `hover` is in trigger modes; otherwise no-op.                                                       |
+| `handlePointerLeave` | `() => void`                                  | Schedules close when `hover` is in trigger modes; otherwise no-op.                                                      |
+| `handleFocus`        | `() => void`                                  | Schedules open when `focus` is in trigger modes; otherwise no-op.                                                       |
+| `handleBlur`         | `() => void`                                  | Schedules close when `focus` is in trigger modes; otherwise no-op.                                                      |
+| `handleClick`        | `() => void`                                  | Toggles `isOpen` when `click` is in trigger modes; otherwise no-op. Clears any pending timers on toggle.                |
 
 ### Contracts
 
@@ -66,16 +66,16 @@ createTooltip(options?: CreateTooltipOptions): TooltipModel
 
 Returns props to spread onto the trigger element. The exact set of handlers depends on the active trigger modes.
 
-| Prop                 | Always present | Condition                              | Value                             |
-|----------------------|----------------|----------------------------------------|-----------------------------------|
-| `id`                 | Yes            | —                                      | `${idBase}-trigger`               |
-| `aria-describedby`   | Yes            | `undefined` when `isDisabled`          | `${idBase}-content` or `undefined`|
-| `onPointerEnter`     | No             | `hover` in trigger modes               | `handlePointerEnter`              |
-| `onPointerLeave`     | No             | `hover` in trigger modes               | `handlePointerLeave`              |
-| `onFocus`            | No             | `focus` in trigger modes               | `handleFocus`                     |
-| `onBlur`             | No             | `focus` in trigger modes               | `handleBlur`                      |
-| `onClick`            | No             | `click` in trigger modes               | `handleClick`                     |
-| `onKeyDown`          | Yes            | —                                      | `handleKeyDown`                   |
+| Prop               | Always present | Condition                     | Value                              |
+| ------------------ | -------------- | ----------------------------- | ---------------------------------- |
+| `id`               | Yes            | —                             | `${idBase}-trigger`                |
+| `aria-describedby` | Yes            | `undefined` when `isDisabled` | `${idBase}-content` or `undefined` |
+| `onPointerEnter`   | No             | `hover` in trigger modes      | `handlePointerEnter`               |
+| `onPointerLeave`   | No             | `hover` in trigger modes      | `handlePointerLeave`               |
+| `onFocus`          | No             | `focus` in trigger modes      | `handleFocus`                      |
+| `onBlur`           | No             | `focus` in trigger modes      | `handleBlur`                       |
+| `onClick`          | No             | `click` in trigger modes      | `handleClick`                      |
+| `onKeyDown`        | Yes            | —                             | `handleKeyDown`                    |
 
 When `manual` is the only trigger mode, only `id`, `aria-describedby`, and `onKeyDown` are returned. No pointer, focus, or click handlers are attached.
 
@@ -83,12 +83,12 @@ When `manual` is the only trigger mode, only `id`, `aria-describedby`, and `onKe
 
 Returns props to spread onto the tooltip content element.
 
-| Prop       | Value                    | Notes                                    |
-|------------|--------------------------|------------------------------------------|
-| `id`       | `${idBase}-content`      | Referenced by `aria-describedby`.        |
-| `role`     | `'tooltip'`              | ARIA landmark role.                      |
-| `tabindex` | `'-1'`                   | Tooltip is never in the tab order.       |
-| `hidden`   | `!isOpen()`              | Reflects current visibility.             |
+| Prop       | Value               | Notes                              |
+| ---------- | ------------------- | ---------------------------------- |
+| `id`       | `${idBase}-content` | Referenced by `aria-describedby`.  |
+| `role`     | `'tooltip'`         | ARIA landmark role.                |
+| `tabindex` | `'-1'`              | Tooltip is never in the tab order. |
+| `hidden`   | `!isOpen()`         | Reflects current visibility.       |
 
 ## APG and A11y Contract
 
@@ -113,14 +113,14 @@ Returns props to spread onto the tooltip content element.
 
 ### Timer Cancellation Rules
 
-| Action               | Cancels show timer | Cancels hide timer |
-|----------------------|--------------------|--------------------|
-| `scheduleOpen`       | Yes                | Yes                |
-| `scheduleClose`      | Yes                | Yes                |
-| `open` (direct)      | Yes                | Yes                |
-| `close` (direct)     | Yes                | Yes                |
-| `handleClick`        | Yes                | Yes                |
-| `handleKeyDown (Esc)`| Yes (via `close`)  | Yes (via `close`)  |
+| Action                | Cancels show timer | Cancels hide timer |
+| --------------------- | ------------------ | ------------------ |
+| `scheduleOpen`        | Yes                | Yes                |
+| `scheduleClose`       | Yes                | Yes                |
+| `open` (direct)       | Yes                | Yes                |
+| `close` (direct)      | Yes                | Yes                |
+| `handleClick`         | Yes                | Yes                |
+| `handleKeyDown (Esc)` | Yes (via `close`)  | Yes (via `close`)  |
 
 ### Disabled State
 
@@ -131,21 +131,21 @@ Returns props to spread onto the tooltip content element.
 
 ## State Transitions
 
-| From state     | Trigger / Event                          | Condition                                   | To state   |
-|----------------|------------------------------------------|---------------------------------------------|------------|
-| closed         | `pointerenter`                           | `hover` in modes, not disabled              | opening*   |
-| opening*       | `showDelay` elapsed                      | —                                           | open       |
-| open           | `pointerleave`                           | `hover` in modes                            | closing*   |
-| closing*       | `hideDelay` elapsed                      | —                                           | closed     |
-| closed         | `focus`                                  | `focus` in modes, not disabled              | opening*   |
-| open           | `blur`                                   | `focus` in modes                            | closing*   |
-| closed         | `click`                                  | `click` in modes, not disabled              | open       |
-| open           | `click`                                  | `click` in modes                            | closed     |
-| open           | `Escape`                                 | any mode                                    | closed     |
-| any            | `show()`                                 | `manual` in modes (or any), not disabled    | opening*   |
-| any            | `hide()`                                 | `manual` in modes (or any)                  | closing*   |
-| any            | `setDisabled(true)`                      | —                                           | closed     |
-| closed/open    | `pointerenter` / `focus` / `click`       | `manual` is the only mode                   | no change  |
+| From state  | Trigger / Event                    | Condition                                | To state  |
+| ----------- | ---------------------------------- | ---------------------------------------- | --------- |
+| closed      | `pointerenter`                     | `hover` in modes, not disabled           | opening\* |
+| opening\*   | `showDelay` elapsed                | —                                        | open      |
+| open        | `pointerleave`                     | `hover` in modes                         | closing\* |
+| closing\*   | `hideDelay` elapsed                | —                                        | closed    |
+| closed      | `focus`                            | `focus` in modes, not disabled           | opening\* |
+| open        | `blur`                             | `focus` in modes                         | closing\* |
+| closed      | `click`                            | `click` in modes, not disabled           | open      |
+| open        | `click`                            | `click` in modes                         | closed    |
+| open        | `Escape`                           | any mode                                 | closed    |
+| any         | `show()`                           | `manual` in modes (or any), not disabled | opening\* |
+| any         | `hide()`                           | `manual` in modes (or any)               | closing\* |
+| any         | `setDisabled(true)`                | —                                        | closed    |
+| closed/open | `pointerenter` / `focus` / `click` | `manual` is the only mode                | no change |
 
 \* "opening" and "closing" are transient timer states, not separate signal values. `isOpen` remains unchanged until the respective timer fires.
 
@@ -167,22 +167,26 @@ Returns props to spread onto the tooltip content element.
 ## Minimum Test Matrix
 
 ### Hover mode
+
 - hover open/close lifecycle with delays
 - timer cancellation on re-enter during hide delay
 - timer cancellation on leave during show delay
 - zero-delay immediate open/close
 
 ### Focus mode
+
 - focus open/close lifecycle with delays
 - zero-delay immediate open/close
 
 ### Click mode
+
 - single click opens when closed
 - single click closes when open
 - click does not fire when disabled
 - `Escape` still closes when in click mode
 
 ### Manual mode
+
 - `show()` opens (respects `showDelay`)
 - `hide()` closes (respects `hideDelay`)
 - `show()` is no-op when disabled
@@ -190,11 +194,13 @@ Returns props to spread onto the tooltip content element.
 - `getTriggerProps()` does not include pointer/focus/click handlers when `manual` is the only mode
 
 ### Keyboard
+
 - `Escape` dismisses
 - `Escape` cancels pending show timer
 - non-`Escape` keys are ignored
 
 ### ARIA
+
 - `aria-describedby` links trigger to tooltip ID when not disabled
 - `aria-describedby` is `undefined` when disabled
 - `aria-describedby` persists regardless of open state (when enabled)
@@ -202,18 +208,21 @@ Returns props to spread onto the tooltip content element.
 - `hidden` prop reflects `isOpen` state
 
 ### Disabled
+
 - `setDisabled(true)` immediately closes
 - interactions do not open when disabled
 - `open()` / `show()` are no-ops when disabled
 - `setDisabled(false)` re-enables interactions
 
 ### getTriggerProps handler presence
+
 - `click` mode: `onClick` present, `onPointerEnter`/`onPointerLeave` absent (unless also `hover`)
 - `hover` mode: pointer handlers present, `onClick` absent (unless also `click`)
 - `manual`-only mode: only `id`, `aria-describedby`, `onKeyDown` returned
 - `hover focus` (default): all four interaction handlers present, no `onClick`
 
 ### Defaults
+
 - `createTooltip()` with no options: `isOpen=false`, `isDisabled=false`, trigger=`'hover focus'`, IDs use `'tooltip'` prefix
 
 ## Adapter Expectations
@@ -231,9 +240,9 @@ Headless adapters (e.g., the UIKit `cv-tooltip` web component, React wrappers) M
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

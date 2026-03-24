@@ -60,24 +60,24 @@
 
 ## Transitions Table
 
-| Event / Action        | Current State          | Next State / Effect                                   |
-|-----------------------|------------------------|-------------------------------------------------------|
-| `moveNext()`          | any                    | `activeSlideIndex` = `(current + 1) % slideCount`; `aria-live` = `polite`; reset autoplay timer |
-| `movePrev()`          | any                    | `activeSlideIndex` = `(current - 1 + slideCount) % slideCount`; `aria-live` = `polite`; reset autoplay timer |
-| `moveTo(index)`       | any                    | `activeSlideIndex` = clamped index; `aria-live` = `polite`; reset autoplay timer |
-| `play()`              | `userPaused = true`    | `userPaused` = `false`; autoplay resumes              |
-| `pause()`             | `userPaused = false`   | `userPaused` = `true`; autoplay timer cleared          |
-| `togglePlay()`        | `userPaused = true`    | calls `play()`                                         |
-| `togglePlay()`        | `userPaused = false`   | calls `pause()`                                        |
-| `handleFocusIn()`     | any                    | `isFocusWithin` = `true`; autoplay timer cleared       |
-| `handleFocusOut()`    | any                    | `isFocusWithin` = `false`; autoplay resumes if eligible |
-| `handlePointerEnter()`| any                    | `isPointerInside` = `true`; autoplay timer cleared     |
-| `handlePointerLeave()`| any                    | `isPointerInside` = `false`; autoplay resumes if eligible |
-| `handleKeyDown(ArrowRight)` | any              | calls `moveNext()`                                     |
-| `handleKeyDown(ArrowLeft)`  | any              | calls `movePrev()`                                     |
-| `handleKeyDown(Home)` | any                    | calls `moveTo(0)`                                      |
-| `handleKeyDown(End)`  | any                    | calls `moveTo(slideCount - 1)`                         |
-| autoplay timer fires  | autoplay running       | `activeSlideIndex` advances by 1; `aria-live` = `off`; timer restarted |
+| Event / Action              | Current State        | Next State / Effect                                                                                          |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `moveNext()`                | any                  | `activeSlideIndex` = `(current + 1) % slideCount`; `aria-live` = `polite`; reset autoplay timer              |
+| `movePrev()`                | any                  | `activeSlideIndex` = `(current - 1 + slideCount) % slideCount`; `aria-live` = `polite`; reset autoplay timer |
+| `moveTo(index)`             | any                  | `activeSlideIndex` = clamped index; `aria-live` = `polite`; reset autoplay timer                             |
+| `play()`                    | `userPaused = true`  | `userPaused` = `false`; autoplay resumes                                                                     |
+| `pause()`                   | `userPaused = false` | `userPaused` = `true`; autoplay timer cleared                                                                |
+| `togglePlay()`              | `userPaused = true`  | calls `play()`                                                                                               |
+| `togglePlay()`              | `userPaused = false` | calls `pause()`                                                                                              |
+| `handleFocusIn()`           | any                  | `isFocusWithin` = `true`; autoplay timer cleared                                                             |
+| `handleFocusOut()`          | any                  | `isFocusWithin` = `false`; autoplay resumes if eligible                                                      |
+| `handlePointerEnter()`      | any                  | `isPointerInside` = `true`; autoplay timer cleared                                                           |
+| `handlePointerLeave()`      | any                  | `isPointerInside` = `false`; autoplay resumes if eligible                                                    |
+| `handleKeyDown(ArrowRight)` | any                  | calls `moveNext()`                                                                                           |
+| `handleKeyDown(ArrowLeft)`  | any                  | calls `movePrev()`                                                                                           |
+| `handleKeyDown(Home)`       | any                  | calls `moveTo(0)`                                                                                            |
+| `handleKeyDown(End)`        | any                  | calls `moveTo(slideCount - 1)`                                                                               |
+| autoplay timer fires        | autoplay running     | `activeSlideIndex` advances by 1; `aria-live` = `off`; timer restarted                                       |
 
 Autoplay is "running" when: `autoplay` option enabled AND `userPaused = false` AND `isPointerInside = false` AND `isFocusWithin = false` AND `slideCount > 1`.
 
@@ -86,12 +86,14 @@ Autoplay is "running" when: `autoplay` option enabled AND `userPaused = false` A
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.activeSlideIndex()` — current active slide index
 - `state.isPaused()` — computed pause state (combines user-paused, focus, pointer)
 - `state.slideCount()` — number of slides
 - `state.visibleSlideIndices()` — array of currently visible slide indices
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.moveNext()` / `actions.movePrev()` — on next/prev button click
 - `actions.moveTo(index)` — on indicator click
 - `actions.togglePlay()` — on play/pause button click
@@ -100,6 +102,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.handlePointerEnter()` / `actions.handlePointerLeave()` — on pointerenter/pointerleave on root
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getRootProps()` — spread onto the carousel root element
 - `contracts.getSlideGroupProps()` — spread onto the slide container
 - `contracts.getSlideProps(index)` — spread onto each slide element
@@ -109,6 +112,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `contracts.getIndicatorProps(index)` — spread onto each indicator button
 
 **UIKit-only concerns (NOT in headless):**
+
 - Touch/swipe gesture handling
 - CSS transition animations
 - Responsive layout logic
@@ -123,9 +127,9 @@ UIKit adapters MUST bind to the headless model as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

@@ -9,7 +9,7 @@ It defines a deterministic dry-run sequence for shard release preparation and re
 ## Run Context
 
 - Package: `@chromvoid/headless-ui`
-- Working directory: `packages/headless`
+- Working directory: package root
 - Rehearsal type: local dry-run (no publish)
 - Date: 2026-02-10
 
@@ -37,7 +37,7 @@ Notes:
 - Evidence:
   - `lint:types` passed
   - `lint:oxlint` passed
-  - `lint:prettier` failed with pre-existing formatting issues in 47 files
+  - `lint:format` failed with pre-existing formatting issues in 47 files
 
 ### 2) Test
 
@@ -103,7 +103,7 @@ Current dry-run outcome: **Blocked**
 
 Blocking items before release sign-off:
 
-- pre-existing `prettier --check` failures in repository files
+- pre-existing `oxfmt --check` failures in repository files
 - pre-existing failing test in `src/meter/meter.test.ts`
 
 Non-blocking rehearsal confirmations:

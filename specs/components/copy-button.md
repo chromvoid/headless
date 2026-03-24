@@ -11,20 +11,20 @@
 
 ## Options (`CreateCopyButtonOptions`)
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `value` | `string \| (() => Promise<string>)` | `''` | Text to copy, or async getter for lazy/sensitive values |
-| `feedbackDuration` | `number` | `1500` | Milliseconds to show success/error before reverting to idle (clamped >= 0) |
-| `isDisabled` | `boolean` | `false` | Whether the button starts in a disabled state |
-| `ariaLabel` | `string \| undefined` | `undefined` | Accessible label for the button (e.g., `'Copy password'`) |
-| `onCopy` | `(value: string) => void \| undefined` | `undefined` | Called on successful copy with the resolved value |
-| `onError` | `(error: unknown) => void \| undefined` | `undefined` | Called when copy fails with the error |
-| `clipboard` | `{ writeText(text: string): Promise<void> } \| undefined` | `navigator.clipboard` | Injectable clipboard adapter for testing and environments without native clipboard API |
+| Option             | Type                                                      | Default               | Description                                                                            |
+| ------------------ | --------------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------- |
+| `value`            | `string \| (() => Promise<string>)`                       | `''`                  | Text to copy, or async getter for lazy/sensitive values                                |
+| `feedbackDuration` | `number`                                                  | `1500`                | Milliseconds to show success/error before reverting to idle (clamped >= 0)             |
+| `isDisabled`       | `boolean`                                                 | `false`               | Whether the button starts in a disabled state                                          |
+| `ariaLabel`        | `string \| undefined`                                     | `undefined`           | Accessible label for the button (e.g., `'Copy password'`)                              |
+| `onCopy`           | `(value: string) => void \| undefined`                    | `undefined`           | Called on successful copy with the resolved value                                      |
+| `onError`          | `(error: unknown) => void \| undefined`                   | `undefined`           | Called when copy fails with the error                                                  |
+| `clipboard`        | `{ writeText(text: string): Promise<void> } \| undefined` | `navigator.clipboard` | Injectable clipboard adapter for testing and environments without native clipboard API |
 
 ## Type Definitions
 
 ```ts
-type CopyButtonStatus = 'idle' | 'success' | 'error';
+type CopyButtonStatus = 'idle' | 'success' | 'error'
 ```
 
 ## Public API
@@ -33,35 +33,35 @@ type CopyButtonStatus = 'idle' | 'success' | 'error';
 
 ### State (signal-backed)
 
-| Signal | Type | Derived? | Description |
-|--------|------|----------|-------------|
-| `status()` | `Atom<CopyButtonStatus>` | No | Current feedback phase: `'idle'`, `'success'`, or `'error'` |
-| `isDisabled()` | `Atom<boolean>` | No | Whether the button is disabled |
-| `isCopying()` | `Computed<boolean>` | Yes | `true` while the async copy operation is in-flight (between invocation and clipboard resolution) |
-| `feedbackDuration()` | `Atom<number>` | No | Milliseconds to display success/error before reverting to idle |
-| `value()` | `Atom<string \| (() => Promise<string>)>` | No | Current value or async getter |
-| `isIdle()` | `Computed<boolean>` | Yes | Derived: `status() === 'idle'` |
-| `isSuccess()` | `Computed<boolean>` | Yes | Derived: `status() === 'success'` |
-| `isError()` | `Computed<boolean>` | Yes | Derived: `status() === 'error'` |
-| `isUnavailable()` | `Computed<boolean>` | Yes | Derived: `isDisabled() \|\| isCopying()` — the button cannot be activated |
+| Signal               | Type                                      | Derived? | Description                                                                                      |
+| -------------------- | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `status()`           | `Atom<CopyButtonStatus>`                  | No       | Current feedback phase: `'idle'`, `'success'`, or `'error'`                                      |
+| `isDisabled()`       | `Atom<boolean>`                           | No       | Whether the button is disabled                                                                   |
+| `isCopying()`        | `Computed<boolean>`                       | Yes      | `true` while the async copy operation is in-flight (between invocation and clipboard resolution) |
+| `feedbackDuration()` | `Atom<number>`                            | No       | Milliseconds to display success/error before reverting to idle                                   |
+| `value()`            | `Atom<string \| (() => Promise<string>)>` | No       | Current value or async getter                                                                    |
+| `isIdle()`           | `Computed<boolean>`                       | Yes      | Derived: `status() === 'idle'`                                                                   |
+| `isSuccess()`        | `Computed<boolean>`                       | Yes      | Derived: `status() === 'success'`                                                                |
+| `isError()`          | `Computed<boolean>`                       | Yes      | Derived: `status() === 'error'`                                                                  |
+| `isUnavailable()`    | `Computed<boolean>`                       | Yes      | Derived: `isDisabled() \|\| isCopying()` — the button cannot be activated                        |
 
 ### Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `copy` | `() => Promise<void>` | Triggers the full copy cycle: resolve value, write to clipboard, transition to success/error, schedule revert. No-op if `isUnavailable()` is `true`. |
-| `setDisabled` | `(v: boolean) => void` | Sets the disabled state |
-| `setFeedbackDuration` | `(v: number) => void` | Sets feedback duration (clamped >= 0) |
-| `setValue` | `(v: string \| (() => Promise<string>)) => void` | Sets the value or async getter |
-| `reset` | `() => void` | Forces status back to `'idle'`, cancels any pending revert timer, clears `isCopying` |
+| Action                | Signature                                        | Description                                                                                                                                          |
+| --------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `copy`                | `() => Promise<void>`                            | Triggers the full copy cycle: resolve value, write to clipboard, transition to success/error, schedule revert. No-op if `isUnavailable()` is `true`. |
+| `setDisabled`         | `(v: boolean) => void`                           | Sets the disabled state                                                                                                                              |
+| `setFeedbackDuration` | `(v: number) => void`                            | Sets feedback duration (clamped >= 0)                                                                                                                |
+| `setValue`            | `(v: string \| (() => Promise<string>)) => void` | Sets the value or async getter                                                                                                                       |
+| `reset`               | `() => void`                                     | Forces status back to `'idle'`, cancels any pending revert timer, clears `isCopying`                                                                 |
 
 ### Contracts
 
-| Contract | Return type | Description |
-|----------|-------------|-------------|
-| `getButtonProps()` | `CopyButtonProps` | Ready-to-spread ARIA attribute map and event handlers for the button element |
-| `getStatusProps()` | `CopyStatusProps` | Ready-to-spread attributes for the live-region status announcement element |
-| `getIconContainerProps(which)` | `CopyIconProps` | Ready-to-spread attributes for each icon container based on current status |
+| Contract                       | Return type       | Description                                                                  |
+| ------------------------------ | ----------------- | ---------------------------------------------------------------------------- |
+| `getButtonProps()`             | `CopyButtonProps` | Ready-to-spread ARIA attribute map and event handlers for the button element |
+| `getStatusProps()`             | `CopyStatusProps` | Ready-to-spread attributes for the live-region status announcement element   |
+| `getIconContainerProps(which)` | `CopyIconProps`   | Ready-to-spread attributes for each icon container based on current status   |
 
 #### `CopyButtonProps` shape
 
@@ -78,6 +78,7 @@ type CopyButtonStatus = 'idle' | 'success' | 'error';
 ```
 
 **`aria-label` resolution:**
+
 - If `options.ariaLabel` is set and status is `'idle'`: returns `ariaLabel` as-is
 - If `options.ariaLabel` is set and status is `'success'`: returns `'Copied'`
 - If `options.ariaLabel` is set and status is `'error'`: returns `'Copy failed'`
@@ -94,6 +95,7 @@ type CopyButtonStatus = 'idle' | 'success' | 'error';
 ```
 
 This region is always present in the DOM. Its text content is managed by the adapter:
+
 - `'idle'`: empty or hidden
 - `'success'`: "Copied" (or localized equivalent)
 - `'error'`: "Copy failed" (or localized equivalent)
@@ -110,6 +112,7 @@ This region is always present in the DOM. Its text content is managed by the ada
 ```
 
 Visibility logic:
+
 - `which === 'copy'`: visible when `status() === 'idle'`
 - `which === 'success'`: visible when `status() === 'success'`
 - `which === 'error'`: visible when `status() === 'error'`
@@ -131,11 +134,11 @@ Visibility logic:
 
 ## Keyboard Contract
 
-| Key | Event | Guard | Effect |
-|-----|-------|-------|--------|
-| `Enter` | `keydown` | `!isUnavailable()` | Calls `copy()` |
-| `Space` | `keyup` | `!isUnavailable()` | Calls `copy()` |
-| `Space` | `keydown` | any | `preventDefault()` to prevent page scroll |
+| Key     | Event     | Guard              | Effect                                    |
+| ------- | --------- | ------------------ | ----------------------------------------- |
+| `Enter` | `keydown` | `!isUnavailable()` | Calls `copy()`                            |
+| `Space` | `keyup`   | `!isUnavailable()` | Calls `copy()`                            |
+| `Space` | `keydown` | any                | `preventDefault()` to prevent page scroll |
 
 ## Behavior Contract
 
@@ -155,28 +158,28 @@ Visibility logic:
 
 ## Transitions Table
 
-| Event / Action | Guard | Current Status | Next Status | Side Effects |
-|----------------|-------|----------------|-------------|--------------|
-| `copy()` | `isUnavailable()` | any | no change | no-op |
-| `copy()` (value resolves, clipboard succeeds) | `!isUnavailable()` | `idle` | `success` | `isCopying`: true -> false; `onCopy(value)` called; revert timer scheduled |
-| `copy()` (value resolves, clipboard fails) | `!isUnavailable()` | `idle` | `error` | `isCopying`: true -> false; `onError(err)` called; revert timer scheduled |
-| `copy()` (async getter throws) | `!isUnavailable()` | `idle` | `error` | `isCopying`: true -> false; `onError(err)` called; revert timer scheduled |
-| `copy()` during feedback | `!isUnavailable()` | `success` / `error` | `success` / `error` | Previous revert timer cancelled; new cycle begins |
-| revert timer fires | status unchanged since schedule | `success` / `error` | `idle` | timer reference cleared |
-| `reset()` | none | any | `idle` | Pending revert timer cancelled; `isCopying` cleared |
-| `setDisabled(true)` | none | any | no status change | `isDisabled` = true; `isUnavailable` recomputes |
-| `setDisabled(false)` | none | any | no status change | `isDisabled` = false; `isUnavailable` recomputes |
-| `setValue(v)` | none | any | no status change | `value` updated |
-| `setFeedbackDuration(v)` | none | any | no status change | `feedbackDuration` updated (clamped >= 0); does not affect running timers |
+| Event / Action                                | Guard                           | Current Status      | Next Status         | Side Effects                                                               |
+| --------------------------------------------- | ------------------------------- | ------------------- | ------------------- | -------------------------------------------------------------------------- |
+| `copy()`                                      | `isUnavailable()`               | any                 | no change           | no-op                                                                      |
+| `copy()` (value resolves, clipboard succeeds) | `!isUnavailable()`              | `idle`              | `success`           | `isCopying`: true -> false; `onCopy(value)` called; revert timer scheduled |
+| `copy()` (value resolves, clipboard fails)    | `!isUnavailable()`              | `idle`              | `error`             | `isCopying`: true -> false; `onError(err)` called; revert timer scheduled  |
+| `copy()` (async getter throws)                | `!isUnavailable()`              | `idle`              | `error`             | `isCopying`: true -> false; `onError(err)` called; revert timer scheduled  |
+| `copy()` during feedback                      | `!isUnavailable()`              | `success` / `error` | `success` / `error` | Previous revert timer cancelled; new cycle begins                          |
+| revert timer fires                            | status unchanged since schedule | `success` / `error` | `idle`              | timer reference cleared                                                    |
+| `reset()`                                     | none                            | any                 | `idle`              | Pending revert timer cancelled; `isCopying` cleared                        |
+| `setDisabled(true)`                           | none                            | any                 | no status change    | `isDisabled` = true; `isUnavailable` recomputes                            |
+| `setDisabled(false)`                          | none                            | any                 | no status change    | `isDisabled` = false; `isUnavailable` recomputes                           |
+| `setValue(v)`                                 | none                            | any                 | no status change    | `value` updated                                                            |
+| `setFeedbackDuration(v)`                      | none                            | any                 | no status change    | `feedbackDuration` updated (clamped >= 0); does not affect running timers  |
 
 ### Derived state reactions
 
-| State Change | Derived Signal | Recomputation |
-|-------------|----------------|---------------|
-| `status` changes | `isIdle`, `isSuccess`, `isError` | Recomputed from `status()` |
-| `isDisabled` or `isCopying` changes | `isUnavailable` | Recomputed as `isDisabled() \|\| isCopying()` |
-| `status` changes | `getButtonProps()` | `aria-disabled`, `tabindex`, `aria-label` recomputed |
-| `status` changes | `getIconContainerProps(which)` | `hidden` recomputed per icon |
+| State Change                        | Derived Signal                   | Recomputation                                        |
+| ----------------------------------- | -------------------------------- | ---------------------------------------------------- |
+| `status` changes                    | `isIdle`, `isSuccess`, `isError` | Recomputed from `status()`                           |
+| `isDisabled` or `isCopying` changes | `isUnavailable`                  | Recomputed as `isDisabled() \|\| isCopying()`        |
+| `status` changes                    | `getButtonProps()`               | `aria-disabled`, `tabindex`, `aria-label` recomputed |
+| `status` changes                    | `getIconContainerProps(which)`   | `hidden` recomputed per icon                         |
 
 ## Invariants
 
@@ -199,44 +202,44 @@ This section defines what UIKit (`cv-copy-button`) binds to from the headless mo
 
 ### Signals read by adapter
 
-| Signal | UIKit usage |
-|--------|-------------|
-| `state.status()` | Maps to `status` host attribute for CSS state styling; drives icon visibility and status text content |
-| `state.isDisabled()` | Maps to `disabled` host attribute; reflects native disabled styling |
-| `state.isCopying()` | Maps to `copying` host attribute for loading indicator styling (e.g., spinner) |
-| `state.isUnavailable()` | Used to determine if click/keyboard should be suppressed; reflected in ARIA via contracts |
-| `state.isIdle()` | Controls visibility of the copy icon slot |
-| `state.isSuccess()` | Controls visibility of the success icon slot |
-| `state.isError()` | Controls visibility of the error icon slot |
+| Signal                  | UIKit usage                                                                                           |
+| ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `state.status()`        | Maps to `status` host attribute for CSS state styling; drives icon visibility and status text content |
+| `state.isDisabled()`    | Maps to `disabled` host attribute; reflects native disabled styling                                   |
+| `state.isCopying()`     | Maps to `copying` host attribute for loading indicator styling (e.g., spinner)                        |
+| `state.isUnavailable()` | Used to determine if click/keyboard should be suppressed; reflected in ARIA via contracts             |
+| `state.isIdle()`        | Controls visibility of the copy icon slot                                                             |
+| `state.isSuccess()`     | Controls visibility of the success icon slot                                                          |
+| `state.isError()`       | Controls visibility of the error icon slot                                                            |
 
 ### Actions called by adapter
 
-| Action | UIKit trigger |
-|--------|--------------|
-| `actions.copy()` | Internal: called from headless contract handlers (click, Enter, Space) — adapter does NOT call directly |
-| `actions.setDisabled(v)` | When `disabled` attribute/property changes on the host element |
-| `actions.setFeedbackDuration(v)` | When `feedback-duration` attribute/property changes on the host element |
-| `actions.setValue(v)` | When `value` property changes on the host element |
-| `actions.reset()` | Programmatic API; exposed as a method on the custom element |
+| Action                           | UIKit trigger                                                                                           |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `actions.copy()`                 | Internal: called from headless contract handlers (click, Enter, Space) — adapter does NOT call directly |
+| `actions.setDisabled(v)`         | When `disabled` attribute/property changes on the host element                                          |
+| `actions.setFeedbackDuration(v)` | When `feedback-duration` attribute/property changes on the host element                                 |
+| `actions.setValue(v)`            | When `value` property changes on the host element                                                       |
+| `actions.reset()`                | Programmatic API; exposed as a method on the custom element                                             |
 
 ### Contracts spread by adapter
 
-| Contract | Target element | Notes |
-|----------|---------------|-------|
-| `getButtonProps()` | Inner button element (`part="base"`) | Spread as attributes; provides `role`, `aria-disabled`, `tabindex`, `aria-label`, `onClick`, `onKeyDown`, `onKeyUp` |
-| `getStatusProps()` | Status live region element (`part="status"`) | Spread as attributes; provides `role="status"`, `aria-live`, `aria-atomic` |
-| `getIconContainerProps('copy')` | Copy icon container (`part="copy-icon"`) | Spread as attributes; provides `aria-hidden`, `hidden` |
-| `getIconContainerProps('success')` | Success icon container (`part="success-icon"`) | Spread as attributes; provides `aria-hidden`, `hidden` |
-| `getIconContainerProps('error')` | Error icon container (`part="error-icon"`) | Spread as attributes; provides `aria-hidden`, `hidden` |
+| Contract                           | Target element                                 | Notes                                                                                                               |
+| ---------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `getButtonProps()`                 | Inner button element (`part="base"`)           | Spread as attributes; provides `role`, `aria-disabled`, `tabindex`, `aria-label`, `onClick`, `onKeyDown`, `onKeyUp` |
+| `getStatusProps()`                 | Status live region element (`part="status"`)   | Spread as attributes; provides `role="status"`, `aria-live`, `aria-atomic`                                          |
+| `getIconContainerProps('copy')`    | Copy icon container (`part="copy-icon"`)       | Spread as attributes; provides `aria-hidden`, `hidden`                                                              |
+| `getIconContainerProps('success')` | Success icon container (`part="success-icon"`) | Spread as attributes; provides `aria-hidden`, `hidden`                                                              |
+| `getIconContainerProps('error')`   | Error icon container (`part="error-icon"`)     | Spread as attributes; provides `aria-hidden`, `hidden`                                                              |
 
 ### Options passed through from UIKit attributes
 
-| UIKit attribute | Headless option | Notes |
-|-----------------|----------------|-------|
-| `value` | `value` | Property-only (not reflected as attribute for security); accepts `string \| (() => Promise<string>)` |
-| `feedback-duration` | `feedbackDuration` | Numeric attribute, defaults to `1500` |
-| `disabled` | `isDisabled` | Boolean attribute |
-| `aria-label` | `ariaLabel` | Labeling |
+| UIKit attribute     | Headless option    | Notes                                                                                                |
+| ------------------- | ------------------ | ---------------------------------------------------------------------------------------------------- |
+| `value`             | `value`            | Property-only (not reflected as attribute for security); accepts `string \| (() => Promise<string>)` |
+| `feedback-duration` | `feedbackDuration` | Numeric attribute, defaults to `1500`                                                                |
+| `disabled`          | `isDisabled`       | Boolean attribute                                                                                    |
+| `aria-label`        | `ariaLabel`        | Labeling                                                                                             |
 
 ### UIKit-only concerns (NOT in headless)
 

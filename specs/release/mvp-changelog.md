@@ -42,8 +42,8 @@ Full implemented surface at this point (30 patterns) is reflected in:
 
 Latest package validation:
 
-- `npm run lint -w packages/headless` - passed
-- `npm run test -w packages/headless` - passed
+- `npm run lint` - passed
+- `npm run test` - passed
 - Test count snapshot: 39 files, 248 tests passed
 
 ## Release Readiness Evidence

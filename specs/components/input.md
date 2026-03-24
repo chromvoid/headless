@@ -127,25 +127,25 @@
 
 ## Transitions Table
 
-| Event / Action | Guard | Effect | Next State |
-|---|---|---|---|
-| `handleInput(v)` | `!disabled && !readonly` | `setValue(v)` | `value = v`; `onInput(v)` called |
-| `handleInput(v)` | `disabled \|\| readonly` | -- | no change |
-| `clear()` | `!disabled && !readonly` | `setValue("")` | `value = ""`; `onClear()` called |
-| `clear()` | `disabled \|\| readonly` | -- | no change |
-| `keydown Escape` | `clearable && filled && !disabled && !readonly` | `clear()` | `value = ""`; `onClear()` called |
-| `keydown Escape` | `!(clearable && filled) \|\| disabled \|\| readonly` | -- | no change |
-| `togglePasswordVisibility()` | `type === "password" && passwordToggle` | toggle | `passwordVisible = !passwordVisible` |
-| `togglePasswordVisibility()` | `type !== "password" \|\| !passwordToggle` | -- | no change |
-| `setValue(v)` | -- | set value | `value = v`; `onInput(v)` called |
-| `setType(t)` | -- | set type | `type = t`; `passwordVisible = false` |
-| `setDisabled(d)` | -- | set disabled | `disabled = d` |
-| `setReadonly(r)` | -- | set readonly | `readonly = r` |
-| `setRequired(r)` | -- | set required | `required = r` |
-| `setPlaceholder(p)` | -- | set placeholder | `placeholder = p` |
-| `setClearable(c)` | -- | set clearable | `clearable = c` |
-| `setPasswordToggle(t)` | -- | set toggle | `passwordToggle = t`; if `!t`: `passwordVisible = false` |
-| `setFocused(f)` | -- | set focused | `focused = f` |
+| Event / Action               | Guard                                                | Effect          | Next State                                               |
+| ---------------------------- | ---------------------------------------------------- | --------------- | -------------------------------------------------------- |
+| `handleInput(v)`             | `!disabled && !readonly`                             | `setValue(v)`   | `value = v`; `onInput(v)` called                         |
+| `handleInput(v)`             | `disabled \|\| readonly`                             | --              | no change                                                |
+| `clear()`                    | `!disabled && !readonly`                             | `setValue("")`  | `value = ""`; `onClear()` called                         |
+| `clear()`                    | `disabled \|\| readonly`                             | --              | no change                                                |
+| `keydown Escape`             | `clearable && filled && !disabled && !readonly`      | `clear()`       | `value = ""`; `onClear()` called                         |
+| `keydown Escape`             | `!(clearable && filled) \|\| disabled \|\| readonly` | --              | no change                                                |
+| `togglePasswordVisibility()` | `type === "password" && passwordToggle`              | toggle          | `passwordVisible = !passwordVisible`                     |
+| `togglePasswordVisibility()` | `type !== "password" \|\| !passwordToggle`           | --              | no change                                                |
+| `setValue(v)`                | --                                                   | set value       | `value = v`; `onInput(v)` called                         |
+| `setType(t)`                 | --                                                   | set type        | `type = t`; `passwordVisible = false`                    |
+| `setDisabled(d)`             | --                                                   | set disabled    | `disabled = d`                                           |
+| `setReadonly(r)`             | --                                                   | set readonly    | `readonly = r`                                           |
+| `setRequired(r)`             | --                                                   | set required    | `required = r`                                           |
+| `setPlaceholder(p)`          | --                                                   | set placeholder | `placeholder = p`                                        |
+| `setClearable(c)`            | --                                                   | set clearable   | `clearable = c`                                          |
+| `setPasswordToggle(t)`       | --                                                   | set toggle      | `passwordToggle = t`; if `!t`: `passwordVisible = false` |
+| `setFocused(f)`              | --                                                   | set focused     | `focused = f`                                            |
 
 ## Adapter Expectations
 
@@ -238,9 +238,9 @@ UIKit (`cv-input`) binds to the headless contract as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

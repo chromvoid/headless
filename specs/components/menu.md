@@ -23,13 +23,14 @@ interface MenuItem {
   id: string
   label?: string
   disabled?: boolean
-  type?: 'normal' | 'checkbox' | 'radio'  // NEW — default: 'normal'
-  group?: string                           // NEW — radio group name (for type='radio')
-  checked?: boolean                        // NEW — initial checked state (for checkbox/radio)
-  hasSubmenu?: boolean                     // NEW — whether this item opens a submenu
+  type?: 'normal' | 'checkbox' | 'radio' // NEW — default: 'normal'
+  group?: string // NEW — radio group name (for type='radio')
+  checked?: boolean // NEW — initial checked state (for checkbox/radio)
+  hasSubmenu?: boolean // NEW — whether this item opens a submenu
 }
 
-interface MenuGroup {                      // NEW
+interface MenuGroup {
+  // NEW
   id: string
   type: 'checkbox' | 'radio'
   label?: string
@@ -41,11 +42,11 @@ interface CreateMenuOptions {
   ariaLabel?: string
   initialOpen?: boolean
   initialActiveId?: string | null
-  closeOnSelect?: boolean                  // default: true
-  typeahead?: boolean                      // NEW — default: true
-  typeaheadTimeout?: number                // NEW — default: 500 (ms)
-  groups?: readonly MenuGroup[]            // NEW — group definitions
-  splitButton?: boolean                    // NEW — enable split button pattern (default: false)
+  closeOnSelect?: boolean // default: true
+  typeahead?: boolean // NEW — default: true
+  typeaheadTimeout?: number // NEW — default: 500 (ms)
+  groups?: readonly MenuGroup[] // NEW — group definitions
+  splitButton?: boolean // NEW — enable split button pattern (default: false)
 }
 ```
 
@@ -63,16 +64,16 @@ interface MenuModel {
 
 All state is signal-backed (Reatom atoms). UIKit reads these reactively to drive re-renders.
 
-| Signal | Type | Description | Status |
-| --- | --- | --- | --- |
-| `isOpen()` | `boolean` | Menu visibility | existing |
-| `activeId()` | `string \| null` | Currently highlighted item id | existing |
-| `selectedId()` | `string \| null` | Last selected item id | existing |
-| `openedBy()` | `MenuOpenSource \| null` | Source that triggered the current open: `'keyboard'`, `'pointer'`, or `'programmatic'`. Resets to `null` on close. | existing |
-| `hasSelection` | `Computed<boolean>` | Whether any item has been selected (`selectedId != null`) | existing |
-| `checkedIds()` | `ReadonlySet<string>` | Set of currently checked item ids. Initialized from items with `checked: true`. Updated on checkbox toggle and radio group selection. | **NEW** |
-| `openSubmenuId()` | `string \| null` | Id of the currently open submenu parent item, or `null` if no submenu is open. Reset to `null` on close. | **NEW** |
-| `submenuActiveId()` | `string \| null` | Id of the currently highlighted item within the open submenu, or `null`. Reset to `null` on close or submenu close. | **NEW** |
+| Signal              | Type                     | Description                                                                                                                           | Status   |
+| ------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `isOpen()`          | `boolean`                | Menu visibility                                                                                                                       | existing |
+| `activeId()`        | `string \| null`         | Currently highlighted item id                                                                                                         | existing |
+| `selectedId()`      | `string \| null`         | Last selected item id                                                                                                                 | existing |
+| `openedBy()`        | `MenuOpenSource \| null` | Source that triggered the current open: `'keyboard'`, `'pointer'`, or `'programmatic'`. Resets to `null` on close.                    | existing |
+| `hasSelection`      | `Computed<boolean>`      | Whether any item has been selected (`selectedId != null`)                                                                             | existing |
+| `checkedIds()`      | `ReadonlySet<string>`    | Set of currently checked item ids. Initialized from items with `checked: true`. Updated on checkbox toggle and radio group selection. | **NEW**  |
+| `openSubmenuId()`   | `string \| null`         | Id of the currently open submenu parent item, or `null` if no submenu is open. Reset to `null` on close.                              | **NEW**  |
+| `submenuActiveId()` | `string \| null`         | Id of the currently highlighted item within the open submenu, or `null`. Reset to `null` on close or submenu close.                   | **NEW**  |
 
 ```ts
 type MenuOpenSource = 'keyboard' | 'pointer' | 'programmatic'
@@ -82,26 +83,26 @@ type MenuOpenSource = 'keyboard' | 'pointer' | 'programmatic'
 
 All state transitions go through these actions. UIKit must never mutate state directly.
 
-| Action | Signature | Description | Status |
-| --- | --- | --- | --- |
-| `open` | `(source?: MenuOpenSource) => void` | Opens the menu. Sets `openedBy`. If no `activeId` is set, sets it to the first enabled item. Resets submenu state. | existing |
-| `close` | `() => void` | Closes the menu. Resets `activeId`, `openedBy`, `openSubmenuId`, `submenuActiveId` to `null`. | existing (updated) |
-| `toggle` | `(source?: MenuOpenSource) => void` | Toggles open/close. | existing |
-| `setActive` | `(id: string \| null) => void` | Sets the active (highlighted) item. No-op for disabled items. | existing |
-| `moveNext` | `() => void` | Moves active to next enabled item (wrapping). | existing |
-| `movePrev` | `() => void` | Moves active to previous enabled item (wrapping). | existing |
-| `moveFirst` | `() => void` | Moves active to first enabled item. | existing |
-| `moveLast` | `() => void` | Moves active to last enabled item. | existing |
-| `select` | `(id: string) => void` | Selects an item. For `type='checkbox'`: toggles the item in `checkedIds`. For `type='radio'`: sets item as only checked in its group. For `type='normal'`: sets `selectedId`. If `closeOnSelect` is true, closes the menu. No-op for disabled or unknown items. | existing (updated) |
-| `toggleCheck` | `(id: string) => void` | Toggles checked state for a checkbox item. For radio items, sets item as only checked in its group. No-op for normal items, disabled items, or unknown ids. | **NEW** |
-| `openSubmenu` | `(id: string) => void` | Opens the submenu for the given parent item id. Sets `openSubmenuId` to `id`. Sets `submenuActiveId` to first enabled child. No-op if item does not have `hasSubmenu: true`. | **NEW** |
-| `closeSubmenu` | `() => void` | Closes the currently open submenu. Resets `openSubmenuId` and `submenuActiveId` to `null`. | **NEW** |
-| `handleTypeahead` | `(char: string) => void` | Handles a single printable character for typeahead navigation. Advances the character buffer, matches items by label prefix, and moves `activeId` to the matched item. If a submenu is open, searches submenu children instead. No-op if `typeahead` option is `false`. | **NEW** |
-| `handleTriggerKeyDown` | `(event: Pick<KeyboardEvent, 'key'>) => void` | Handles keyboard on the trigger element. `ArrowDown` opens and focuses first item. `ArrowUp` opens and focuses last item. `Enter`/`Space` toggles. | existing |
-| `handleMenuKeyDown` | `(event: MenuKeyboardEventLike) => void` | Handles keyboard inside the open menu. When a submenu is open, delegates navigation to submenu. `ArrowRight` on a submenu item opens the submenu. `ArrowLeft` closes the submenu. Printable characters trigger typeahead. All other keys handled as before. | existing (updated) |
-| `handleItemPointerEnter` | `(id: string) => void` | Handles pointer enter on a menu item. Sets `activeId` immediately. If item has submenu, starts ~200ms hover intent timer. If item does not have submenu, cancels pending timer and closes open submenu. | **NEW** |
-| `handleItemPointerLeave` | `(id: string) => void` | Handles pointer leave on a menu item. Cancels pending hover intent timer if it was for this item. | **NEW** |
-| `setSubmenuItems` | `(parentId: string, items: readonly MenuItem[]) => void` | Provides submenu child items for a parent item. Must be called before `openSubmenu` for the parent to have navigable children. | **NEW** |
+| Action                   | Signature                                                | Description                                                                                                                                                                                                                                                             | Status             |
+| ------------------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `open`                   | `(source?: MenuOpenSource) => void`                      | Opens the menu. Sets `openedBy`. If no `activeId` is set, sets it to the first enabled item. Resets submenu state.                                                                                                                                                      | existing           |
+| `close`                  | `() => void`                                             | Closes the menu. Resets `activeId`, `openedBy`, `openSubmenuId`, `submenuActiveId` to `null`.                                                                                                                                                                           | existing (updated) |
+| `toggle`                 | `(source?: MenuOpenSource) => void`                      | Toggles open/close.                                                                                                                                                                                                                                                     | existing           |
+| `setActive`              | `(id: string \| null) => void`                           | Sets the active (highlighted) item. No-op for disabled items.                                                                                                                                                                                                           | existing           |
+| `moveNext`               | `() => void`                                             | Moves active to next enabled item (wrapping).                                                                                                                                                                                                                           | existing           |
+| `movePrev`               | `() => void`                                             | Moves active to previous enabled item (wrapping).                                                                                                                                                                                                                       | existing           |
+| `moveFirst`              | `() => void`                                             | Moves active to first enabled item.                                                                                                                                                                                                                                     | existing           |
+| `moveLast`               | `() => void`                                             | Moves active to last enabled item.                                                                                                                                                                                                                                      | existing           |
+| `select`                 | `(id: string) => void`                                   | Selects an item. For `type='checkbox'`: toggles the item in `checkedIds`. For `type='radio'`: sets item as only checked in its group. For `type='normal'`: sets `selectedId`. If `closeOnSelect` is true, closes the menu. No-op for disabled or unknown items.         | existing (updated) |
+| `toggleCheck`            | `(id: string) => void`                                   | Toggles checked state for a checkbox item. For radio items, sets item as only checked in its group. No-op for normal items, disabled items, or unknown ids.                                                                                                             | **NEW**            |
+| `openSubmenu`            | `(id: string) => void`                                   | Opens the submenu for the given parent item id. Sets `openSubmenuId` to `id`. Sets `submenuActiveId` to first enabled child. No-op if item does not have `hasSubmenu: true`.                                                                                            | **NEW**            |
+| `closeSubmenu`           | `() => void`                                             | Closes the currently open submenu. Resets `openSubmenuId` and `submenuActiveId` to `null`.                                                                                                                                                                              | **NEW**            |
+| `handleTypeahead`        | `(char: string) => void`                                 | Handles a single printable character for typeahead navigation. Advances the character buffer, matches items by label prefix, and moves `activeId` to the matched item. If a submenu is open, searches submenu children instead. No-op if `typeahead` option is `false`. | **NEW**            |
+| `handleTriggerKeyDown`   | `(event: Pick<KeyboardEvent, 'key'>) => void`            | Handles keyboard on the trigger element. `ArrowDown` opens and focuses first item. `ArrowUp` opens and focuses last item. `Enter`/`Space` toggles.                                                                                                                      | existing           |
+| `handleMenuKeyDown`      | `(event: MenuKeyboardEventLike) => void`                 | Handles keyboard inside the open menu. When a submenu is open, delegates navigation to submenu. `ArrowRight` on a submenu item opens the submenu. `ArrowLeft` closes the submenu. Printable characters trigger typeahead. All other keys handled as before.             | existing (updated) |
+| `handleItemPointerEnter` | `(id: string) => void`                                   | Handles pointer enter on a menu item. Sets `activeId` immediately. If item has submenu, starts ~200ms hover intent timer. If item does not have submenu, cancels pending timer and closes open submenu.                                                                 | **NEW**            |
+| `handleItemPointerLeave` | `(id: string) => void`                                   | Handles pointer leave on a menu item. Cancels pending hover intent timer if it was for this item.                                                                                                                                                                       | **NEW**            |
+| `setSubmenuItems`        | `(parentId: string, items: readonly MenuItem[]) => void` | Provides submenu child items for a parent item. Must be called before `openSubmenu` for the parent to have navigable children.                                                                                                                                          | **NEW**            |
 
 ```ts
 interface MenuKeyboardEventLike {
@@ -121,11 +122,11 @@ Contracts return complete ARIA prop objects ready to spread onto DOM elements.
 
 ```ts
 interface MenuTriggerProps {
-  id: string                        // '{idBase}-trigger'
+  id: string // '{idBase}-trigger'
   tabindex: '0'
   'aria-haspopup': 'menu'
   'aria-expanded': 'true' | 'false'
-  'aria-controls': string           // '{idBase}-menu'
+  'aria-controls': string // '{idBase}-menu'
   'aria-label'?: string
 }
 ```
@@ -136,11 +137,11 @@ Existing, unchanged.
 
 ```ts
 interface MenuProps {
-  id: string                        // '{idBase}-menu'
+  id: string // '{idBase}-menu'
   role: 'menu'
   tabindex: '-1'
   'aria-label'?: string
-  'aria-activedescendant'?: string  // NEW — DOM id of active item when open
+  'aria-activedescendant'?: string // NEW — DOM id of active item when open
 }
 ```
 
@@ -150,18 +151,19 @@ interface MenuProps {
 
 ```ts
 interface MenuItemProps {
-  id: string                        // '{idBase}-item-{id}'
-  role: 'menuitem' | 'menuitemcheckbox' | 'menuitemradio'  // UPDATED
+  id: string // '{idBase}-item-{id}'
+  role: 'menuitem' | 'menuitemcheckbox' | 'menuitemradio' // UPDATED
   tabindex: '-1'
-  'aria-disabled'?: 'true'          // present only for disabled items
-  'data-active': 'true' | 'false'  // reflects activeId === id
+  'aria-disabled'?: 'true' // present only for disabled items
+  'data-active': 'true' | 'false' // reflects activeId === id
   'aria-checked'?: 'true' | 'false' // NEW — present for checkbox and radio items
-  'aria-haspopup'?: 'menu'          // NEW — present for submenu items
+  'aria-haspopup'?: 'menu' // NEW — present for submenu items
   'aria-expanded'?: 'true' | 'false' // NEW — present for submenu items
 }
 ```
 
 **Updated**: Role assignment per item type:
+
 - `type='normal'` (default) — `role: 'menuitem'`
 - `type='checkbox'` — `role: 'menuitemcheckbox'`
 - `type='radio'` — `role: 'menuitemradio'`
@@ -174,11 +176,11 @@ For checkbox and radio items, `aria-checked` reflects whether the item id is pre
 
 ```ts
 interface MenuSubmenuProps {
-  id: string                        // '{idBase}-submenu-{parentItemId}'
+  id: string // '{idBase}-submenu-{parentItemId}'
   role: 'menu'
   tabindex: '-1'
-  hidden: boolean                   // openSubmenuId !== parentItemId
-  'aria-label'?: string             // from parent item label
+  hidden: boolean // openSubmenuId !== parentItemId
+  'aria-label'?: string // from parent item label
 }
 ```
 
@@ -196,7 +198,7 @@ Returns props for an item within a submenu. `data-active` reflects `submenuActiv
 
 ```ts
 interface MenuSplitTriggerProps {
-  id: string                        // '{idBase}-split-action'
+  id: string // '{idBase}-split-action'
   tabindex: '0'
   role: 'button'
 }
@@ -208,13 +210,13 @@ Returns props for the action portion of a split button. This is the primary acti
 
 ```ts
 interface MenuSplitDropdownProps {
-  id: string                        // '{idBase}-split-dropdown'
+  id: string // '{idBase}-split-dropdown'
   tabindex: '0'
   role: 'button'
   'aria-haspopup': 'menu'
   'aria-expanded': 'true' | 'false'
-  'aria-controls': string           // '{idBase}-menu'
-  'aria-label': string              // 'More options' or from ariaLabel
+  'aria-controls': string // '{idBase}-menu'
+  'aria-label': string // 'More options' or from ariaLabel
 }
 ```
 
@@ -226,9 +228,9 @@ When `splitButton: true`, `getTriggerProps()` is still available and returns the
 
 ```ts
 interface MenuGroupProps {
-  id: string                        // '{idBase}-group-{groupId}'
+  id: string // '{idBase}-group-{groupId}'
   role: 'group'
-  'aria-label'?: string             // from group.label
+  'aria-label'?: string // from group.label
 }
 ```
 
@@ -250,42 +252,42 @@ Returns props for a group container element. Groups provide semantic grouping fo
 
 ### Trigger Element
 
-| Key | Action | Status |
-| --- | --- | --- |
+| Key         | Action                              | Status   |
+| ----------- | ----------------------------------- | -------- |
 | `ArrowDown` | Open menu, focus first enabled item | existing |
-| `ArrowUp` | Open menu, focus last enabled item | existing |
-| `Enter` | Toggle open state | existing |
-| `Space` | Toggle open state | existing |
+| `ArrowUp`   | Open menu, focus last enabled item  | existing |
+| `Enter`     | Toggle open state                   | existing |
+| `Space`     | Toggle open state                   | existing |
 
 ### Menu Element (when open, no submenu)
 
-| Key | Action | Status |
-| --- | --- | --- |
-| `ArrowDown` | Move active to next enabled item (wrapping) | existing |
-| `ArrowUp` | Move active to previous enabled item (wrapping) | existing |
-| `Home` | Move active to first enabled item | existing |
-| `End` | Move active to last enabled item | existing |
-| `Enter` | Select active item | existing |
-| `Space` | Select active item (for checkable items: toggle check state) | existing (updated) |
-| `Escape` | Close menu | existing |
-| `ArrowRight` | If active item has submenu: open submenu, focus first child | **NEW** |
-| `ArrowLeft` | No-op (at top-level menu) | **NEW** |
-| Printable character | Typeahead: advance query, move active to matching item by label prefix | **NEW** |
+| Key                 | Action                                                                 | Status             |
+| ------------------- | ---------------------------------------------------------------------- | ------------------ |
+| `ArrowDown`         | Move active to next enabled item (wrapping)                            | existing           |
+| `ArrowUp`           | Move active to previous enabled item (wrapping)                        | existing           |
+| `Home`              | Move active to first enabled item                                      | existing           |
+| `End`               | Move active to last enabled item                                       | existing           |
+| `Enter`             | Select active item                                                     | existing           |
+| `Space`             | Select active item (for checkable items: toggle check state)           | existing (updated) |
+| `Escape`            | Close menu                                                             | existing           |
+| `ArrowRight`        | If active item has submenu: open submenu, focus first child            | **NEW**            |
+| `ArrowLeft`         | No-op (at top-level menu)                                              | **NEW**            |
+| Printable character | Typeahead: advance query, move active to matching item by label prefix | **NEW**            |
 
 ### Submenu (when open) — NEW
 
-| Key | Action |
-| --- | --- |
-| `Escape` | Close submenu, return focus to parent menu item |
-| `ArrowLeft` | Close submenu, return focus to parent menu item |
-| `ArrowDown` | Move `submenuActiveId` to next enabled submenu item (wrapping) |
-| `ArrowUp` | Move `submenuActiveId` to previous enabled submenu item (wrapping) |
-| `Home` | Move `submenuActiveId` to first enabled submenu item |
-| `End` | Move `submenuActiveId` to last enabled submenu item |
-| `Enter` | Select active submenu item |
-| `Space` | Select active submenu item |
-| `ArrowRight` | If active submenu item has nested submenu: open it (future — currently one level only) |
-| Printable character | Typeahead within submenu items |
+| Key                 | Action                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `Escape`            | Close submenu, return focus to parent menu item                                        |
+| `ArrowLeft`         | Close submenu, return focus to parent menu item                                        |
+| `ArrowDown`         | Move `submenuActiveId` to next enabled submenu item (wrapping)                         |
+| `ArrowUp`           | Move `submenuActiveId` to previous enabled submenu item (wrapping)                     |
+| `Home`              | Move `submenuActiveId` to first enabled submenu item                                   |
+| `End`               | Move `submenuActiveId` to last enabled submenu item                                    |
+| `Enter`             | Select active submenu item                                                             |
+| `Space`             | Select active submenu item                                                             |
+| `ArrowRight`        | If active submenu item has nested submenu: open it (future — currently one level only) |
+| Printable character | Typeahead within submenu items                                                         |
 
 ## Behavior Contract
 
@@ -373,48 +375,48 @@ Returns props for a group container element. Groups provide semantic grouping fo
 
 ### Core Transitions
 
-| Event / Action | Preconditions | Next State | Status |
-| --- | --- | --- | --- |
-| `open(source)` | none | `isOpen=true`; `openedBy=source`; `activeId=first enabled item`; `openSubmenuId=null`; `submenuActiveId=null` | existing (updated) |
-| `close()` | none | `isOpen=false`; `activeId=null`; `openedBy=null`; `openSubmenuId=null`; `submenuActiveId=null` | existing (updated) |
-| `toggle(source)` | `isOpen=false` | same as `open(source)` | existing |
-| `toggle(source)` | `isOpen=true` | same as `close()` | existing |
-| `select(id)` (normal) | item exists, not disabled | `selectedId=id`; `activeId=id`; if `closeOnSelect`: close | existing |
-| `select(id)` (checkbox) | item exists, not disabled, type=checkbox | toggles `id` in `checkedIds`; does NOT close menu by default | **NEW** |
-| `select(id)` (radio) | item exists, not disabled, type=radio, has group | unchecks all items in same group, adds `id` to `checkedIds`; does NOT close menu by default | **NEW** |
-| `select(id)` | item disabled or unknown | no-op | existing |
-| `toggleCheck(id)` (checkbox) | item exists, type=checkbox | toggles `id` in `checkedIds` | **NEW** |
-| `toggleCheck(id)` (radio) | item exists, type=radio, has group | unchecks all in group, adds `id` | **NEW** |
-| `toggleCheck(id)` | item is normal, disabled, or unknown | no-op | **NEW** |
-| `openSubmenu(id)` | item has `hasSubmenu: true` | `openSubmenuId=id`; `submenuActiveId=first enabled child` | **NEW** |
-| `openSubmenu(id)` | item does not have submenu | no-op | **NEW** |
-| `closeSubmenu()` | `openSubmenuId != null` | `openSubmenuId=null`; `submenuActiveId=null` | **NEW** |
-| `closeSubmenu()` | `openSubmenuId == null` | no-op | **NEW** |
-| `handleTypeahead(char)` | `isOpen=true`, `typeahead=true` | buffer advanced; `activeId` or `submenuActiveId` moves to match | **NEW** |
-| `handleTypeahead(char)` | `isOpen=false` or `typeahead=false` | no-op | **NEW** |
-| `handleMenuKeyDown(ArrowRight)` | `isOpen=true`, `activeId` has submenu | `openSubmenu(activeId)` | **NEW** |
-| `handleMenuKeyDown(ArrowLeft)` | `isOpen=true`, submenu open | `closeSubmenu()` | **NEW** |
-| `handleMenuKeyDown(printable)` | `isOpen=true`, `typeahead=true` | `handleTypeahead(key)` | **NEW** |
-| `handleMenuKeyDown(ArrowDown)` | submenu open | `submenuActiveId` moves to next enabled child (wrapping) | **NEW** |
-| `handleMenuKeyDown(ArrowUp)` | submenu open | `submenuActiveId` moves to previous enabled child (wrapping) | **NEW** |
-| `handleMenuKeyDown(Home)` | submenu open | `submenuActiveId` moves to first enabled child | **NEW** |
-| `handleMenuKeyDown(End)` | submenu open | `submenuActiveId` moves to last enabled child | **NEW** |
-| `handleMenuKeyDown(Enter/Space)` | submenu open, `submenuActiveId!=null` | `select(submenuActiveId)` | **NEW** |
-| `handleMenuKeyDown(Escape)` | submenu open | `closeSubmenu()` | **NEW** |
-| `handleMenuKeyDown(Escape)` | no submenu open | `close()` | existing |
-| `handleMenuKeyDown(ArrowDown)` | no submenu | `activeId` moves to next enabled item (wrapping) | existing |
-| `handleMenuKeyDown(ArrowUp)` | no submenu | `activeId` moves to previous enabled item (wrapping) | existing |
-| `handleMenuKeyDown(Home)` | no submenu | `activeId` moves to first enabled item | existing |
-| `handleMenuKeyDown(End)` | no submenu | `activeId` moves to last enabled item | existing |
-| `handleMenuKeyDown(Enter)` | no submenu, `activeId!=null` | `select(activeId)` | existing |
-| `handleMenuKeyDown(Space)` | no submenu, `activeId!=null` | `select(activeId)` | existing |
-| `handleMenuKeyDown(*)` | `isOpen=false` | no-op | existing |
-| `handleItemPointerEnter(id)` | item has submenu | start ~200ms hover timer; on fire: `openSubmenu(id)`. Set `activeId=id`. | **NEW** |
-| `handleItemPointerEnter(id)` | item does not have submenu | cancel any pending hover timer; close open submenu; set `activeId=id`. | **NEW** |
-| `handleItemPointerLeave(id)` | timer pending for `id` | cancel timer | **NEW** |
-| `handleTriggerKeyDown(ArrowDown)` | none | `open('keyboard')`; `activeId=first enabled item` | existing |
-| `handleTriggerKeyDown(ArrowUp)` | none | `open('keyboard')`; `activeId=last enabled item` | existing |
-| `handleTriggerKeyDown(Enter/Space)` | none | `toggle('keyboard')` | existing |
+| Event / Action                      | Preconditions                                    | Next State                                                                                                    | Status             |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `open(source)`                      | none                                             | `isOpen=true`; `openedBy=source`; `activeId=first enabled item`; `openSubmenuId=null`; `submenuActiveId=null` | existing (updated) |
+| `close()`                           | none                                             | `isOpen=false`; `activeId=null`; `openedBy=null`; `openSubmenuId=null`; `submenuActiveId=null`                | existing (updated) |
+| `toggle(source)`                    | `isOpen=false`                                   | same as `open(source)`                                                                                        | existing           |
+| `toggle(source)`                    | `isOpen=true`                                    | same as `close()`                                                                                             | existing           |
+| `select(id)` (normal)               | item exists, not disabled                        | `selectedId=id`; `activeId=id`; if `closeOnSelect`: close                                                     | existing           |
+| `select(id)` (checkbox)             | item exists, not disabled, type=checkbox         | toggles `id` in `checkedIds`; does NOT close menu by default                                                  | **NEW**            |
+| `select(id)` (radio)                | item exists, not disabled, type=radio, has group | unchecks all items in same group, adds `id` to `checkedIds`; does NOT close menu by default                   | **NEW**            |
+| `select(id)`                        | item disabled or unknown                         | no-op                                                                                                         | existing           |
+| `toggleCheck(id)` (checkbox)        | item exists, type=checkbox                       | toggles `id` in `checkedIds`                                                                                  | **NEW**            |
+| `toggleCheck(id)` (radio)           | item exists, type=radio, has group               | unchecks all in group, adds `id`                                                                              | **NEW**            |
+| `toggleCheck(id)`                   | item is normal, disabled, or unknown             | no-op                                                                                                         | **NEW**            |
+| `openSubmenu(id)`                   | item has `hasSubmenu: true`                      | `openSubmenuId=id`; `submenuActiveId=first enabled child`                                                     | **NEW**            |
+| `openSubmenu(id)`                   | item does not have submenu                       | no-op                                                                                                         | **NEW**            |
+| `closeSubmenu()`                    | `openSubmenuId != null`                          | `openSubmenuId=null`; `submenuActiveId=null`                                                                  | **NEW**            |
+| `closeSubmenu()`                    | `openSubmenuId == null`                          | no-op                                                                                                         | **NEW**            |
+| `handleTypeahead(char)`             | `isOpen=true`, `typeahead=true`                  | buffer advanced; `activeId` or `submenuActiveId` moves to match                                               | **NEW**            |
+| `handleTypeahead(char)`             | `isOpen=false` or `typeahead=false`              | no-op                                                                                                         | **NEW**            |
+| `handleMenuKeyDown(ArrowRight)`     | `isOpen=true`, `activeId` has submenu            | `openSubmenu(activeId)`                                                                                       | **NEW**            |
+| `handleMenuKeyDown(ArrowLeft)`      | `isOpen=true`, submenu open                      | `closeSubmenu()`                                                                                              | **NEW**            |
+| `handleMenuKeyDown(printable)`      | `isOpen=true`, `typeahead=true`                  | `handleTypeahead(key)`                                                                                        | **NEW**            |
+| `handleMenuKeyDown(ArrowDown)`      | submenu open                                     | `submenuActiveId` moves to next enabled child (wrapping)                                                      | **NEW**            |
+| `handleMenuKeyDown(ArrowUp)`        | submenu open                                     | `submenuActiveId` moves to previous enabled child (wrapping)                                                  | **NEW**            |
+| `handleMenuKeyDown(Home)`           | submenu open                                     | `submenuActiveId` moves to first enabled child                                                                | **NEW**            |
+| `handleMenuKeyDown(End)`            | submenu open                                     | `submenuActiveId` moves to last enabled child                                                                 | **NEW**            |
+| `handleMenuKeyDown(Enter/Space)`    | submenu open, `submenuActiveId!=null`            | `select(submenuActiveId)`                                                                                     | **NEW**            |
+| `handleMenuKeyDown(Escape)`         | submenu open                                     | `closeSubmenu()`                                                                                              | **NEW**            |
+| `handleMenuKeyDown(Escape)`         | no submenu open                                  | `close()`                                                                                                     | existing           |
+| `handleMenuKeyDown(ArrowDown)`      | no submenu                                       | `activeId` moves to next enabled item (wrapping)                                                              | existing           |
+| `handleMenuKeyDown(ArrowUp)`        | no submenu                                       | `activeId` moves to previous enabled item (wrapping)                                                          | existing           |
+| `handleMenuKeyDown(Home)`           | no submenu                                       | `activeId` moves to first enabled item                                                                        | existing           |
+| `handleMenuKeyDown(End)`            | no submenu                                       | `activeId` moves to last enabled item                                                                         | existing           |
+| `handleMenuKeyDown(Enter)`          | no submenu, `activeId!=null`                     | `select(activeId)`                                                                                            | existing           |
+| `handleMenuKeyDown(Space)`          | no submenu, `activeId!=null`                     | `select(activeId)`                                                                                            | existing           |
+| `handleMenuKeyDown(*)`              | `isOpen=false`                                   | no-op                                                                                                         | existing           |
+| `handleItemPointerEnter(id)`        | item has submenu                                 | start ~200ms hover timer; on fire: `openSubmenu(id)`. Set `activeId=id`.                                      | **NEW**            |
+| `handleItemPointerEnter(id)`        | item does not have submenu                       | cancel any pending hover timer; close open submenu; set `activeId=id`.                                        | **NEW**            |
+| `handleItemPointerLeave(id)`        | timer pending for `id`                           | cancel timer                                                                                                  | **NEW**            |
+| `handleTriggerKeyDown(ArrowDown)`   | none                                             | `open('keyboard')`; `activeId=first enabled item`                                                             | existing           |
+| `handleTriggerKeyDown(ArrowUp)`     | none                                             | `open('keyboard')`; `activeId=last enabled item`                                                              | existing           |
+| `handleTriggerKeyDown(Enter/Space)` | none                                             | `toggle('keyboard')`                                                                                          | existing           |
 
 ### Submenu Open/Close Flow — NEW
 
@@ -487,6 +489,7 @@ printable character key in open menu (typeahead=true)
 UIKit adapter (`cv-menu`) will:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOpen()` — menu visibility, controls `hidden` attribute and positioning
 - `state.activeId()` — highlighted item id, used to sync `data-active` and visual focus
 - `state.selectedId()` — last selected item id, included in event detail
@@ -497,6 +500,7 @@ UIKit adapter (`cv-menu`) will:
 - `state.submenuActiveId()` — active item within open submenu, used to sync `data-active` and focus
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open(source)` — on trigger click or programmatic open
 - `actions.close()` — on dismiss or programmatic close
 - `actions.toggle(source)` — on trigger click
@@ -513,6 +517,7 @@ UIKit adapter (`cv-menu`) will:
 - `actions.moveNext()` / `actions.movePrev()` / `actions.moveFirst()` / `actions.moveLast()` — programmatic navigation
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getTriggerProps()` — applied to trigger element (or split dropdown in split-button mode)
 - `contracts.getMenuProps()` — applied to menu container element
 - `contracts.getItemProps(id)` — applied to each menu item element
@@ -523,6 +528,7 @@ UIKit adapter (`cv-menu`) will:
 - `contracts.getGroupProps(groupId)` — applied to group container elements
 
 **UIKit-only concerns (NOT in headless):**
+
 - Popup positioning and viewport collision detection
 - Slotted item element discovery and `slotchange` observation
 - Item element attribute synchronization (imperative DOM updates)
@@ -537,6 +543,7 @@ UIKit adapter (`cv-menu`) will:
 ## Minimum Test Matrix
 
 **Existing tests:**
+
 - keyboard and pointer open paths
 - trigger toggle behavior
 - navigation and disabled skip behavior
@@ -545,6 +552,7 @@ UIKit adapter (`cv-menu`) will:
 - roles/aria props contract checks
 
 **New tests — Typeahead:**
+
 - printable character moves active to matching item by label prefix
 - typeahead buffer accumulates characters within timeout
 - typeahead buffer resets after timeout
@@ -556,6 +564,7 @@ UIKit adapter (`cv-menu`) will:
 - typeahead within open submenu searches submenu children
 
 **New tests — Checkable items:**
+
 - checkbox item has `role=menuitemcheckbox` and `aria-checked`
 - checkbox toggle updates `checkedIds`
 - checkbox select does not close menu by default
@@ -569,6 +578,7 @@ UIKit adapter (`cv-menu`) will:
 - disabled checkable items cannot be toggled
 
 **New tests — Submenu:**
+
 - submenu item has `aria-haspopup=menu` and `aria-expanded`
 - ArrowRight opens submenu on submenu item
 - ArrowRight is no-op on non-submenu item
@@ -586,6 +596,7 @@ UIKit adapter (`cv-menu`) will:
 - hover on non-submenu item closes open submenu
 
 **New tests — Split button:**
+
 - `getSplitTriggerProps` returns action button props
 - `getSplitDropdownProps` returns dropdown trigger props with `aria-haspopup`
 - split contracts throw when `splitButton` is not enabled
@@ -593,13 +604,14 @@ UIKit adapter (`cv-menu`) will:
 - dropdown area opens/closes menu normally
 
 **New tests — Group props:**
+
 - `getGroupProps` returns `role=group` with optional `aria-label`
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

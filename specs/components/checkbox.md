@@ -10,11 +10,11 @@ It handles checked state transitions, indeterminate state management, and standa
 
 Canonical conceptual states:
 
-| Conceptual state | Component state (canonical) | ARIA mapping |
-| --- | --- | --- |
-| `unchecked` | `checked=false`, `indeterminate=false` | `aria-checked="false"` |
-| `checked` | `checked=true`, `indeterminate=false` | `aria-checked="true"` |
-| `indeterminate` | `checked=false`, `indeterminate=true` | `aria-checked="mixed"` |
+| Conceptual state | Component state (canonical)            | ARIA mapping           |
+| ---------------- | -------------------------------------- | ---------------------- |
+| `unchecked`      | `checked=false`, `indeterminate=false` | `aria-checked="false"` |
+| `checked`        | `checked=true`, `indeterminate=false`  | `aria-checked="true"`  |
+| `indeterminate`  | `checked=false`, `indeterminate=true`  | `aria-checked="mixed"` |
 
 Notes:
 
@@ -149,21 +149,21 @@ When this contract changes in a breaking way, the change MUST be documented in t
 
 This matrix is intentionally short and exists to prevent drift between `packages/headless/specs/components/checkbox.md` and `packages/uikit/specs/components/checkbox.md`.
 
-| Surface | Headless | UIKit |
-| --- | --- | --- |
-| Canonical third-state term | `indeterminate` | `indeterminate` attribute + event detail |
-| ARIA token for third state | `aria-checked="mixed"` only | `aria-checked="mixed"` only |
-| State representation | `checked:boolean`, `indeterminate:boolean` | `checked`/`indeterminate` attributes |
-| User toggle transition | `indeterminate` -> `checked` | `indeterminate` -> `checked` |
-| Disabled/read-only semantics | cannot toggle | cannot toggle |
-| Payload on user interaction | N/A (actions/state API) | `{ checked, indeterminate, value? }` |
-| Form primitives | specified (see above) | not specified on `cv-checkbox` surface |
+| Surface                      | Headless                                   | UIKit                                    |
+| ---------------------------- | ------------------------------------------ | ---------------------------------------- |
+| Canonical third-state term   | `indeterminate`                            | `indeterminate` attribute + event detail |
+| ARIA token for third state   | `aria-checked="mixed"` only                | `aria-checked="mixed"` only              |
+| State representation         | `checked:boolean`, `indeterminate:boolean` | `checked`/`indeterminate` attributes     |
+| User toggle transition       | `indeterminate` -> `checked`               | `indeterminate` -> `checked`             |
+| Disabled/read-only semantics | cannot toggle                              | cannot toggle                            |
+| Payload on user interaction  | N/A (actions/state API)                    | `{ checked, indeterminate, value? }`     |
+| Form primitives              | specified (see above)                      | not specified on `cv-checkbox` surface   |
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

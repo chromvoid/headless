@@ -27,11 +27,11 @@
 
 ## State Signal Surface
 
-| Signal    | Type                       | Derived? | Description                                        |
-|-----------|----------------------------|----------|----------------------------------------------------|
-| `type`    | `Atom<LandmarkType>`       | No       | The ARIA landmark role                             |
-| `label`   | `Atom<string \| null>`     | No       | Accessible label text, or `null`                   |
-| `labelId` | `Atom<string \| null>`     | No       | ID of the labelling element, or `null`             |
+| Signal    | Type                   | Derived? | Description                            |
+| --------- | ---------------------- | -------- | -------------------------------------- |
+| `type`    | `Atom<LandmarkType>`   | No       | The ARIA landmark role                 |
+| `label`   | `Atom<string \| null>` | No       | Accessible label text, or `null`       |
+| `labelId` | `Atom<string \| null>` | No       | ID of the labelling element, or `null` |
 
 ## APG and A11y Contract
 
@@ -64,6 +64,7 @@
 ## Contract Prop Shapes
 
 ### `getLandmarkProps()`
+
 ```ts
 {
   role: LandmarkType                   // the landmark ARIA role
@@ -74,11 +75,11 @@
 
 ## Transitions Table
 
-| Event / Action          | Current State          | Next State / Effect                                      |
-|-------------------------|------------------------|----------------------------------------------------------|
-| `createLandmark(opts)`  | —                      | `type = opts.type`, `label = opts.label ?? null`, `labelId = opts.labelId ?? null` |
-| atom update on `label`  | `label = oldValue`     | `label = newValue`; `getLandmarkProps()` recomputes       |
-| atom update on `labelId`| `labelId = oldValue`   | `labelId = newValue`; `getLandmarkProps()` recomputes     |
+| Event / Action           | Current State        | Next State / Effect                                                                |
+| ------------------------ | -------------------- | ---------------------------------------------------------------------------------- |
+| `createLandmark(opts)`   | —                    | `type = opts.type`, `label = opts.label ?? null`, `labelId = opts.labelId ?? null` |
+| atom update on `label`   | `label = oldValue`   | `label = newValue`; `getLandmarkProps()` recomputes                                |
+| atom update on `labelId` | `labelId = oldValue` | `labelId = newValue`; `getLandmarkProps()` recomputes                              |
 
 > No user-driven actions exist. State changes only via reactive atom updates from the consumer.
 
@@ -96,17 +97,21 @@
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.type()` — the ARIA landmark role (used to select semantic HTML element or apply role attribute)
 - `state.label()` — accessible label text (synced from the `label` attribute on the host)
 - `state.labelId()` — ID of the labelling element (synced from the `label-id` attribute on the host)
 
 **Actions called:**
+
 - None. Landmark is a pure semantic wrapper with no user-driven state transitions.
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getLandmarkProps()` — spread onto the root landmark element
 
 **UIKit-only concerns (NOT in headless):**
+
 - `display: block` styling on the host element
 - Attribute-to-signal synchronization (`label` attr to `state.label`, `label-id` attr to `state.labelId`)
 - Choice of semantic HTML element vs `<div>` with explicit `role`

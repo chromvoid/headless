@@ -12,7 +12,7 @@ Define repeatable changelog generation for release preparation using backlog/sta
 
 ## Commands
 
-Run from `packages/headless`.
+Run from the package root.
 
 ### Full Release Mode
 
@@ -73,4 +73,4 @@ Use this when generated output needs human adjustments for final publication.
 
 - If generator fails due to missing issue ids, fix issue list and re-run.
 - If backlog is inconsistent, update `specs/ISSUE-BACKLOG.md` first, then regenerate.
-- If generated file is manually edited, run prettier check before publishing.
+- If generated file is manually edited, run `npm run lint:format` before publishing.

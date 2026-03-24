@@ -36,29 +36,29 @@
 
 ## CreatePopoverOptions
 
-| Option                  | Type                  | Default       | Description                                                     |
-|-------------------------|-----------------------|---------------|-----------------------------------------------------------------|
-| `idBase`                | `string`              | `'popover'`   | Base id prefix for all generated ids                            |
-| `initialOpen`           | `boolean`             | `false`       | Whether the popover starts open                                 |
-| `initialTriggerId`      | `string \| null`      | `'{idBase}-trigger'` | Trigger element id                                       |
-| `ariaLabel`             | `string`              | —             | Content `aria-label`                                            |
-| `ariaLabelledBy`        | `string`              | —             | Content `aria-labelledby`                                       |
-| `closeOnEscape`         | `boolean`             | `true`        | Whether Escape key closes the popover                           |
-| `closeOnOutsidePointer` | `boolean`             | `true`        | Whether clicking outside closes the popover                     |
-| `closeOnOutsideFocus`   | `boolean`             | `true`        | Whether focusing outside closes the popover                     |
-| `useNativePopover`      | `boolean`             | `false`       | Enable native HTML Popover API integration                      |
+| Option                  | Type             | Default              | Description                                 |
+| ----------------------- | ---------------- | -------------------- | ------------------------------------------- |
+| `idBase`                | `string`         | `'popover'`          | Base id prefix for all generated ids        |
+| `initialOpen`           | `boolean`        | `false`              | Whether the popover starts open             |
+| `initialTriggerId`      | `string \| null` | `'{idBase}-trigger'` | Trigger element id                          |
+| `ariaLabel`             | `string`         | —                    | Content `aria-label`                        |
+| `ariaLabelledBy`        | `string`         | —                    | Content `aria-labelledby`                   |
+| `closeOnEscape`         | `boolean`        | `true`               | Whether Escape key closes the popover       |
+| `closeOnOutsidePointer` | `boolean`        | `true`               | Whether clicking outside closes the popover |
+| `closeOnOutsideFocus`   | `boolean`        | `true`               | Whether focusing outside closes the popover |
+| `useNativePopover`      | `boolean`        | `false`              | Enable native HTML Popover API integration  |
 
 ## State Signal Surface
 
-| Signal              | Type                         | Derived? | Description                                               |
-|---------------------|------------------------------|----------|-----------------------------------------------------------|
-| `isOpen`            | `Atom<boolean>`              | No       | Single source of truth for visibility                     |
-| `triggerId`         | `Atom<string \| null>`       | No       | Active trigger element id                                 |
-| `openedBy`          | `Atom<PopoverOpenSource \| null>` | No  | How the popover was opened                                |
-| `restoreTargetId`   | `Atom<string \| null>`       | No       | Element id to return focus to after close                 |
-| `lastDismissIntent` | `Atom<PopoverDismissIntent \| null>` | No | Most recent dismiss intent                             |
-| `isInteractive`     | `Computed<boolean>`          | Yes      | `isOpen()` — always mirrors open state                    |
-| `useNativePopover`  | `Atom<boolean>`              | No       | Whether native Popover API mode is active                 |
+| Signal              | Type                                 | Derived? | Description                               |
+| ------------------- | ------------------------------------ | -------- | ----------------------------------------- |
+| `isOpen`            | `Atom<boolean>`                      | No       | Single source of truth for visibility     |
+| `triggerId`         | `Atom<string \| null>`               | No       | Active trigger element id                 |
+| `openedBy`          | `Atom<PopoverOpenSource \| null>`    | No       | How the popover was opened                |
+| `restoreTargetId`   | `Atom<string \| null>`               | No       | Element id to return focus to after close |
+| `lastDismissIntent` | `Atom<PopoverDismissIntent \| null>` | No       | Most recent dismiss intent                |
+| `isInteractive`     | `Computed<boolean>`                  | Yes      | `isOpen()` — always mirrors open state    |
+| `useNativePopover`  | `Atom<boolean>`                      | No       | Whether native Popover API mode is active |
 
 ## APG and A11y Contract
 
@@ -107,6 +107,7 @@ When `useNativePopover` is `false` (default):
 ## Contract Prop Shapes
 
 ### `getTriggerProps()`
+
 ```ts
 {
   id: string                          // trigger element id
@@ -123,6 +124,7 @@ When `useNativePopover` is `false` (default):
 ```
 
 ### `getContentProps()`
+
 ```ts
 {
   id: string                          // content element id
@@ -141,32 +143,32 @@ When `useNativePopover` is `false` (default):
 
 ## Transitions Table
 
-| Event / Action                      | Current State     | Next State / Effect                                          |
-|-------------------------------------|-------------------|--------------------------------------------------------------|
-| `open(source)`                      | `isOpen = false`  | `isOpen = true`; restore target cleared; `openedBy` set      |
-| `close(intent)`                     | `isOpen = true`   | `isOpen = false`; `restoreTargetId` set to trigger id        |
-| `close(intent)`                     | `isOpen = false`  | `lastDismissIntent` updated; no visibility change            |
-| `toggle(source)`                    | `isOpen = false`  | calls `open(source)`                                         |
-| `toggle(source)`                    | `isOpen = true`   | calls `close('programmatic')`                                |
-| `handleTriggerKeyDown(Enter/Space/ArrowDown)` | any    | calls `toggle('keyboard')`                                   |
-| `handleTriggerKeyDown(other key)`   | any               | no-op                                                        |
-| `handleContentKeyDown(Escape)`      | `isOpen = true`, `closeOnEscape = true` | calls `close('escape')`                  |
-| `handleContentKeyDown(Escape)`      | `closeOnEscape = false` | no-op                                                  |
-| `handleOutsidePointer()`            | `isOpen = true`, `closeOnOutsidePointer = true` | calls `close('outside-pointer')` |
-| `handleOutsidePointer()`            | `closeOnOutsidePointer = false` | no-op                                           |
-| `handleOutsideFocus()`              | `isOpen = true`, `closeOnOutsideFocus = true` | calls `close('outside-focus')`    |
-| `handleOutsideFocus()`              | `closeOnOutsideFocus = false` | no-op                                             |
-| `setTriggerId(id)`                  | any               | trigger id updated; affects future `restoreTargetId`         |
-| `handleNativeToggle('closed')`      | `isOpen = true`   | calls `close('programmatic')` to sync state                  |
-| `handleNativeToggle('open')`        | `isOpen = false`  | calls `open('programmatic')` to sync state                   |
-| `handleNativeToggle(same state)`    | any               | no-op (already in sync)                                      |
+| Event / Action                                | Current State                                   | Next State / Effect                                     |
+| --------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+| `open(source)`                                | `isOpen = false`                                | `isOpen = true`; restore target cleared; `openedBy` set |
+| `close(intent)`                               | `isOpen = true`                                 | `isOpen = false`; `restoreTargetId` set to trigger id   |
+| `close(intent)`                               | `isOpen = false`                                | `lastDismissIntent` updated; no visibility change       |
+| `toggle(source)`                              | `isOpen = false`                                | calls `open(source)`                                    |
+| `toggle(source)`                              | `isOpen = true`                                 | calls `close('programmatic')`                           |
+| `handleTriggerKeyDown(Enter/Space/ArrowDown)` | any                                             | calls `toggle('keyboard')`                              |
+| `handleTriggerKeyDown(other key)`             | any                                             | no-op                                                   |
+| `handleContentKeyDown(Escape)`                | `isOpen = true`, `closeOnEscape = true`         | calls `close('escape')`                                 |
+| `handleContentKeyDown(Escape)`                | `closeOnEscape = false`                         | no-op                                                   |
+| `handleOutsidePointer()`                      | `isOpen = true`, `closeOnOutsidePointer = true` | calls `close('outside-pointer')`                        |
+| `handleOutsidePointer()`                      | `closeOnOutsidePointer = false`                 | no-op                                                   |
+| `handleOutsideFocus()`                        | `isOpen = true`, `closeOnOutsideFocus = true`   | calls `close('outside-focus')`                          |
+| `handleOutsideFocus()`                        | `closeOnOutsideFocus = false`                   | no-op                                                   |
+| `setTriggerId(id)`                            | any                                             | trigger id updated; affects future `restoreTargetId`    |
+| `handleNativeToggle('closed')`                | `isOpen = true`                                 | calls `close('programmatic')` to sync state             |
+| `handleNativeToggle('open')`                  | `isOpen = false`                                | calls `open('programmatic')` to sync state              |
+| `handleNativeToggle(same state)`              | any                                             | no-op (already in sync)                                 |
 
 ### Derived state reactions
 
-| State Change   | `isInteractive` |
-|----------------|-----------------|
-| open           | `true`          |
-| closed         | `false`         |
+| State Change | `isInteractive` |
+| ------------ | --------------- |
+| open         | `true`          |
+| closed       | `false`         |
 
 ## Invariants
 
@@ -185,6 +187,7 @@ When `useNativePopover` is `false` (default):
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOpen()` — whether the popover is visible
 - `state.triggerId()` — trigger element id
 - `state.openedBy()` — how the popover was opened
@@ -194,6 +197,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `state.useNativePopover()` — whether native Popover API mode is active
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open(source?)` / `actions.close(intent?)` — programmatic open/close
 - `actions.toggle(source?)` — toggle open state
 - `actions.setTriggerId(id)` — set custom trigger element id
@@ -204,10 +208,12 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.handleNativeToggle(newState)` — sync state from native `toggle` event
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getTriggerProps()` — spread onto the trigger button element (includes `popovertarget` when native)
 - `contracts.getContentProps()` — spread onto the popover content panel (includes `popover="manual"` when native, `hidden` when manual)
 
 **UIKit-only concerns (NOT in headless):**
+
 - Calling `showPopover()` / `hidePopover()` on the content DOM element (when `useNativePopover` is active)
 - Listening for native `toggle` / `beforetoggle` events on the content element and calling `handleNativeToggle`
 - Document-level `pointerdown` and `focusin` listeners for outside dismiss

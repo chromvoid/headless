@@ -9,13 +9,13 @@
 
 ### How it differs from Drawer
 
-| Concern | Drawer | Sidebar |
-|---------|--------|---------|
-| Presence in layout | Overlay only; removed from flow when closed | Always in DOM/layout flow (desktop) |
-| Placement | Any edge (`start`, `end`, `top`, `bottom`) | Inline-start only |
-| Collapsed state | N/A | Collapses to icon rail |
-| Responsive mode | N/A (always overlay) | Auto-switches between persistent panel and modal overlay |
-| Dialog delegation | Always | Mobile overlay mode only |
+| Concern            | Drawer                                      | Sidebar                                                  |
+| ------------------ | ------------------------------------------- | -------------------------------------------------------- |
+| Presence in layout | Overlay only; removed from flow when closed | Always in DOM/layout flow (desktop)                      |
+| Placement          | Any edge (`start`, `end`, `top`, `bottom`)  | Inline-start only                                        |
+| Collapsed state    | N/A                                         | Collapses to icon rail                                   |
+| Responsive mode    | N/A (always overlay)                        | Auto-switches between persistent panel and modal overlay |
+| Dialog delegation  | Always                                      | Mobile overlay mode only                                 |
 
 ## Component Files
 
@@ -51,37 +51,39 @@
 
 ## CreateSidebarOptions
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `id` | `string` | `'sidebar'` | Base id prefix for all generated ids |
-| `defaultExpanded` | `boolean` | `true` | Whether the sidebar starts expanded (desktop mode) |
-| `onExpandedChange` | `(expanded: boolean) => void` | --- | Callback fired when `expanded` state changes |
-| `closeOnEscape` | `boolean` | `true` | Whether Escape key closes mobile overlay |
-| `closeOnOutsidePointer` | `boolean` | `true` | Whether clicking outside closes mobile overlay |
-| `initialFocusId` | `string` | --- | Id of element to focus when mobile overlay opens |
-| `ariaLabel` | `string` | `'Sidebar navigation'` | Accessible label for the sidebar landmark |
+| Option                  | Type                          | Default                | Description                                        |
+| ----------------------- | ----------------------------- | ---------------------- | -------------------------------------------------- |
+| `id`                    | `string`                      | `'sidebar'`            | Base id prefix for all generated ids               |
+| `defaultExpanded`       | `boolean`                     | `true`                 | Whether the sidebar starts expanded (desktop mode) |
+| `onExpandedChange`      | `(expanded: boolean) => void` | ---                    | Callback fired when `expanded` state changes       |
+| `closeOnEscape`         | `boolean`                     | `true`                 | Whether Escape key closes mobile overlay           |
+| `closeOnOutsidePointer` | `boolean`                     | `true`                 | Whether clicking outside closes mobile overlay     |
+| `initialFocusId`        | `string`                      | ---                    | Id of element to focus when mobile overlay opens   |
+| `ariaLabel`             | `string`                      | `'Sidebar navigation'` | Accessible label for the sidebar landmark          |
 
 ## State Signal Surface
 
-| Signal | Type | Derived? | Source | Description |
-|--------|------|----------|--------|-------------|
-| `expanded` | `Atom<boolean>` | No | sidebar | Whether sidebar shows full width (`true`) or icon rail (`false`) |
-| `overlayOpen` | `Atom<boolean>` | No | dialog | Whether mobile overlay is visible |
-| `mobile` | `Atom<boolean>` | No | sidebar | Whether in mobile/overlay mode |
-| `isFocusTrapped` | `Computed<boolean>` | Yes | dialog | `mobile() && overlayOpen()` |
-| `shouldLockScroll` | `Computed<boolean>` | Yes | dialog | `mobile() && overlayOpen()` |
-| `restoreTargetId` | `Atom<string \| null>` | No | dialog | Element id to return focus to after overlay close |
-| `initialFocusTargetId` | `Atom<string \| null>` | No | dialog | Id of element to receive focus when overlay opens |
+| Signal                 | Type                   | Derived? | Source  | Description                                                      |
+| ---------------------- | ---------------------- | -------- | ------- | ---------------------------------------------------------------- |
+| `expanded`             | `Atom<boolean>`        | No       | sidebar | Whether sidebar shows full width (`true`) or icon rail (`false`) |
+| `overlayOpen`          | `Atom<boolean>`        | No       | dialog  | Whether mobile overlay is visible                                |
+| `mobile`               | `Atom<boolean>`        | No       | sidebar | Whether in mobile/overlay mode                                   |
+| `isFocusTrapped`       | `Computed<boolean>`    | Yes      | dialog  | `mobile() && overlayOpen()`                                      |
+| `shouldLockScroll`     | `Computed<boolean>`    | Yes      | dialog  | `mobile() && overlayOpen()`                                      |
+| `restoreTargetId`      | `Atom<string \| null>` | No       | dialog  | Element id to return focus to after overlay close                |
+| `initialFocusTargetId` | `Atom<string \| null>` | No       | dialog  | Id of element to receive focus when overlay opens                |
 
 ## APG and A11y Contract
 
 ### Desktop (persistent) mode
+
 - Sidebar container: `role="navigation"`, `aria-label`
 - No dialog semantics; the sidebar is a landmark, not an overlay
 - Toggle button: `aria-expanded`, `aria-controls` pointing to sidebar id
 - Rail state communicated via `data-collapsed="true|false"` on sidebar container
 
 ### Mobile (overlay) mode
+
 - Overlay container: `role="dialog"`, `aria-modal="true"`, `aria-label`
 - Focus trap within the overlay panel
 - Escape key dismisses the overlay
@@ -92,6 +94,7 @@
 ## Behavior Contract
 
 ### Desktop mode (`mobile: false`)
+
 - Sidebar is always visible in the layout, either expanded or collapsed to rail
 - `toggle()` switches between expanded and collapsed (icon rail)
 - `expand()` sets `expanded = true`; `collapse()` sets `expanded = false`
@@ -100,6 +103,7 @@
 - `onExpandedChange` fires when `expanded` transitions
 
 ### Mobile mode (`mobile: true`)
+
 - Sidebar is hidden by default; `overlayOpen` controls visibility
 - `toggle()` toggles `overlayOpen`
 - `expand()` and `collapse()` are no-ops
@@ -109,13 +113,16 @@
 - Focus returns to toggle button on close
 
 ### Mode switching (`setMobile`)
+
 - `setMobile(true)`: closes any expanded state, sidebar enters overlay mode (closed by default)
 - `setMobile(false)`: closes overlay if open, sidebar enters persistent mode with `expanded = defaultExpanded`
 
 ## Contract Prop Shapes
 
 ### `getSidebarProps()`
+
 Props for the sidebar container element.
+
 ```ts
 // Desktop mode:
 {
@@ -140,7 +147,9 @@ Props for the sidebar container element.
 ```
 
 ### `getToggleProps()`
+
 Props for the expand/collapse toggle button.
+
 ```ts
 {
   id: string                           // `${id}-toggle`
@@ -154,7 +163,9 @@ Props for the expand/collapse toggle button.
 ```
 
 ### `getOverlayProps()`
+
 Props for the mobile overlay backdrop. Only meaningful in mobile mode.
+
 ```ts
 {
   id: string                           // `${id}-overlay`
@@ -166,7 +177,9 @@ Props for the mobile overlay backdrop. Only meaningful in mobile mode.
 ```
 
 ### `getRailProps()`
+
 Props for the collapsed rail container. Only meaningful in desktop mode.
+
 ```ts
 {
   id: string                           // `${id}-rail`
@@ -178,40 +191,40 @@ Props for the collapsed rail container. Only meaningful in desktop mode.
 
 ## Transitions Table
 
-| Event / Action | Current State | Next State / Effect |
-|---------------|---------------|---------------------|
-| `toggle()` | `mobile = false`, `expanded = false` | `expanded = true`; fire `onExpandedChange(true)` |
-| `toggle()` | `mobile = false`, `expanded = true` | `expanded = false`; fire `onExpandedChange(false)` |
-| `toggle()` | `mobile = true`, `overlayOpen = false` | `overlayOpen = true`; focus management begins |
-| `toggle()` | `mobile = true`, `overlayOpen = true` | `overlayOpen = false`; focus returns to toggle |
-| `expand()` | `mobile = false`, `expanded = false` | `expanded = true`; fire `onExpandedChange(true)` |
-| `expand()` | `mobile = false`, `expanded = true` | no-op |
-| `expand()` | `mobile = true` | no-op |
-| `collapse()` | `mobile = false`, `expanded = true` | `expanded = false`; fire `onExpandedChange(false)` |
-| `collapse()` | `mobile = false`, `expanded = false` | no-op |
-| `collapse()` | `mobile = true` | no-op |
-| `openOverlay()` | `mobile = true`, `overlayOpen = false` | `overlayOpen = true`; focus management begins |
-| `openOverlay()` | `mobile = true`, `overlayOpen = true` | no-op |
-| `openOverlay()` | `mobile = false` | no-op |
-| `closeOverlay(intent)` | `mobile = true`, `overlayOpen = true` | `overlayOpen = false`; focus returns to toggle |
-| `closeOverlay(intent)` | `mobile = true`, `overlayOpen = false` | no-op |
-| `closeOverlay(intent)` | `mobile = false` | no-op |
-| `setMobile(true)` | `mobile = false` | `mobile = true`; `overlayOpen = false` |
-| `setMobile(false)` | `mobile = true` | `mobile = false`; `overlayOpen = false`; `expanded = defaultExpanded` |
-| `setMobile(value)` | `mobile = value` | no-op |
-| `handleKeyDown(Escape)` | `mobile = true`, `overlayOpen = true`, `closeOnEscape = true` | `closeOverlay('escape')` |
-| `handleKeyDown(Escape)` | `mobile = false` OR `closeOnEscape = false` | no-op |
-| `handleOutsidePointer()` | `mobile = true`, `overlayOpen = true`, `closeOnOutsidePointer = true` | `closeOverlay('outside-pointer')` |
-| `handleOutsidePointer()` | `mobile = false` OR `closeOnOutsidePointer = false` | no-op |
-| `handleOutsideFocus()` | `mobile = true`, `overlayOpen = true` | `closeOverlay('outside-focus')` |
+| Event / Action           | Current State                                                         | Next State / Effect                                                   |
+| ------------------------ | --------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `toggle()`               | `mobile = false`, `expanded = false`                                  | `expanded = true`; fire `onExpandedChange(true)`                      |
+| `toggle()`               | `mobile = false`, `expanded = true`                                   | `expanded = false`; fire `onExpandedChange(false)`                    |
+| `toggle()`               | `mobile = true`, `overlayOpen = false`                                | `overlayOpen = true`; focus management begins                         |
+| `toggle()`               | `mobile = true`, `overlayOpen = true`                                 | `overlayOpen = false`; focus returns to toggle                        |
+| `expand()`               | `mobile = false`, `expanded = false`                                  | `expanded = true`; fire `onExpandedChange(true)`                      |
+| `expand()`               | `mobile = false`, `expanded = true`                                   | no-op                                                                 |
+| `expand()`               | `mobile = true`                                                       | no-op                                                                 |
+| `collapse()`             | `mobile = false`, `expanded = true`                                   | `expanded = false`; fire `onExpandedChange(false)`                    |
+| `collapse()`             | `mobile = false`, `expanded = false`                                  | no-op                                                                 |
+| `collapse()`             | `mobile = true`                                                       | no-op                                                                 |
+| `openOverlay()`          | `mobile = true`, `overlayOpen = false`                                | `overlayOpen = true`; focus management begins                         |
+| `openOverlay()`          | `mobile = true`, `overlayOpen = true`                                 | no-op                                                                 |
+| `openOverlay()`          | `mobile = false`                                                      | no-op                                                                 |
+| `closeOverlay(intent)`   | `mobile = true`, `overlayOpen = true`                                 | `overlayOpen = false`; focus returns to toggle                        |
+| `closeOverlay(intent)`   | `mobile = true`, `overlayOpen = false`                                | no-op                                                                 |
+| `closeOverlay(intent)`   | `mobile = false`                                                      | no-op                                                                 |
+| `setMobile(true)`        | `mobile = false`                                                      | `mobile = true`; `overlayOpen = false`                                |
+| `setMobile(false)`       | `mobile = true`                                                       | `mobile = false`; `overlayOpen = false`; `expanded = defaultExpanded` |
+| `setMobile(value)`       | `mobile = value`                                                      | no-op                                                                 |
+| `handleKeyDown(Escape)`  | `mobile = true`, `overlayOpen = true`, `closeOnEscape = true`         | `closeOverlay('escape')`                                              |
+| `handleKeyDown(Escape)`  | `mobile = false` OR `closeOnEscape = false`                           | no-op                                                                 |
+| `handleOutsidePointer()` | `mobile = true`, `overlayOpen = true`, `closeOnOutsidePointer = true` | `closeOverlay('outside-pointer')`                                     |
+| `handleOutsidePointer()` | `mobile = false` OR `closeOnOutsidePointer = false`                   | no-op                                                                 |
+| `handleOutsideFocus()`   | `mobile = true`, `overlayOpen = true`                                 | `closeOverlay('outside-focus')`                                       |
 
 ### Derived state reactions
 
-| State Change | `isFocusTrapped` | `shouldLockScroll` |
-|-------------|------------------|--------------------|
-| desktop, any expanded | `false` | `false` |
-| mobile, overlayOpen = true | `true` | `true` |
-| mobile, overlayOpen = false | `false` | `false` |
+| State Change                | `isFocusTrapped` | `shouldLockScroll` |
+| --------------------------- | ---------------- | ------------------ |
+| desktop, any expanded       | `false`          | `false`            |
+| mobile, overlayOpen = true  | `true`           | `true`             |
+| mobile, overlayOpen = false | `false`          | `false`            |
 
 ## Invariants
 
@@ -233,6 +246,7 @@ Props for the collapsed rail container. Only meaningful in desktop mode.
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.expanded()` — whether full-width or icon rail (desktop)
 - `state.overlayOpen()` — whether mobile overlay is visible
 - `state.mobile()` — whether in mobile/overlay mode
@@ -242,6 +256,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `state.initialFocusTargetId()` — element id to focus on overlay open
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.toggle()` — toggle expand/collapse (desktop) or open/close (mobile)
 - `actions.expand()` — expand sidebar (desktop only)
 - `actions.collapse()` — collapse to rail (desktop only)
@@ -253,12 +268,14 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.handleOutsideFocus()` — outside focus for mobile overlay
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getSidebarProps()` — spread onto the sidebar panel element (role switches between `navigation` and `dialog` based on mode)
 - `contracts.getToggleProps()` — spread onto the toggle button element
 - `contracts.getOverlayProps()` — spread onto the mobile backdrop element
 - `contracts.getRailProps()` — spread onto the collapsed rail element
 
 **UIKit-only concerns (NOT in headless):**
+
 - Lifecycle events (`cv-expand`, `cv-collapse`, `cv-overlay-open`, `cv-overlay-close`)
 - CSS transitions for expand/collapse and slide-in overlay animations
 - Backdrop rendering and styling

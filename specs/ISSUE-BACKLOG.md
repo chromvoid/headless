@@ -20,8 +20,8 @@ Applies to all issues unless overridden:
 
 1. Code/docs changed in `packages/headless` only.
 2. No forbidden imports (boundary check remains green).
-3. `npm run lint -w packages/headless` passes.
-4. `npm run test -w packages/headless` passes.
+3. `npm run lint` passes.
+4. `npm run test` passes.
 5. Public exports are wired in `packages/headless/src/index.ts`.
 6. Component behavior stays aligned with corresponding `specs/components/<component>.md`.
 

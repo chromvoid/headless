@@ -11,22 +11,22 @@
 
 ## Options (`CreateBadgeOptions`)
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `variant` | `BadgeVariant` | `'neutral'` | Visual variant: `'primary' \| 'success' \| 'neutral' \| 'warning' \| 'danger'` |
-| `size` | `BadgeSize` | `'medium'` | Display size: `'small' \| 'medium' \| 'large'` |
-| `dot` | `boolean` | `false` | Dot mode: hides textual content, shows a colored circle indicator |
-| `pulse` | `boolean` | `false` | Whether the badge should animate to draw attention |
-| `pill` | `boolean` | `false` | Whether to apply a pill (fully rounded) shape modifier |
-| `isDynamic` | `boolean` | `false` | Whether content changes at runtime (enables live-region semantics) |
-| `isDecorative` | `boolean` | `false` | Whether the badge is purely decorative (hides from assistive technology) |
-| `ariaLabel` | `string \| undefined` | `undefined` | Accessible label override; useful in dot mode where visible text is absent |
+| Option         | Type                  | Default     | Description                                                                    |
+| -------------- | --------------------- | ----------- | ------------------------------------------------------------------------------ |
+| `variant`      | `BadgeVariant`        | `'neutral'` | Visual variant: `'primary' \| 'success' \| 'neutral' \| 'warning' \| 'danger'` |
+| `size`         | `BadgeSize`           | `'medium'`  | Display size: `'small' \| 'medium' \| 'large'`                                 |
+| `dot`          | `boolean`             | `false`     | Dot mode: hides textual content, shows a colored circle indicator              |
+| `pulse`        | `boolean`             | `false`     | Whether the badge should animate to draw attention                             |
+| `pill`         | `boolean`             | `false`     | Whether to apply a pill (fully rounded) shape modifier                         |
+| `isDynamic`    | `boolean`             | `false`     | Whether content changes at runtime (enables live-region semantics)             |
+| `isDecorative` | `boolean`             | `false`     | Whether the badge is purely decorative (hides from assistive technology)       |
+| `ariaLabel`    | `string \| undefined` | `undefined` | Accessible label override; useful in dot mode where visible text is absent     |
 
 ## Type Definitions
 
 ```ts
-type BadgeVariant = 'primary' | 'success' | 'neutral' | 'warning' | 'danger';
-type BadgeSize = 'small' | 'medium' | 'large';
+type BadgeVariant = 'primary' | 'success' | 'neutral' | 'warning' | 'danger'
+type BadgeSize = 'small' | 'medium' | 'large'
 ```
 
 ## Public API
@@ -35,33 +35,33 @@ type BadgeSize = 'small' | 'medium' | 'large';
 
 ### State (signal-backed)
 
-| Signal | Type | Description |
-|--------|------|-------------|
-| `variant()` | `Atom<BadgeVariant>` | Current visual variant |
-| `size()` | `Atom<BadgeSize>` | Current display size |
-| `dot()` | `Atom<boolean>` | Whether dot mode is active |
-| `pulse()` | `Atom<boolean>` | Whether pulse animation is active |
-| `pill()` | `Atom<boolean>` | Whether pill shape modifier is active |
-| `isDynamic()` | `Atom<boolean>` | Whether the badge is a live region |
-| `isDecorative()` | `Atom<boolean>` | Whether the badge is decorative-only |
-| `isEmpty()` | `Computed<boolean>` | Derived: `true` when `dot` is `true` (content is hidden) |
+| Signal           | Type                 | Description                                              |
+| ---------------- | -------------------- | -------------------------------------------------------- |
+| `variant()`      | `Atom<BadgeVariant>` | Current visual variant                                   |
+| `size()`         | `Atom<BadgeSize>`    | Current display size                                     |
+| `dot()`          | `Atom<boolean>`      | Whether dot mode is active                               |
+| `pulse()`        | `Atom<boolean>`      | Whether pulse animation is active                        |
+| `pill()`         | `Atom<boolean>`      | Whether pill shape modifier is active                    |
+| `isDynamic()`    | `Atom<boolean>`      | Whether the badge is a live region                       |
+| `isDecorative()` | `Atom<boolean>`      | Whether the badge is decorative-only                     |
+| `isEmpty()`      | `Computed<boolean>`  | Derived: `true` when `dot` is `true` (content is hidden) |
 
 ### Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `setVariant` | `(value: BadgeVariant) => void` | Updates the visual variant |
-| `setSize` | `(value: BadgeSize) => void` | Updates the display size |
-| `setDot` | `(value: boolean) => void` | Toggles dot mode |
-| `setPulse` | `(value: boolean) => void` | Toggles pulse animation |
-| `setPill` | `(value: boolean) => void` | Toggles pill shape modifier |
-| `setDynamic` | `(value: boolean) => void` | Toggles live-region semantics |
-| `setDecorative` | `(value: boolean) => void` | Toggles decorative mode |
+| Action          | Signature                       | Description                   |
+| --------------- | ------------------------------- | ----------------------------- |
+| `setVariant`    | `(value: BadgeVariant) => void` | Updates the visual variant    |
+| `setSize`       | `(value: BadgeSize) => void`    | Updates the display size      |
+| `setDot`        | `(value: boolean) => void`      | Toggles dot mode              |
+| `setPulse`      | `(value: boolean) => void`      | Toggles pulse animation       |
+| `setPill`       | `(value: boolean) => void`      | Toggles pill shape modifier   |
+| `setDynamic`    | `(value: boolean) => void`      | Toggles live-region semantics |
+| `setDecorative` | `(value: boolean) => void`      | Toggles decorative mode       |
 
 ### Contracts
 
-| Contract | Return type | Description |
-|----------|-------------|-------------|
+| Contract          | Return type  | Description                                              |
+| ----------------- | ------------ | -------------------------------------------------------- |
 | `getBadgeProps()` | `BadgeProps` | Ready-to-spread ARIA attribute map for the badge element |
 
 #### `BadgeProps` Shape
@@ -125,15 +125,15 @@ Badge is not keyboard-interactive. No keyboard handling is needed.
 
 ## Transitions Table
 
-| Trigger | Precondition | State Change | Contract Effect |
-|---------|-------------|-------------|-----------------|
-| `actions.setVariant(v)` | valid variant | `variant` = v | no ARIA change |
-| `actions.setSize(v)` | valid size | `size` = v | no ARIA change |
-| `actions.setDot(v)` | any | `dot` = v; `isEmpty` recomputes | no ARIA change; UIKit hides/shows content |
-| `actions.setPulse(v)` | any | `pulse` = v | no ARIA change |
-| `actions.setPill(v)` | any | `pill` = v | no ARIA change |
-| `actions.setDynamic(v)` | any | `isDynamic` = v | `getBadgeProps()` adds/removes `role="status"`, `aria-live`, `aria-atomic` |
-| `actions.setDecorative(v)` | any | `isDecorative` = v | `getBadgeProps()` switches to `role="presentation"` + `aria-hidden="true"` or reverts |
+| Trigger                    | Precondition  | State Change                    | Contract Effect                                                                       |
+| -------------------------- | ------------- | ------------------------------- | ------------------------------------------------------------------------------------- |
+| `actions.setVariant(v)`    | valid variant | `variant` = v                   | no ARIA change                                                                        |
+| `actions.setSize(v)`       | valid size    | `size` = v                      | no ARIA change                                                                        |
+| `actions.setDot(v)`        | any           | `dot` = v; `isEmpty` recomputes | no ARIA change; UIKit hides/shows content                                             |
+| `actions.setPulse(v)`      | any           | `pulse` = v                     | no ARIA change                                                                        |
+| `actions.setPill(v)`       | any           | `pill` = v                      | no ARIA change                                                                        |
+| `actions.setDynamic(v)`    | any           | `isDynamic` = v                 | `getBadgeProps()` adds/removes `role="status"`, `aria-live`, `aria-atomic`            |
+| `actions.setDecorative(v)` | any           | `isDecorative` = v              | `getBadgeProps()` switches to `role="presentation"` + `aria-hidden="true"` or reverts |
 
 ## Invariants
 
@@ -150,45 +150,45 @@ This section defines what UIKit (`cv-badge`) binds to from the headless model.
 
 ### Signals read by adapter
 
-| Signal | UIKit usage |
-|--------|-------------|
-| `state.variant()` | Maps to `variant` host attribute and CSS class for color theming |
-| `state.size()` | Maps to `size` host attribute and CSS class for dimension styling |
-| `state.dot()` | Sets `dot` attribute on host; conditionally hides default slot content |
-| `state.pulse()` | Sets `pulse` attribute on host; toggles CSS pulse animation |
-| `state.pill()` | Sets `pill` attribute on host; applies fully rounded border radius |
-| `state.isEmpty()` | Used to conditionally suppress content rendering in dot mode |
+| Signal            | UIKit usage                                                            |
+| ----------------- | ---------------------------------------------------------------------- |
+| `state.variant()` | Maps to `variant` host attribute and CSS class for color theming       |
+| `state.size()`    | Maps to `size` host attribute and CSS class for dimension styling      |
+| `state.dot()`     | Sets `dot` attribute on host; conditionally hides default slot content |
+| `state.pulse()`   | Sets `pulse` attribute on host; toggles CSS pulse animation            |
+| `state.pill()`    | Sets `pill` attribute on host; applies fully rounded border radius     |
+| `state.isEmpty()` | Used to conditionally suppress content rendering in dot mode           |
 
 ### Actions called by adapter
 
-| Action | UIKit trigger |
-|--------|--------------|
-| `actions.setVariant(v)` | When `variant` attribute/property changes on the host element |
-| `actions.setSize(v)` | When `size` attribute/property changes on the host element |
-| `actions.setDot(v)` | When `dot` attribute/property changes on the host element |
-| `actions.setPulse(v)` | When `pulse` attribute/property changes on the host element |
-| `actions.setPill(v)` | When `pill` attribute/property changes on the host element |
-| `actions.setDynamic(v)` | When `dynamic` attribute/property changes on the host element |
+| Action                     | UIKit trigger                                                    |
+| -------------------------- | ---------------------------------------------------------------- |
+| `actions.setVariant(v)`    | When `variant` attribute/property changes on the host element    |
+| `actions.setSize(v)`       | When `size` attribute/property changes on the host element       |
+| `actions.setDot(v)`        | When `dot` attribute/property changes on the host element        |
+| `actions.setPulse(v)`      | When `pulse` attribute/property changes on the host element      |
+| `actions.setPill(v)`       | When `pill` attribute/property changes on the host element       |
+| `actions.setDynamic(v)`    | When `dynamic` attribute/property changes on the host element    |
 | `actions.setDecorative(v)` | When `decorative` attribute/property changes on the host element |
 
 ### Contracts spread by adapter
 
-| Contract | Target element | Notes |
-|----------|---------------|-------|
+| Contract          | Target element                     | Notes                                                                                                        |
+| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `getBadgeProps()` | Root badge element (`part="base"`) | Spread as attributes; provides `role`, `aria-live`, `aria-atomic`, `aria-hidden`, `aria-label` as applicable |
 
 ### Options passed through from UIKit attributes
 
-| UIKit attribute | Headless option | Notes |
-|-----------------|----------------|-------|
-| `variant` | `variant` | String enum, defaults to `'neutral'` |
-| `size` | `size` | String enum, defaults to `'medium'` |
-| `dot` | `dot` | Boolean attribute |
-| `pulse` | `pulse` | Boolean attribute |
-| `pill` | `pill` | Boolean attribute |
-| `dynamic` | `isDynamic` | Boolean attribute; enables live-region semantics |
-| `decorative` | `isDecorative` | Boolean attribute; hides from assistive technology |
-| `aria-label` | `ariaLabel` | Labeling; recommended when `dot` is `true` |
+| UIKit attribute | Headless option | Notes                                              |
+| --------------- | --------------- | -------------------------------------------------- |
+| `variant`       | `variant`       | String enum, defaults to `'neutral'`               |
+| `size`          | `size`          | String enum, defaults to `'medium'`                |
+| `dot`           | `dot`           | Boolean attribute                                  |
+| `pulse`         | `pulse`         | Boolean attribute                                  |
+| `pill`          | `pill`          | Boolean attribute                                  |
+| `dynamic`       | `isDynamic`     | Boolean attribute; enables live-region semantics   |
+| `decorative`    | `isDecorative`  | Boolean attribute; hides from assistive technology |
+| `aria-label`    | `ariaLabel`     | Labeling; recommended when `dot` is `true`         |
 
 ## Minimum Test Matrix
 

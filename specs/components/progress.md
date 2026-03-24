@@ -11,20 +11,20 @@
 
 ## Options (`CreateProgressOptions`)
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `idBase` | `string` | `'progress'` | Prefix for atom debug names and generated element IDs |
-| `value` | `number` | `min` | Initial value; clamped and snapped to range |
-| `min` | `number` | `0` | Minimum value |
-| `max` | `number` | `100` | Maximum value |
-| `step` | `number` | `1` | Step size for `increment()`/`decrement()` (delegated to `createValueRange`) |
-| `isIndeterminate` | `boolean` | `false` | Whether to start in indeterminate mode |
-| `valueText` | `string \| undefined` | `undefined` | Static override for `aria-valuetext`; takes precedence over `formatValueText` and the percentage fallback |
-| `ariaLabel` | `string \| undefined` | `undefined` | Passed through to `aria-label` |
-| `ariaLabelledBy` | `string \| undefined` | `undefined` | Passed through to `aria-labelledby` |
-| `ariaDescribedBy` | `string \| undefined` | `undefined` | Passed through to `aria-describedby` |
-| `formatValueText` | `(value: number) => string \| undefined` | `undefined` | Custom formatter for `aria-valuetext`; used when `valueText` is not set |
-| `onValueChange` | `(value: number) => void \| undefined` | `undefined` | Called when `value` actually changes (after clamping) |
+| Option            | Type                                     | Default      | Description                                                                                               |
+| ----------------- | ---------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| `idBase`          | `string`                                 | `'progress'` | Prefix for atom debug names and generated element IDs                                                     |
+| `value`           | `number`                                 | `min`        | Initial value; clamped and snapped to range                                                               |
+| `min`             | `number`                                 | `0`          | Minimum value                                                                                             |
+| `max`             | `number`                                 | `100`        | Maximum value                                                                                             |
+| `step`            | `number`                                 | `1`          | Step size for `increment()`/`decrement()` (delegated to `createValueRange`)                               |
+| `isIndeterminate` | `boolean`                                | `false`      | Whether to start in indeterminate mode                                                                    |
+| `valueText`       | `string \| undefined`                    | `undefined`  | Static override for `aria-valuetext`; takes precedence over `formatValueText` and the percentage fallback |
+| `ariaLabel`       | `string \| undefined`                    | `undefined`  | Passed through to `aria-label`                                                                            |
+| `ariaLabelledBy`  | `string \| undefined`                    | `undefined`  | Passed through to `aria-labelledby`                                                                       |
+| `ariaDescribedBy` | `string \| undefined`                    | `undefined`  | Passed through to `aria-describedby`                                                                      |
+| `formatValueText` | `(value: number) => string \| undefined` | `undefined`  | Custom formatter for `aria-valuetext`; used when `valueText` is not set                                   |
+| `onValueChange`   | `(value: number) => void \| undefined`   | `undefined`  | Called when `value` actually changes (after clamping)                                                     |
 
 ## Public API
 
@@ -32,28 +32,28 @@
 
 ### State (signal-backed)
 
-| Signal | Type | Description |
-|--------|------|-------------|
-| `value()` | `Atom<number>` | Current value, clamped to `[min, max]` |
-| `min()` | `Atom<number>` | Minimum boundary |
-| `max()` | `Atom<number>` | Maximum boundary |
-| `percentage()` | `Computed<number>` | Derived: `((value - min) / (max - min)) * 100` |
-| `isIndeterminate()` | `Atom<boolean>` | Whether progress is in indeterminate mode |
-| `isComplete()` | `Computed<boolean>` | Derived: `!isIndeterminate && value >= max` |
+| Signal              | Type                | Description                                    |
+| ------------------- | ------------------- | ---------------------------------------------- |
+| `value()`           | `Atom<number>`      | Current value, clamped to `[min, max]`         |
+| `min()`             | `Atom<number>`      | Minimum boundary                               |
+| `max()`             | `Atom<number>`      | Maximum boundary                               |
+| `percentage()`      | `Computed<number>`  | Derived: `((value - min) / (max - min)) * 100` |
+| `isIndeterminate()` | `Atom<boolean>`     | Whether progress is in indeterminate mode      |
+| `isComplete()`      | `Computed<boolean>` | Derived: `!isIndeterminate && value >= max`    |
 
 ### Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `setValue` | `(value: number) => void` | Set value; clamped to range, fires `onValueChange` on actual change |
-| `increment` | `() => void` | Increase value by `step`; clamped, fires `onValueChange` on actual change |
-| `decrement` | `() => void` | Decrease value by `step`; clamped, fires `onValueChange` on actual change |
-| `setIndeterminate` | `(value: boolean) => void` | Switch between determinate and indeterminate modes |
+| Action             | Signature                  | Description                                                               |
+| ------------------ | -------------------------- | ------------------------------------------------------------------------- |
+| `setValue`         | `(value: number) => void`  | Set value; clamped to range, fires `onValueChange` on actual change       |
+| `increment`        | `() => void`               | Increase value by `step`; clamped, fires `onValueChange` on actual change |
+| `decrement`        | `() => void`               | Decrease value by `step`; clamped, fires `onValueChange` on actual change |
+| `setIndeterminate` | `(value: boolean) => void` | Switch between determinate and indeterminate modes                        |
 
 ### Contracts
 
-| Contract | Return type | Description |
-|----------|-------------|-------------|
+| Contract             | Return type     | Description                                                    |
+| -------------------- | --------------- | -------------------------------------------------------------- |
 | `getProgressProps()` | `ProgressProps` | Ready-to-spread ARIA attribute map for the progressbar element |
 
 #### `ProgressProps` shape
@@ -73,6 +73,7 @@
 ```
 
 `aria-valuetext` resolution order (determinate mode only):
+
 1. `options.valueText` if set (static string override)
 2. `options.formatValueText(value)` if provided
 3. Rounded percentage fallback: `"${Math.round(percentage)}%"`
@@ -104,13 +105,13 @@
 
 ## Transitions Table
 
-| Trigger | Precondition | State change | Side effect |
-|---------|-------------|-------------|-------------|
-| `actions.setValue(v)` | any | `value` = clamp(v, min, max) | `onValueChange` if value changed |
-| `actions.increment()` | any | `value` = clamp(value + step, min, max) | `onValueChange` if value changed |
-| `actions.decrement()` | any | `value` = clamp(value - step, min, max) | `onValueChange` if value changed |
-| `actions.setIndeterminate(true)` | determinate | `isIndeterminate` = true | `isComplete` recomputes to false |
-| `actions.setIndeterminate(false)` | indeterminate | `isIndeterminate` = false | `isComplete` recomputes based on value/max |
+| Trigger                           | Precondition  | State change                            | Side effect                                |
+| --------------------------------- | ------------- | --------------------------------------- | ------------------------------------------ |
+| `actions.setValue(v)`             | any           | `value` = clamp(v, min, max)            | `onValueChange` if value changed           |
+| `actions.increment()`             | any           | `value` = clamp(value + step, min, max) | `onValueChange` if value changed           |
+| `actions.decrement()`             | any           | `value` = clamp(value - step, min, max) | `onValueChange` if value changed           |
+| `actions.setIndeterminate(true)`  | determinate   | `isIndeterminate` = true                | `isComplete` recomputes to false           |
+| `actions.setIndeterminate(false)` | indeterminate | `isIndeterminate` = false               | `isComplete` recomputes based on value/max |
 
 ## Invariants
 
@@ -126,40 +127,40 @@ This section defines what UIKit (`cv-progress`) binds to from the headless model
 
 ### Signals read by adapter
 
-| Signal | UIKit usage |
-|--------|-------------|
-| `state.value()` | Not read directly; consumed via contracts |
-| `state.percentage()` | Sets `--cv-progress-value` CSS custom property for indicator width |
+| Signal                    | UIKit usage                                                        |
+| ------------------------- | ------------------------------------------------------------------ |
+| `state.value()`           | Not read directly; consumed via contracts                          |
+| `state.percentage()`      | Sets `--cv-progress-value` CSS custom property for indicator width |
 | `state.isIndeterminate()` | Sets `indeterminate` attribute on host for CSS animation switching |
-| `state.isComplete()` | Sets `complete` attribute on host for visual feedback |
+| `state.isComplete()`      | Sets `complete` attribute on host for visual feedback              |
 
 ### Actions called by adapter
 
-| Action | UIKit trigger |
-|--------|--------------|
-| `actions.setValue(v)` | When `value` attribute/property changes on the host element |
+| Action                        | UIKit trigger                                                       |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `actions.setValue(v)`         | When `value` attribute/property changes on the host element         |
 | `actions.setIndeterminate(v)` | When `indeterminate` attribute/property changes on the host element |
 
 Note: `increment()` and `decrement()` are available for programmatic use but have no direct DOM event trigger in UIKit.
 
 ### Contracts spread by adapter
 
-| Contract | Target element | Notes |
-|----------|---------------|-------|
+| Contract             | Target element                           | Notes                                                     |
+| -------------------- | ---------------------------------------- | --------------------------------------------------------- |
 | `getProgressProps()` | Root progressbar element (`part="base"`) | Spread as attributes; provides `role`, `aria-*`, and `id` |
 
 ### Options passed through from UIKit attributes
 
-| UIKit attribute | Headless option | Notes |
-|-----------------|----------------|-------|
-| `value` | `value` | Numeric, synced via `setValue` action |
-| `min` | `min` | Numeric |
-| `max` | `max` | Numeric |
-| `indeterminate` | `isIndeterminate` | Boolean attribute |
-| `value-text` | `valueText` | Static string override for `aria-valuetext` |
-| `aria-label` | `ariaLabel` | Labeling |
-| `aria-labelledby` | `ariaLabelledBy` | Labeling |
-| `aria-describedby` | `ariaDescribedBy` | Labeling |
+| UIKit attribute    | Headless option   | Notes                                       |
+| ------------------ | ----------------- | ------------------------------------------- |
+| `value`            | `value`           | Numeric, synced via `setValue` action       |
+| `min`              | `min`             | Numeric                                     |
+| `max`              | `max`             | Numeric                                     |
+| `indeterminate`    | `isIndeterminate` | Boolean attribute                           |
+| `value-text`       | `valueText`       | Static string override for `aria-valuetext` |
+| `aria-label`       | `ariaLabel`       | Labeling                                    |
+| `aria-labelledby`  | `ariaLabelledBy`  | Labeling                                    |
+| `aria-describedby` | `ariaDescribedBy` | Labeling                                    |
 
 ## Minimum Test Matrix
 

@@ -58,7 +58,7 @@ Common labels:
 - **Acceptance Criteria**:
   - tests validate `model -> bindings -> events -> state` flow
   - tests cover keyboard and pointer paths
-  - tests run in existing `npm run test -w packages/headless`
+  - tests run in existing `npm run test`
 
 ## HLS-GTG-004 - Finalize docs for multi-component reality and ADR status
 
@@ -83,6 +83,6 @@ Common labels:
 - **Deliverables**:
   - root workflow update with headless package job
 - **Acceptance Criteria**:
-  - root CI executes `npm run lint -w packages/headless`
-  - root CI executes `npm run test -w packages/headless`
+  - root CI executes `npm run lint`
+  - root CI executes `npm run test`
   - failures block merge

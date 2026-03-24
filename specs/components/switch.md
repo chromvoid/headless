@@ -28,21 +28,21 @@ While functionally similar to a checkbox, it follows distinct APG keyboard and s
 
 ## CreateSwitchOptions
 
-| Option           | Type                           | Default     | Description                                             |
-|------------------|--------------------------------|-------------|---------------------------------------------------------|
-| `idBase`         | `string`                       | `'switch'`  | Base id prefix for generated ids                        |
-| `isOn`           | `boolean`                      | `false`     | Initial on/off state                                    |
-| `isDisabled`     | `boolean`                      | `false`     | Initial disabled state                                  |
-| `ariaLabelledBy` | `string`                       | —           | Id reference for external label (`aria-labelledby`)     |
-| `ariaDescribedBy`| `string`                       | —           | Id reference for help text / description (`aria-describedby`) |
-| `onCheckedChange`| `(value: boolean) => void`     | —           | Callback fired when `isOn` changes via `setOn`          |
+| Option            | Type                       | Default    | Description                                                   |
+| ----------------- | -------------------------- | ---------- | ------------------------------------------------------------- |
+| `idBase`          | `string`                   | `'switch'` | Base id prefix for generated ids                              |
+| `isOn`            | `boolean`                  | `false`    | Initial on/off state                                          |
+| `isDisabled`      | `boolean`                  | `false`    | Initial disabled state                                        |
+| `ariaLabelledBy`  | `string`                   | —          | Id reference for external label (`aria-labelledby`)           |
+| `ariaDescribedBy` | `string`                   | —          | Id reference for help text / description (`aria-describedby`) |
+| `onCheckedChange` | `(value: boolean) => void` | —          | Callback fired when `isOn` changes via `setOn`                |
 
 ## State Signal Surface
 
-| Signal       | Type            | Derived? | Description                                     |
-|--------------|-----------------|----------|-------------------------------------------------|
-| `isOn`       | `Atom<boolean>` | No       | Single source of truth for on/off state         |
-| `isDisabled` | `Atom<boolean>` | No       | Whether user interaction is blocked             |
+| Signal       | Type            | Derived? | Description                             |
+| ------------ | --------------- | -------- | --------------------------------------- |
+| `isOn`       | `Atom<boolean>` | No       | Single source of truth for on/off state |
+| `isDisabled` | `Atom<boolean>` | No       | Whether user interaction is blocked     |
 
 ## APG and A11y Contract
 
@@ -56,10 +56,10 @@ While functionally similar to a checkbox, it follows distinct APG keyboard and s
 
 ## Keyboard Contract
 
-| Key     | Action                                           |
-|---------|--------------------------------------------------|
-| `Space` | Toggle the `isOn` state; calls `preventDefault`  |
-| `Enter` | Toggle the `isOn` state; calls `preventDefault`  |
+| Key     | Action                                          |
+| ------- | ----------------------------------------------- |
+| `Space` | Toggle the `isOn` state; calls `preventDefault` |
+| `Enter` | Toggle the `isOn` state; calls `preventDefault` |
 
 All keyboard actions are no-ops when `isDisabled` is `true`.
 
@@ -74,6 +74,7 @@ All keyboard actions are no-ops when `isDisabled` is `true`.
 ## Contract Prop Shapes
 
 ### `getSwitchProps()`
+
 ```ts
 {
   id: string                          // '{idBase}-root'
@@ -90,18 +91,18 @@ All keyboard actions are no-ops when `isDisabled` is `true`.
 
 ## Transitions Table
 
-| Event / Action              | Current State        | Next State / Effect                               |
-|-----------------------------|----------------------|---------------------------------------------------|
-| `toggle()`                  | `isOn=false`         | `isOn=true`; fires `onCheckedChange(true)`        |
-| `toggle()`                  | `isOn=true`          | `isOn=false`; fires `onCheckedChange(false)`      |
-| `toggle()`                  | `isDisabled=true`    | no-op                                             |
-| `setOn(value)`              | any                  | `isOn=value`; fires `onCheckedChange(value)`      |
-| `setDisabled(value)`        | any                  | `isDisabled=value`                                |
-| `handleClick()`             | any                  | delegates to `toggle()`                           |
-| `handleKeyDown(Space)`      | not disabled         | delegates to `toggle()`; `preventDefault`         |
-| `handleKeyDown(Enter)`      | not disabled         | delegates to `toggle()`; `preventDefault`         |
-| `handleKeyDown(other)`      | any                  | no-op; no `preventDefault`                        |
-| `handleKeyDown(any)`        | `isDisabled=true`    | no-op; no `preventDefault`                        |
+| Event / Action         | Current State     | Next State / Effect                          |
+| ---------------------- | ----------------- | -------------------------------------------- |
+| `toggle()`             | `isOn=false`      | `isOn=true`; fires `onCheckedChange(true)`   |
+| `toggle()`             | `isOn=true`       | `isOn=false`; fires `onCheckedChange(false)` |
+| `toggle()`             | `isDisabled=true` | no-op                                        |
+| `setOn(value)`         | any               | `isOn=value`; fires `onCheckedChange(value)` |
+| `setDisabled(value)`   | any               | `isDisabled=value`                           |
+| `handleClick()`        | any               | delegates to `toggle()`                      |
+| `handleKeyDown(Space)` | not disabled      | delegates to `toggle()`; `preventDefault`    |
+| `handleKeyDown(Enter)` | not disabled      | delegates to `toggle()`; `preventDefault`    |
+| `handleKeyDown(other)` | any               | no-op; no `preventDefault`                   |
+| `handleKeyDown(any)`   | `isDisabled=true` | no-op; no `preventDefault`                   |
 
 ## Invariants
 
@@ -119,10 +120,12 @@ All keyboard actions are no-ops when `isDisabled` is `true`.
 UIKit adapter (`cv-switch`) will:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOn()` — whether the switch is on or off
 - `state.isDisabled()` — whether user interaction is blocked
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.toggle()` — toggle on/off
 - `actions.setOn(value)` — programmatic state set
 - `actions.setDisabled(value)` — update disabled state
@@ -130,9 +133,11 @@ UIKit adapter (`cv-switch`) will:
 - `actions.handleKeyDown(event)` — on switch keydown
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getSwitchProps()` — spread onto the switch host element
 
 **UIKit-only concerns (NOT in headless):**
+
 - Toggled/untoggled content slots (on/off icons/text inside the track) — purely visual, no state or ARIA changes
 - Help text slot rendering — headless provides `aria-describedby` linkage via `ariaDescribedBy` option; UIKit renders the visible help text element and generates the matching id
 - CSS custom properties, animations, and size variants
@@ -157,9 +162,9 @@ UIKit adapter (`cv-switch`) will:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

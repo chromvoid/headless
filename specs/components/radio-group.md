@@ -92,19 +92,19 @@ It handles roving tabindex, arrow-key navigation with automatic selection, and g
 
 ## Transitions
 
-| Event / Action | Current State | Next State | Notes |
-| --- | --- | --- | --- |
-| `select(id)` | `value=X, activeId=Y` | `value=id, activeId=id` | No-op if `isDisabled` or item disabled |
-| `moveNext()` | `activeId=current` | `value=next, activeId=next` | Wraps; skips disabled; no-op if group disabled |
-| `movePrev()` | `activeId=current` | `value=prev, activeId=prev` | Wraps; skips disabled; no-op if group disabled |
-| `moveFirst()` | any | `value=first, activeId=first` | First enabled item; no-op if group disabled |
-| `moveLast()` | any | `value=last, activeId=last` | Last enabled item; no-op if group disabled |
-| `handleKeyDown(ArrowRight/Down)` | any | delegates to `moveNext()` | |
-| `handleKeyDown(ArrowLeft/Up)` | any | delegates to `movePrev()` | |
-| `handleKeyDown(Home)` | any | delegates to `moveFirst()` | |
-| `handleKeyDown(End)` | any | delegates to `moveLast()` | |
-| `handleKeyDown(Space)` | `activeId=id` | `value=id` | Selects focused radio; no-op if group disabled |
-| `setDisabled(v)` | `isDisabled=old` | `isDisabled=v` | Does not change value or activeId |
+| Event / Action                   | Current State         | Next State                    | Notes                                          |
+| -------------------------------- | --------------------- | ----------------------------- | ---------------------------------------------- |
+| `select(id)`                     | `value=X, activeId=Y` | `value=id, activeId=id`       | No-op if `isDisabled` or item disabled         |
+| `moveNext()`                     | `activeId=current`    | `value=next, activeId=next`   | Wraps; skips disabled; no-op if group disabled |
+| `movePrev()`                     | `activeId=current`    | `value=prev, activeId=prev`   | Wraps; skips disabled; no-op if group disabled |
+| `moveFirst()`                    | any                   | `value=first, activeId=first` | First enabled item; no-op if group disabled    |
+| `moveLast()`                     | any                   | `value=last, activeId=last`   | Last enabled item; no-op if group disabled     |
+| `handleKeyDown(ArrowRight/Down)` | any                   | delegates to `moveNext()`     |                                                |
+| `handleKeyDown(ArrowLeft/Up)`    | any                   | delegates to `movePrev()`     |                                                |
+| `handleKeyDown(Home)`            | any                   | delegates to `moveFirst()`    |                                                |
+| `handleKeyDown(End)`             | any                   | delegates to `moveLast()`     |                                                |
+| `handleKeyDown(Space)`           | `activeId=id`         | `value=id`                    | Selects focused radio; no-op if group disabled |
+| `setDisabled(v)`                 | `isDisabled=old`      | `isDisabled=v`                | Does not change value or activeId              |
 
 ## Invariants
 
@@ -130,6 +130,7 @@ It handles roving tabindex, arrow-key navigation with automatic selection, and g
 ## Adapter Expectations
 
 UIKit adapter (`cv-radio-group` + `cv-radio`) will:
+
 - **Read**: `state.value`, `state.activeId`, `state.isDisabled`, `state.orientation`
 - **Call**: `actions.select`, `actions.moveNext`, `actions.movePrev`, `actions.moveFirst`, `actions.moveLast`, `actions.handleKeyDown`, `actions.setDisabled`
 - **Spread**: `contracts.getRootProps()` onto the radio-group host/container, `contracts.getRadioProps(id)` onto each radio element
@@ -138,9 +139,9 @@ UIKit adapter (`cv-radio-group` + `cv-radio`) will:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

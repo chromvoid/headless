@@ -20,11 +20,11 @@ Coverage focus for the newest tranche (HLS-131..HLS-134):
 - [x] `src/index.ts` exports include all implemented components
 - [x] `README.md` implemented components list matches package surface
 - [x] LSP diagnostics clean for changed source and test files
-- [x] Package lint gates pass (`lint:types`, `lint:oxlint`, `lint:prettier`, `lint:boundaries`)
+- [x] Package lint gates pass (`lint:types`, `lint:oxlint`, `lint:format`, `lint:boundaries`)
 - [x] Package test gate passes (`vitest`)
 - [x] APG contract helper and regression suite added
 
 ## Verification commands
 
-- `npm run lint -w packages/headless`
-- `npm run test -w packages/headless`
+- `npm run lint`
+- `npm run test`

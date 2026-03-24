@@ -29,21 +29,21 @@
 
 ## CreateToastOptions
 
-| Option            | Type                       | Default     | Description                                      |
-|-------------------|----------------------------|-------------|--------------------------------------------------|
-| `idBase`          | `string`                   | `'toast'`   | Base id prefix for all generated ids             |
-| `initialItems`    | `readonly ToastItem[]`     | `[]`        | Pre-populated toast items                        |
-| `maxVisible`      | `number`                   | `3`         | Maximum number of toasts shown (clamped >= 1)    |
-| `defaultDurationMs` | `number`                | `5000`      | Default auto-dismiss duration (clamped >= 0)     |
-| `ariaLive`        | `'polite' \| 'assertive'` | `'polite'`  | `aria-live` value for the region                 |
+| Option              | Type                      | Default    | Description                                   |
+| ------------------- | ------------------------- | ---------- | --------------------------------------------- |
+| `idBase`            | `string`                  | `'toast'`  | Base id prefix for all generated ids          |
+| `initialItems`      | `readonly ToastItem[]`    | `[]`       | Pre-populated toast items                     |
+| `maxVisible`        | `number`                  | `3`        | Maximum number of toasts shown (clamped >= 1) |
+| `defaultDurationMs` | `number`                  | `5000`     | Default auto-dismiss duration (clamped >= 0)  |
+| `ariaLive`          | `'polite' \| 'assertive'` | `'polite'` | `aria-live` value for the region              |
 
 ## State Signal Surface
 
-| Signal         | Type                   | Derived? | Description                                        |
-|----------------|------------------------|----------|----------------------------------------------------|
-| `items`        | `Atom<ToastItem[]>`    | No       | Full toast queue, newest-first                     |
-| `visibleItems` | `Computed<ToastItem[]>`| Yes      | `items().slice(0, maxVisible)`                     |
-| `isPaused`     | `Atom<boolean>`        | No       | Whether auto-dismiss timers are paused             |
+| Signal         | Type                    | Derived? | Description                            |
+| -------------- | ----------------------- | -------- | -------------------------------------- |
+| `items`        | `Atom<ToastItem[]>`     | No       | Full toast queue, newest-first         |
+| `visibleItems` | `Computed<ToastItem[]>` | Yes      | `items().slice(0, maxVisible)`         |
+| `isPaused`     | `Atom<boolean>`         | No       | Whether auto-dismiss timers are paused |
 
 ## APG and A11y Contract
 
@@ -73,6 +73,7 @@
 ## Contract Prop Shapes
 
 ### `getRegionProps()`
+
 ```ts
 {
   id: string                          // '{idBase}-region'
@@ -83,6 +84,7 @@
 ```
 
 ### `getToastProps(id)`
+
 ```ts
 {
   id: string                          // '{idBase}-item-{id}'
@@ -92,6 +94,7 @@
 ```
 
 ### `getDismissButtonProps(id)`
+
 ```ts
 {
   id: string                          // '{idBase}-dismiss-{id}'
@@ -104,23 +107,23 @@
 
 ## Transitions Table
 
-| Event / Action            | Current State           | Next State / Effect                                                |
-|---------------------------|-------------------------|--------------------------------------------------------------------|
-| `push(item)`              | any                     | New toast prepended to `items`; auto-dismiss timer scheduled; returns generated id |
-| `push(item)` (paused)     | `isPaused = true`       | New toast prepended to `items`; remaining duration stored but no timer started |
-| `dismiss(id)`             | toast exists in `items` | Toast removed from `items`; timer and tracking data cleared        |
-| `clear()`                 | any                     | All items removed; all timers and tracking data cleared            |
-| `pause()`                 | `isPaused = false`      | `isPaused = true`; all running timers stopped; remaining durations computed and stored |
-| `pause()`                 | `isPaused = true`       | no-op                                                              |
-| `resume()`                | `isPaused = true`       | `isPaused = false`; auto-dismiss timers rescheduled from remaining durations |
-| `resume()`                | `isPaused = false`      | no-op                                                              |
-| timer fires (auto-dismiss)| toast exists, timer done| `dismiss(id)` called; toast removed from queue                     |
+| Event / Action             | Current State            | Next State / Effect                                                                    |
+| -------------------------- | ------------------------ | -------------------------------------------------------------------------------------- |
+| `push(item)`               | any                      | New toast prepended to `items`; auto-dismiss timer scheduled; returns generated id     |
+| `push(item)` (paused)      | `isPaused = true`        | New toast prepended to `items`; remaining duration stored but no timer started         |
+| `dismiss(id)`              | toast exists in `items`  | Toast removed from `items`; timer and tracking data cleared                            |
+| `clear()`                  | any                      | All items removed; all timers and tracking data cleared                                |
+| `pause()`                  | `isPaused = false`       | `isPaused = true`; all running timers stopped; remaining durations computed and stored |
+| `pause()`                  | `isPaused = true`        | no-op                                                                                  |
+| `resume()`                 | `isPaused = true`        | `isPaused = false`; auto-dismiss timers rescheduled from remaining durations           |
+| `resume()`                 | `isPaused = false`       | no-op                                                                                  |
+| timer fires (auto-dismiss) | toast exists, timer done | `dismiss(id)` called; toast removed from queue                                         |
 
 ### Derived state reactions
 
-| State Change              | `visibleItems`                              |
-|---------------------------|---------------------------------------------|
-| `items` changes           | Recomputed as `items().slice(0, maxVisible)` |
+| State Change    | `visibleItems`                               |
+| --------------- | -------------------------------------------- |
+| `items` changes | Recomputed as `items().slice(0, maxVisible)` |
 
 ## Invariants
 
@@ -137,11 +140,13 @@
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.items()` — full toast queue for iteration
 - `state.visibleItems()` — sliced queue for rendering visible toasts
 - `state.isPaused()` — whether auto-dismiss timers are paused (for hover pause behavior)
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.push(item)` — enqueue a new toast notification
 - `actions.dismiss(id)` — dismiss a specific toast
 - `actions.clear()` — dismiss all toasts
@@ -149,11 +154,13 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.resume()` — resume auto-dismiss timers (e.g., on mouse leave region)
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getRegionProps()` — spread onto the `cv-toast-region` container element
 - `contracts.getToastProps(id)` — spread onto each `cv-toast` item element (returns `role: 'status' | 'alert'` based on toast level)
 - `contracts.getDismissButtonProps(id)` — spread onto the dismiss button inside each toast (includes `onClick` handler)
 
 **UIKit-only concerns (NOT in headless):**
+
 - Positioning and stacking layout (`position` attribute on `cv-toast-region`)
 - Entry/exit animations and transitions
 - Icon slot rendering per severity level
@@ -176,9 +183,9 @@ UIKit adapters MUST bind to the headless model as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

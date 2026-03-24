@@ -11,8 +11,8 @@
 
 ## Options (`CreateSpinnerOptions`)
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
+| Option  | Type     | Default     | Description                                                        |
+| ------- | -------- | ----------- | ------------------------------------------------------------------ |
 | `label` | `string` | `'Loading'` | Accessible name for the spinner, announced by assistive technology |
 
 ## Public API
@@ -21,20 +21,20 @@
 
 ### State (signal-backed)
 
-| Signal | Type | Description |
-|--------|------|-------------|
+| Signal    | Type           | Description                             |
+| --------- | -------------- | --------------------------------------- |
 | `label()` | `Atom<string>` | Current accessible name for the spinner |
 
 ### Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
+| Action     | Signature                 | Description                  |
+| ---------- | ------------------------- | ---------------------------- |
 | `setLabel` | `(value: string) => void` | Updates the accessible label |
 
 ### Contracts
 
-| Contract | Return type | Description |
-|----------|-------------|-------------|
+| Contract            | Return type    | Description                                                |
+| ------------------- | -------------- | ---------------------------------------------------------- |
 | `getSpinnerProps()` | `SpinnerProps` | Ready-to-spread ARIA attribute map for the spinner element |
 
 #### `SpinnerProps` Shape
@@ -68,9 +68,9 @@ Spinner is not keyboard-interactive. No keyboard handling is needed.
 
 ## Transitions Table
 
-| Trigger | Precondition | State Change | Contract Effect |
-|---------|-------------|-------------|-----------------|
-| `actions.setLabel(v)` | any | `label` = v | `getSpinnerProps()` updates `aria-label` to new value |
+| Trigger               | Precondition | State Change | Contract Effect                                       |
+| --------------------- | ------------ | ------------ | ----------------------------------------------------- |
+| `actions.setLabel(v)` | any          | `label` = v  | `getSpinnerProps()` updates `aria-label` to new value |
 
 ## Invariants
 
@@ -85,27 +85,27 @@ This section defines what UIKit (`cv-spinner`) binds to from the headless model.
 
 ### Signals read by adapter
 
-| Signal | UIKit usage |
-|--------|-------------|
+| Signal          | UIKit usage                                                  |
+| --------------- | ------------------------------------------------------------ |
 | `state.label()` | Not read directly; consumed via `getSpinnerProps()` contract |
 
 ### Actions called by adapter
 
-| Action | UIKit trigger |
-|--------|--------------|
+| Action                | UIKit trigger                                               |
+| --------------------- | ----------------------------------------------------------- |
 | `actions.setLabel(v)` | When `label` attribute/property changes on the host element |
 
 ### Contracts spread by adapter
 
-| Contract | Target element | Notes |
-|----------|---------------|-------|
+| Contract            | Target element                       | Notes                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `getSpinnerProps()` | Root spinner element (`part="base"`) | Spread as attributes; provides `role` and `aria-label` |
 
 ### Options passed through from UIKit attributes
 
-| UIKit attribute | Headless option | Notes |
-|-----------------|----------------|-------|
-| `label` | `label` | String, defaults to `"Loading"` |
+| UIKit attribute | Headless option | Notes                           |
+| --------------- | --------------- | ------------------------------- |
+| `label`         | `label`         | String, defaults to `"Loading"` |
 
 ## Minimum Test Matrix
 

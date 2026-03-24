@@ -53,6 +53,7 @@ Per W3C APG Feed Pattern:
 - `Ctrl + Home`: move focus to the first focusable element BEFORE the feed (not to the first article). Same adapter delegation as above.
 
 The `handleKeyDown` action returns a `FeedKeyboardResult` indicating the action taken:
+
 - `'next'` - moved to next article
 - `'prev'` - moved to previous article
 - `'exit-after'` - adapter should move focus after the feed
@@ -85,36 +86,36 @@ The `handleKeyDown` action returns a `FeedKeyboardResult` indicating the action 
 
 ## State Signal Surface
 
-| Signal | Type | Description |
-|---|---|---|
-| `articleIds` | `Computed<string[]>` | Ordered list of loaded article IDs |
-| `activeArticleId` | `Atom<string \| null>` | Currently focused article ID |
-| `isLoading` | `Atom<boolean>` | Whether a load operation is in progress |
-| `isBusy` | `Atom<boolean>` | Maps to `aria-busy` |
-| `totalCount` | `Atom<number>` | Total articles count, or `-1` if unknown |
-| `isEmpty` | `Computed<boolean>` | `articleIds.length === 0` |
-| `hasError` | `Computed<boolean>` | `error !== null` |
-| `error` | `Atom<string \| null>` | Current error message, or `null` |
-| `canLoadMore` | `Computed<boolean>` | Whether bottom-loading is possible (not loading AND not all loaded) |
-| `canLoadNewer` | `Computed<boolean>` | Whether top-loading is possible (not loading AND newer content exists) |
+| Signal            | Type                   | Description                                                            |
+| ----------------- | ---------------------- | ---------------------------------------------------------------------- |
+| `articleIds`      | `Computed<string[]>`   | Ordered list of loaded article IDs                                     |
+| `activeArticleId` | `Atom<string \| null>` | Currently focused article ID                                           |
+| `isLoading`       | `Atom<boolean>`        | Whether a load operation is in progress                                |
+| `isBusy`          | `Atom<boolean>`        | Maps to `aria-busy`                                                    |
+| `totalCount`      | `Atom<number>`         | Total articles count, or `-1` if unknown                               |
+| `isEmpty`         | `Computed<boolean>`    | `articleIds.length === 0`                                              |
+| `hasError`        | `Computed<boolean>`    | `error !== null`                                                       |
+| `error`           | `Atom<string \| null>` | Current error message, or `null`                                       |
+| `canLoadMore`     | `Computed<boolean>`    | Whether bottom-loading is possible (not loading AND not all loaded)    |
+| `canLoadNewer`    | `Computed<boolean>`    | Whether top-loading is possible (not loading AND newer content exists) |
 
 ## Actions
 
-| Action | Signature | Description |
-|---|---|---|
-| `focusNextArticle` | `() => void` | Move active to next enabled article |
-| `focusPrevArticle` | `() => void` | Move active to previous enabled article |
-| `loadMore` | `() => Promise<void>` | Append articles at bottom; sets busy, calls adapter callback |
-| `loadNewer` | `() => Promise<void>` | Prepend articles at top; sets busy, calls adapter callback |
-| `setArticles` | `(articles: FeedArticle[]) => void` | Replace entire article list |
-| `appendArticles` | `(articles: FeedArticle[]) => void` | Add articles to the end |
-| `prependArticles` | `(articles: FeedArticle[]) => void` | Add articles to the beginning |
-| `removeArticle` | `(articleId: string) => void` | Remove a single article by ID |
-| `setBusy` | `(value: boolean) => void` | Set `aria-busy` state |
-| `setError` | `(message: string) => void` | Set error state with message |
-| `clearError` | `() => void` | Clear error state |
-| `setTotalCount` | `(count: number) => void` | Set total article count (`-1` for unknown) |
-| `handleKeyDown` | `(event: FeedKeyboardEventLike) => FeedKeyboardResult` | Process keyboard event per APG |
+| Action             | Signature                                              | Description                                                  |
+| ------------------ | ------------------------------------------------------ | ------------------------------------------------------------ |
+| `focusNextArticle` | `() => void`                                           | Move active to next enabled article                          |
+| `focusPrevArticle` | `() => void`                                           | Move active to previous enabled article                      |
+| `loadMore`         | `() => Promise<void>`                                  | Append articles at bottom; sets busy, calls adapter callback |
+| `loadNewer`        | `() => Promise<void>`                                  | Prepend articles at top; sets busy, calls adapter callback   |
+| `setArticles`      | `(articles: FeedArticle[]) => void`                    | Replace entire article list                                  |
+| `appendArticles`   | `(articles: FeedArticle[]) => void`                    | Add articles to the end                                      |
+| `prependArticles`  | `(articles: FeedArticle[]) => void`                    | Add articles to the beginning                                |
+| `removeArticle`    | `(articleId: string) => void`                          | Remove a single article by ID                                |
+| `setBusy`          | `(value: boolean) => void`                             | Set `aria-busy` state                                        |
+| `setError`         | `(message: string) => void`                            | Set error state with message                                 |
+| `clearError`       | `() => void`                                           | Clear error state                                            |
+| `setTotalCount`    | `(count: number) => void`                              | Set total article count (`-1` for unknown)                   |
+| `handleKeyDown`    | `(event: FeedKeyboardEventLike) => FeedKeyboardResult` | Process keyboard event per APG                               |
 
 ## Contracts
 
@@ -153,28 +154,28 @@ Returns a complete ARIA prop object ready to spread on each article element:
 
 ## Transitions Table
 
-| Event / Action | Current State | Next State / Effect |
-|---|---|---|
-| `focusNextArticle()` | any | `activeArticleId` = next enabled article ID; clamps at last |
-| `focusPrevArticle()` | any | `activeArticleId` = previous enabled article ID; clamps at first |
-| `loadMore()` | `isLoading = false` | `isLoading` = `true`; `isBusy` = `true`; invoke callback; on resolve: append articles, `isLoading` = `false`, `isBusy` = `false`; on reject: set error, `isLoading` = `false`, `isBusy` = `false` |
-| `loadMore()` | `isLoading = true` | no-op (guard against concurrent loads) |
-| `loadNewer()` | `isLoading = false` | `isLoading` = `true`; `isBusy` = `true`; invoke callback; on resolve: prepend articles, `isLoading` = `false`, `isBusy` = `false`; on reject: set error, `isLoading` = `false`, `isBusy` = `false` |
-| `loadNewer()` | `isLoading = true` | no-op (guard against concurrent loads) |
-| `setArticles(list)` | any | `articles` = deduplicated list; recalculate all derived signals; ensure `activeArticleId` invariant |
-| `appendArticles(list)` | any | `articles` = current + new (deduplicated); recalculate positions |
-| `prependArticles(list)` | any | `articles` = new + current (deduplicated); recalculate positions; `activeArticleId` preserved |
-| `removeArticle(id)` | `activeArticleId = id` | remove article; `activeArticleId` = nearest enabled (prefer next, fallback prev) |
-| `removeArticle(id)` | `activeArticleId != id` | remove article; `activeArticleId` unchanged |
-| `setBusy(value)` | any | `isBusy` = value |
-| `setError(message)` | any | `error` = message; `hasError` = `true` |
-| `clearError()` | any | `error` = `null`; `hasError` = `false` |
-| `setTotalCount(count)` | any | `totalCount` = count; `canLoadMore` / `canLoadNewer` recalculated |
-| `handleKeyDown(PageDown)` | any | calls `focusNextArticle()`; returns `'next'` |
-| `handleKeyDown(PageUp)` | any | calls `focusPrevArticle()`; returns `'prev'` |
-| `handleKeyDown(Ctrl+End)` | any | returns `'exit-after'` (adapter handles DOM focus) |
-| `handleKeyDown(Ctrl+Home)` | any | returns `'exit-before'` (adapter handles DOM focus) |
-| `handleKeyDown(other)` | any | returns `null` (not handled) |
+| Event / Action             | Current State           | Next State / Effect                                                                                                                                                                                |
+| -------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `focusNextArticle()`       | any                     | `activeArticleId` = next enabled article ID; clamps at last                                                                                                                                        |
+| `focusPrevArticle()`       | any                     | `activeArticleId` = previous enabled article ID; clamps at first                                                                                                                                   |
+| `loadMore()`               | `isLoading = false`     | `isLoading` = `true`; `isBusy` = `true`; invoke callback; on resolve: append articles, `isLoading` = `false`, `isBusy` = `false`; on reject: set error, `isLoading` = `false`, `isBusy` = `false`  |
+| `loadMore()`               | `isLoading = true`      | no-op (guard against concurrent loads)                                                                                                                                                             |
+| `loadNewer()`              | `isLoading = false`     | `isLoading` = `true`; `isBusy` = `true`; invoke callback; on resolve: prepend articles, `isLoading` = `false`, `isBusy` = `false`; on reject: set error, `isLoading` = `false`, `isBusy` = `false` |
+| `loadNewer()`              | `isLoading = true`      | no-op (guard against concurrent loads)                                                                                                                                                             |
+| `setArticles(list)`        | any                     | `articles` = deduplicated list; recalculate all derived signals; ensure `activeArticleId` invariant                                                                                                |
+| `appendArticles(list)`     | any                     | `articles` = current + new (deduplicated); recalculate positions                                                                                                                                   |
+| `prependArticles(list)`    | any                     | `articles` = new + current (deduplicated); recalculate positions; `activeArticleId` preserved                                                                                                      |
+| `removeArticle(id)`        | `activeArticleId = id`  | remove article; `activeArticleId` = nearest enabled (prefer next, fallback prev)                                                                                                                   |
+| `removeArticle(id)`        | `activeArticleId != id` | remove article; `activeArticleId` unchanged                                                                                                                                                        |
+| `setBusy(value)`           | any                     | `isBusy` = value                                                                                                                                                                                   |
+| `setError(message)`        | any                     | `error` = message; `hasError` = `true`                                                                                                                                                             |
+| `clearError()`             | any                     | `error` = `null`; `hasError` = `false`                                                                                                                                                             |
+| `setTotalCount(count)`     | any                     | `totalCount` = count; `canLoadMore` / `canLoadNewer` recalculated                                                                                                                                  |
+| `handleKeyDown(PageDown)`  | any                     | calls `focusNextArticle()`; returns `'next'`                                                                                                                                                       |
+| `handleKeyDown(PageUp)`    | any                     | calls `focusPrevArticle()`; returns `'prev'`                                                                                                                                                       |
+| `handleKeyDown(Ctrl+End)`  | any                     | returns `'exit-after'` (adapter handles DOM focus)                                                                                                                                                 |
+| `handleKeyDown(Ctrl+Home)` | any                     | returns `'exit-before'` (adapter handles DOM focus)                                                                                                                                                |
+| `handleKeyDown(other)`     | any                     | returns `null` (not handled)                                                                                                                                                                       |
 
 ## Invariants
 
@@ -194,6 +195,7 @@ Returns a complete ARIA prop object ready to spread on each article element:
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.articleIds()` — ordered article IDs for rendering the list
 - `state.activeArticleId()` — for focus management
 - `state.isLoading()` — for rendering loading indicators
@@ -206,6 +208,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `state.totalCount()` — reflected in `aria-setsize` via `getArticleProps()`
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.focusNextArticle()` / `actions.focusPrevArticle()` — article navigation
 - `actions.loadMore()` — called by IntersectionObserver on bottom sentinel
 - `actions.loadNewer()` — called by IntersectionObserver on top sentinel
@@ -218,10 +221,12 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.handleKeyDown(event)` — on keydown within feed root; adapter inspects return value for `'exit-after'`/`'exit-before'` to handle DOM focus transfer
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getFeedProps()` — spread onto the feed root element
 - `contracts.getArticleProps(articleId)` — spread onto each article element
 
 **UIKit-only concerns (NOT in headless):**
+
 - IntersectionObserver setup for top/bottom sentinels
 - DOM focus transfer for `Ctrl+End` / `Ctrl+Home` (moving focus outside the feed)
 - Empty state and error state slot rendering
@@ -246,9 +251,9 @@ UIKit adapters MUST bind to the headless model as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

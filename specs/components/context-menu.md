@@ -18,9 +18,9 @@ interface CreateContextMenuOptions {
   items: readonly ContextMenuItem[]
   idBase?: string
   ariaLabel?: string
-  closeOnSelect?: boolean           // default: true (via composed menu)
-  closeOnOutsidePointer?: boolean   // default: true
-  longPressDuration?: number        // default: 500 (ms, for touch devices)
+  closeOnSelect?: boolean // default: true (via composed menu)
+  closeOnOutsidePointer?: boolean // default: true
+  longPressDuration?: number // default: 500 (ms, for touch devices)
 }
 ```
 
@@ -35,14 +35,15 @@ interface ContextMenuItem {
   id: string
   label?: string
   disabled?: boolean
-  type?: ContextMenuItemType        // default: 'item'
-  checked?: boolean                 // initial checked state for checkbox/radio items
-  group?: string                    // radio group name for radio items
-  children?: readonly ContextMenuItem[]  // children for submenu items
+  type?: ContextMenuItemType // default: 'item'
+  checked?: boolean // initial checked state for checkbox/radio items
+  group?: string // radio group name for radio items
+  children?: readonly ContextMenuItem[] // children for submenu items
 }
 ```
 
 Item types and their behavior:
+
 - `'item'` (default) — standard actionable menu item
 - `'separator'` — visual divider, not actionable, skipped during navigation
 - `'group-label'` — label for a group of items, not actionable, skipped during navigation
@@ -64,17 +65,17 @@ interface ContextMenuModel {
 
 All state is signal-backed (Reatom atoms). UIKit reads these reactively to drive re-renders.
 
-| Signal | Type | Description |
-| --- | --- | --- |
-| `isOpen()` | `boolean` | Menu visibility. Delegated to composed `createMenu`. |
-| `activeId()` | `string \| null` | Currently highlighted item id. Delegated to composed `createMenu`. |
-| `anchorX()` | `number` | X coordinate of the context menu anchor point (from right-click or imperative call). Initial: `0`. |
-| `anchorY()` | `number` | Y coordinate of the context menu anchor point. Initial: `0`. |
-| `openedBy()` | `ContextMenuOpenSource \| null` | Source that triggered the current open: `'pointer'`, `'keyboard'`, or `'programmatic'`. Resets to `null` on close. |
-| `restoreTargetId()` | `string \| null` | DOM id of the element that should receive focus after menu close. Set to `'{idBase}-target'` on close/select-close. `null` while open. |
-| `checkedIds()` | `ReadonlySet<string>` | Set of currently checked item ids. Initialized from items with `checked: true`. Updated on checkbox toggle and radio group selection. |
-| `openSubmenuId()` | `string \| null` | Id of the currently open sub-menu parent item, or `null` if no sub-menu is open. Reset to `null` on close. |
-| `submenuActiveId()` | `string \| null` | Id of the currently highlighted item within the open sub-menu, or `null`. Reset to `null` on close or sub-menu close. |
+| Signal              | Type                            | Description                                                                                                                            |
+| ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `isOpen()`          | `boolean`                       | Menu visibility. Delegated to composed `createMenu`.                                                                                   |
+| `activeId()`        | `string \| null`                | Currently highlighted item id. Delegated to composed `createMenu`.                                                                     |
+| `anchorX()`         | `number`                        | X coordinate of the context menu anchor point (from right-click or imperative call). Initial: `0`.                                     |
+| `anchorY()`         | `number`                        | Y coordinate of the context menu anchor point. Initial: `0`.                                                                           |
+| `openedBy()`        | `ContextMenuOpenSource \| null` | Source that triggered the current open: `'pointer'`, `'keyboard'`, or `'programmatic'`. Resets to `null` on close.                     |
+| `restoreTargetId()` | `string \| null`                | DOM id of the element that should receive focus after menu close. Set to `'{idBase}-target'` on close/select-close. `null` while open. |
+| `checkedIds()`      | `ReadonlySet<string>`           | Set of currently checked item ids. Initialized from items with `checked: true`. Updated on checkbox toggle and radio group selection.  |
+| `openSubmenuId()`   | `string \| null`                | Id of the currently open sub-menu parent item, or `null` if no sub-menu is open. Reset to `null` on close.                             |
+| `submenuActiveId()` | `string \| null`                | Id of the currently highlighted item within the open sub-menu, or `null`. Reset to `null` on close or sub-menu close.                  |
 
 ```ts
 type ContextMenuOpenSource = 'pointer' | 'keyboard' | 'programmatic'
@@ -93,17 +94,17 @@ The composed menu also holds `selectedId`, `openedBy`, and `hasSelection`, but t
 
 All state transitions go through these actions. UIKit must never mutate state directly.
 
-| Action | Signature | Description |
-| --- | --- | --- |
-| `openAt` | `(x: number, y: number, source?: ContextMenuOpenSource) => void` | Opens the menu at coordinates `(x, y)`. Sets `anchorX`, `anchorY`, `openedBy`. Default `source` is `'programmatic'`. Clears `restoreTargetId`. Resets `openSubmenuId` and `submenuActiveId` to `null`. Delegates open to composed menu. |
-| `close` | `() => void` | Closes the menu. Resets `activeId` to `null`. Sets `openedBy` to `null`. Sets `restoreTargetId` to `'{idBase}-target'`. Resets `openSubmenuId` and `submenuActiveId` to `null`. |
-| `select` | `(id: string) => void` | Selects an item. For checkbox items, toggles the item's presence in `checkedIds`. For radio items, sets the item as the only checked item in its group. For submenu children, closes the entire menu if `closeOnSelect` is true. For regular items, delegates to composed menu's `select`. Skips separators and group-labels. No-op for disabled or unknown items. If menu closes as a result (when `closeOnSelect` is true), resets `openedBy` to `null`, sets `restoreTargetId`, and resets sub-menu state. |
-| `handleTargetKeyDown` | `(event: ContextMenuKeyboardEventLike) => void` | Handles keyboard on the target element. Opens the menu on `ContextMenu` key or `Shift+F10`. Uses `'keyboard'` as open source. Coordinates stay at their current values (last known position). |
-| `handleKeyDown` | `(event: ContextMenuKeyboardEventLike) => void` | Handles keyboard inside the open menu. When a sub-menu is open, delegates to sub-menu keyboard handler first (Escape/ArrowLeft close sub-menu, ArrowDown/ArrowUp/Home/End navigate sub-menu items, Enter/Space select sub-menu item). `Escape` and `Tab` close the menu. `ArrowRight` on a submenu item opens the sub-menu. Printable characters trigger type-ahead navigation. All other keys are delegated to the composed menu's `handleMenuKeyDown` (arrow navigation, Home/End, Enter/Space activation). No-op when menu is closed. |
-| `handleOutsidePointer` | `() => void` | Closes the menu on outside pointer interaction. No-op when `closeOnOutsidePointer` is `false` or menu is already closed. |
-| `handleTouchStart` | `(point: {clientX: number; clientY: number}) => void` | Starts a long-press timer. After `longPressDuration` ms, opens the menu at the touch coordinates with source `'pointer'`. |
-| `handleTouchMove` | `() => void` | Cancels the long-press timer (touch moved, not a long-press). |
-| `handleTouchEnd` | `() => void` | Cancels the long-press timer (touch ended before threshold). |
+| Action                 | Signature                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `openAt`               | `(x: number, y: number, source?: ContextMenuOpenSource) => void` | Opens the menu at coordinates `(x, y)`. Sets `anchorX`, `anchorY`, `openedBy`. Default `source` is `'programmatic'`. Clears `restoreTargetId`. Resets `openSubmenuId` and `submenuActiveId` to `null`. Delegates open to composed menu.                                                                                                                                                                                                                                                                                                  |
+| `close`                | `() => void`                                                     | Closes the menu. Resets `activeId` to `null`. Sets `openedBy` to `null`. Sets `restoreTargetId` to `'{idBase}-target'`. Resets `openSubmenuId` and `submenuActiveId` to `null`.                                                                                                                                                                                                                                                                                                                                                          |
+| `select`               | `(id: string) => void`                                           | Selects an item. For checkbox items, toggles the item's presence in `checkedIds`. For radio items, sets the item as the only checked item in its group. For submenu children, closes the entire menu if `closeOnSelect` is true. For regular items, delegates to composed menu's `select`. Skips separators and group-labels. No-op for disabled or unknown items. If menu closes as a result (when `closeOnSelect` is true), resets `openedBy` to `null`, sets `restoreTargetId`, and resets sub-menu state.                            |
+| `handleTargetKeyDown`  | `(event: ContextMenuKeyboardEventLike) => void`                  | Handles keyboard on the target element. Opens the menu on `ContextMenu` key or `Shift+F10`. Uses `'keyboard'` as open source. Coordinates stay at their current values (last known position).                                                                                                                                                                                                                                                                                                                                            |
+| `handleKeyDown`        | `(event: ContextMenuKeyboardEventLike) => void`                  | Handles keyboard inside the open menu. When a sub-menu is open, delegates to sub-menu keyboard handler first (Escape/ArrowLeft close sub-menu, ArrowDown/ArrowUp/Home/End navigate sub-menu items, Enter/Space select sub-menu item). `Escape` and `Tab` close the menu. `ArrowRight` on a submenu item opens the sub-menu. Printable characters trigger type-ahead navigation. All other keys are delegated to the composed menu's `handleMenuKeyDown` (arrow navigation, Home/End, Enter/Space activation). No-op when menu is closed. |
+| `handleOutsidePointer` | `() => void`                                                     | Closes the menu on outside pointer interaction. No-op when `closeOnOutsidePointer` is `false` or menu is already closed.                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `handleTouchStart`     | `(point: {clientX: number; clientY: number}) => void`            | Starts a long-press timer. After `longPressDuration` ms, opens the menu at the touch coordinates with source `'pointer'`.                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `handleTouchMove`      | `() => void`                                                     | Cancels the long-press timer (touch moved, not a long-press).                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `handleTouchEnd`       | `() => void`                                                     | Cancels the long-press timer (touch ended before threshold).                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 ```ts
 interface ContextMenuKeyboardEventLike {
@@ -123,17 +124,14 @@ Contracts return complete ARIA prop objects ready to spread onto DOM elements.
 
 ```ts
 interface ContextMenuTargetProps {
-  id: string                        // '{idBase}-target'
-  onContextMenu: (event: {
-    clientX: number
-    clientY: number
-    preventDefault?: () => void
-  }) => void
+  id: string // '{idBase}-target'
+  onContextMenu: (event: {clientX: number; clientY: number; preventDefault?: () => void}) => void
   onKeyDown: (event: ContextMenuKeyboardEventLike) => void
 }
 ```
 
 The `onContextMenu` handler:
+
 1. Calls `event.preventDefault()` if available (suppresses native browser context menu)
 2. Opens the menu at `(event.clientX, event.clientY)` with source `'pointer'`
 
@@ -143,18 +141,19 @@ The `onKeyDown` handler delegates to `handleTargetKeyDown`.
 
 ```ts
 interface ContextMenuProps {
-  id: string                        // '{idBase}-menu' (from composed menu)
+  id: string // '{idBase}-menu' (from composed menu)
   role: 'menu'
   tabindex: '-1'
-  hidden: boolean                   // !isOpen
-  'aria-label'?: string             // from options.ariaLabel
-  'data-anchor-x': string           // String(anchorX)
-  'data-anchor-y': string           // String(anchorY)
+  hidden: boolean // !isOpen
+  'aria-label'?: string // from options.ariaLabel
+  'data-anchor-x': string // String(anchorX)
+  'data-anchor-y': string // String(anchorY)
   onKeyDown: (event: ContextMenuKeyboardEventLike) => void
 }
 ```
 
 Spreads the composed menu's `getMenuProps()` result and augments it with:
+
 - `hidden` reflecting open state
 - `data-anchor-x` / `data-anchor-y` reflecting anchor coordinates as string data attributes
 - `onKeyDown` delegating to `handleKeyDown`
@@ -163,19 +162,20 @@ Spreads the composed menu's `getMenuProps()` result and augments it with:
 
 ```ts
 interface ContextMenuItemProps {
-  id: string                        // '{idBase}-item-{id}' (from composed menu or manual)
+  id: string // '{idBase}-item-{id}' (from composed menu or manual)
   role: 'menuitem' | 'menuitemcheckbox' | 'menuitemradio'
   tabindex: '-1'
-  'aria-disabled'?: 'true'          // present only for disabled items
-  'data-active': 'true' | 'false'  // reflects activeId === id (or submenuActiveId for sub-menu children)
+  'aria-disabled'?: 'true' // present only for disabled items
+  'data-active': 'true' | 'false' // reflects activeId === id (or submenuActiveId for sub-menu children)
   'aria-checked'?: 'true' | 'false' // present for checkbox and radio items, reflects checkedIds
-  'aria-haspopup'?: 'menu'          // present for submenu items
+  'aria-haspopup'?: 'menu' // present for submenu items
   'aria-expanded'?: 'true' | 'false' // present for submenu items, reflects openSubmenuId
-  onClick: () => void               // calls select(id)
+  onClick: () => void // calls select(id)
 }
 ```
 
 Role assignment per item type:
+
 - `'item'` (default) and `'submenu'` — `role: 'menuitem'`
 - `'checkbox'` — `role: 'menuitemcheckbox'`
 - `'radio'` — `role: 'menuitemradio'`
@@ -188,7 +188,7 @@ For sub-menu child items (not in the top-level actionable items list), props are
 
 ```ts
 interface ContextMenuSeparatorProps {
-  id: string                        // '{idBase}-separator-{id}'
+  id: string // '{idBase}-separator-{id}'
   role: 'separator'
 }
 ```
@@ -197,9 +197,9 @@ interface ContextMenuSeparatorProps {
 
 ```ts
 interface ContextMenuGroupLabelProps {
-  id: string                        // '{idBase}-group-{id}'
+  id: string // '{idBase}-group-{id}'
   role: 'presentation'
-  'aria-label'?: string             // from item.label
+  'aria-label'?: string // from item.label
 }
 ```
 
@@ -207,10 +207,10 @@ interface ContextMenuGroupLabelProps {
 
 ```ts
 interface ContextMenuSubmenuProps {
-  id: string                        // '{idBase}-submenu-{id}'
+  id: string // '{idBase}-submenu-{id}'
   role: 'menu'
   tabindex: '-1'
-  hidden: boolean                   // openSubmenuId !== id
+  hidden: boolean // openSubmenuId !== id
 }
 ```
 
@@ -218,41 +218,41 @@ interface ContextMenuSubmenuProps {
 
 ### Core Transitions
 
-| Event / Action | Preconditions | Next State |
-| --- | --- | --- |
-| `openAt(x, y, source)` | none | `isOpen=true`; `anchorX=x`; `anchorY=y`; `openedBy=source`; `restoreTargetId=null`; `openSubmenuId=null`; `submenuActiveId=null`; `activeId` set to first enabled item (via composed menu) |
-| `close()` | none | `isOpen=false`; `activeId=null`; `openedBy=null`; `restoreTargetId='{idBase}-target'`; `openSubmenuId=null`; `submenuActiveId=null` |
-| `select(id)` (checkbox) | item exists, not disabled, type=checkbox | toggles `id` in `checkedIds`; delegates to composed menu `select` |
-| `select(id)` (radio) | item exists, not disabled, type=radio, has group | unchecks all items in same group in `checkedIds`, adds `id`; delegates to composed menu `select` |
-| `select(id)` (submenu child) | item exists, not disabled | handles checkable state if applicable; if `closeOnSelect=true`: closes entire menu |
-| `select(id)` (regular) | item exists, not disabled | delegates to composed menu's `select`; if `closeOnSelect=true`: `isOpen=false`, `activeId=null`, `openedBy=null`, `restoreTargetId='{idBase}-target'`, sub-menu state reset |
-| `select(id)` | item disabled, unknown, separator, or group-label | no-op |
-| `handleTargetKeyDown(ContextMenu)` | none | same as `openAt(currentAnchorX, currentAnchorY, 'keyboard')` |
-| `handleTargetKeyDown(Shift+F10)` | none | same as `openAt(currentAnchorX, currentAnchorY, 'keyboard')` |
-| `handleTargetKeyDown(other key)` | none | no-op |
-| `handleKeyDown(Escape)` | `isOpen=true`, sub-menu open | closes sub-menu only (`openSubmenuId=null`, `submenuActiveId=null`) |
-| `handleKeyDown(Escape)` | `isOpen=true`, no sub-menu open | `close()` |
-| `handleKeyDown(Tab)` | `isOpen=true` | `close()` |
-| `handleKeyDown(ArrowDown)` | `isOpen=true`, sub-menu open | `submenuActiveId` moves to next enabled sub-menu item (wrapping) |
-| `handleKeyDown(ArrowDown)` | `isOpen=true`, no sub-menu | `activeId` moves to next enabled item (wrapping) |
-| `handleKeyDown(ArrowUp)` | `isOpen=true`, sub-menu open | `submenuActiveId` moves to previous enabled sub-menu item (wrapping) |
-| `handleKeyDown(ArrowUp)` | `isOpen=true`, no sub-menu | `activeId` moves to previous enabled item (wrapping) |
-| `handleKeyDown(ArrowRight)` | `isOpen=true`, `activeId` is a submenu item | opens sub-menu: `openSubmenuId=activeId`, `submenuActiveId=first enabled child` |
-| `handleKeyDown(ArrowLeft)` | `isOpen=true`, sub-menu open | closes sub-menu (`openSubmenuId=null`, `submenuActiveId=null`) |
-| `handleKeyDown(Home)` | `isOpen=true`, sub-menu open | `submenuActiveId` moves to first enabled sub-menu item |
-| `handleKeyDown(Home)` | `isOpen=true`, no sub-menu | `activeId` moves to first enabled item |
-| `handleKeyDown(End)` | `isOpen=true`, sub-menu open | `submenuActiveId` moves to last enabled sub-menu item |
-| `handleKeyDown(End)` | `isOpen=true`, no sub-menu | `activeId` moves to last enabled item |
-| `handleKeyDown(Enter/Space)` | `isOpen=true`, sub-menu open, `submenuActiveId!=null` | `select(submenuActiveId)` |
-| `handleKeyDown(Enter)` | `isOpen=true`, `activeId!=null` | `select(activeId)` via composed menu |
-| `handleKeyDown(Space)` | `isOpen=true`, `activeId!=null` | `select(activeId)` via composed menu |
-| `handleKeyDown(printable char)` | `isOpen=true` | type-ahead: advances query, moves `activeId` to matching item by label prefix |
-| `handleKeyDown(*)` | `isOpen=false` | no-op |
-| `handleOutsidePointer()` | `isOpen=true`, `closeOnOutsidePointer!=false` | `close()` |
-| `handleOutsidePointer()` | `isOpen=false` or `closeOnOutsidePointer=false` | no-op |
-| `handleTouchStart(point)` | none | starts long-press timer; after `longPressDuration` ms: `openAt(clientX, clientY, 'pointer')` |
-| `handleTouchMove()` | timer running | cancels long-press timer |
-| `handleTouchEnd()` | timer running | cancels long-press timer |
+| Event / Action                     | Preconditions                                         | Next State                                                                                                                                                                                 |
+| ---------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `openAt(x, y, source)`             | none                                                  | `isOpen=true`; `anchorX=x`; `anchorY=y`; `openedBy=source`; `restoreTargetId=null`; `openSubmenuId=null`; `submenuActiveId=null`; `activeId` set to first enabled item (via composed menu) |
+| `close()`                          | none                                                  | `isOpen=false`; `activeId=null`; `openedBy=null`; `restoreTargetId='{idBase}-target'`; `openSubmenuId=null`; `submenuActiveId=null`                                                        |
+| `select(id)` (checkbox)            | item exists, not disabled, type=checkbox              | toggles `id` in `checkedIds`; delegates to composed menu `select`                                                                                                                          |
+| `select(id)` (radio)               | item exists, not disabled, type=radio, has group      | unchecks all items in same group in `checkedIds`, adds `id`; delegates to composed menu `select`                                                                                           |
+| `select(id)` (submenu child)       | item exists, not disabled                             | handles checkable state if applicable; if `closeOnSelect=true`: closes entire menu                                                                                                         |
+| `select(id)` (regular)             | item exists, not disabled                             | delegates to composed menu's `select`; if `closeOnSelect=true`: `isOpen=false`, `activeId=null`, `openedBy=null`, `restoreTargetId='{idBase}-target'`, sub-menu state reset                |
+| `select(id)`                       | item disabled, unknown, separator, or group-label     | no-op                                                                                                                                                                                      |
+| `handleTargetKeyDown(ContextMenu)` | none                                                  | same as `openAt(currentAnchorX, currentAnchorY, 'keyboard')`                                                                                                                               |
+| `handleTargetKeyDown(Shift+F10)`   | none                                                  | same as `openAt(currentAnchorX, currentAnchorY, 'keyboard')`                                                                                                                               |
+| `handleTargetKeyDown(other key)`   | none                                                  | no-op                                                                                                                                                                                      |
+| `handleKeyDown(Escape)`            | `isOpen=true`, sub-menu open                          | closes sub-menu only (`openSubmenuId=null`, `submenuActiveId=null`)                                                                                                                        |
+| `handleKeyDown(Escape)`            | `isOpen=true`, no sub-menu open                       | `close()`                                                                                                                                                                                  |
+| `handleKeyDown(Tab)`               | `isOpen=true`                                         | `close()`                                                                                                                                                                                  |
+| `handleKeyDown(ArrowDown)`         | `isOpen=true`, sub-menu open                          | `submenuActiveId` moves to next enabled sub-menu item (wrapping)                                                                                                                           |
+| `handleKeyDown(ArrowDown)`         | `isOpen=true`, no sub-menu                            | `activeId` moves to next enabled item (wrapping)                                                                                                                                           |
+| `handleKeyDown(ArrowUp)`           | `isOpen=true`, sub-menu open                          | `submenuActiveId` moves to previous enabled sub-menu item (wrapping)                                                                                                                       |
+| `handleKeyDown(ArrowUp)`           | `isOpen=true`, no sub-menu                            | `activeId` moves to previous enabled item (wrapping)                                                                                                                                       |
+| `handleKeyDown(ArrowRight)`        | `isOpen=true`, `activeId` is a submenu item           | opens sub-menu: `openSubmenuId=activeId`, `submenuActiveId=first enabled child`                                                                                                            |
+| `handleKeyDown(ArrowLeft)`         | `isOpen=true`, sub-menu open                          | closes sub-menu (`openSubmenuId=null`, `submenuActiveId=null`)                                                                                                                             |
+| `handleKeyDown(Home)`              | `isOpen=true`, sub-menu open                          | `submenuActiveId` moves to first enabled sub-menu item                                                                                                                                     |
+| `handleKeyDown(Home)`              | `isOpen=true`, no sub-menu                            | `activeId` moves to first enabled item                                                                                                                                                     |
+| `handleKeyDown(End)`               | `isOpen=true`, sub-menu open                          | `submenuActiveId` moves to last enabled sub-menu item                                                                                                                                      |
+| `handleKeyDown(End)`               | `isOpen=true`, no sub-menu                            | `activeId` moves to last enabled item                                                                                                                                                      |
+| `handleKeyDown(Enter/Space)`       | `isOpen=true`, sub-menu open, `submenuActiveId!=null` | `select(submenuActiveId)`                                                                                                                                                                  |
+| `handleKeyDown(Enter)`             | `isOpen=true`, `activeId!=null`                       | `select(activeId)` via composed menu                                                                                                                                                       |
+| `handleKeyDown(Space)`             | `isOpen=true`, `activeId!=null`                       | `select(activeId)` via composed menu                                                                                                                                                       |
+| `handleKeyDown(printable char)`    | `isOpen=true`                                         | type-ahead: advances query, moves `activeId` to matching item by label prefix                                                                                                              |
+| `handleKeyDown(*)`                 | `isOpen=false`                                        | no-op                                                                                                                                                                                      |
+| `handleOutsidePointer()`           | `isOpen=true`, `closeOnOutsidePointer!=false`         | `close()`                                                                                                                                                                                  |
+| `handleOutsidePointer()`           | `isOpen=false` or `closeOnOutsidePointer=false`       | no-op                                                                                                                                                                                      |
+| `handleTouchStart(point)`          | none                                                  | starts long-press timer; after `longPressDuration` ms: `openAt(clientX, clientY, 'pointer')`                                                                                               |
+| `handleTouchMove()`                | timer running                                         | cancels long-press timer                                                                                                                                                                   |
+| `handleTouchEnd()`                 | timer running                                         | cancels long-press timer                                                                                                                                                                   |
 
 ### Pointer Open Flow
 
@@ -360,20 +360,21 @@ select(id) where item.type='radio', item.group='groupName'
 
 `createContextMenu` internally creates a `createMenu` instance and delegates to it:
 
-| Context-menu concern | Delegated to composed `createMenu` |
-| --- | --- |
-| `state.isOpen` | `menu.state.isOpen` (re-exported) |
-| `state.activeId` | `menu.state.activeId` (re-exported) |
-| `openAt` open logic | `menu.actions.open(source)` |
-| `close` close logic | `menu.actions.close()` + `menu.actions.setActive(null)` |
-| `select` (regular items) | `menu.actions.select(id)` |
-| Arrow/Home/End navigation | `menu.actions.handleMenuKeyDown(event)` |
-| `getMenuProps` base | `menu.contracts.getMenuProps()` |
-| `getItemProps` base (for top-level actionable items) | `menu.contracts.getItemProps(id)` |
+| Context-menu concern                                 | Delegated to composed `createMenu`                      |
+| ---------------------------------------------------- | ------------------------------------------------------- |
+| `state.isOpen`                                       | `menu.state.isOpen` (re-exported)                       |
+| `state.activeId`                                     | `menu.state.activeId` (re-exported)                     |
+| `openAt` open logic                                  | `menu.actions.open(source)`                             |
+| `close` close logic                                  | `menu.actions.close()` + `menu.actions.setActive(null)` |
+| `select` (regular items)                             | `menu.actions.select(id)`                               |
+| Arrow/Home/End navigation                            | `menu.actions.handleMenuKeyDown(event)`                 |
+| `getMenuProps` base                                  | `menu.contracts.getMenuProps()`                         |
+| `getItemProps` base (for top-level actionable items) | `menu.contracts.getItemProps(id)`                       |
 
 Only actionable items (`item`, `checkbox`, `radio`, `submenu`) are passed to the composed `createMenu`; separators and group-labels are filtered out.
 
 Context-menu adds its own layers:
+
 - Anchor coordinate atoms (`anchorX`, `anchorY`)
 - Open source tracking (`openedBy`)
 - Focus restoration (`restoreTargetId`)
@@ -391,6 +392,7 @@ Context-menu adds its own layers:
 UIKit adapter (`cv-context-menu`) will:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOpen()` -- menu visibility, controls `hidden` attribute and outside-pointer listener registration
 - `state.activeId()` -- highlighted item id, used to sync `data-active` and focus on item elements
 - `state.anchorX()` / `state.anchorY()` -- positioning coordinates, applied as CSS custom properties for fixed positioning
@@ -401,6 +403,7 @@ UIKit adapter (`cv-context-menu`) will:
 - `state.submenuActiveId()` -- active item within open sub-menu, used to sync `data-active` and focus
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.openAt(x, y, source)` -- on `contextmenu` event (via target contract), or imperative `openAt()` method on element
 - `actions.close()` -- imperative `close()` method on element, or driven by property sync
 - `actions.select(id)` -- on item click (via item contract `onClick`), or on Enter/Space in menu (via `handleKeyDown`)
@@ -412,6 +415,7 @@ UIKit adapter (`cv-context-menu`) will:
 - `actions.handleTouchEnd()` -- on `touchend` event on the target element
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getTargetProps()` -- applied to the target wrapper element (provides `id`, `onContextMenu`, `onKeyDown`)
 - `contracts.getMenuProps()` -- applied to the menu container element (provides `id`, `role`, `tabindex`, `hidden`, `aria-label`, `data-anchor-x`, `data-anchor-y`, `onKeyDown`)
 - `contracts.getItemProps(id)` -- applied to each menu item element (provides `id`, `role`, `tabindex`, `aria-disabled`, `data-active`, `aria-checked`, `aria-haspopup`, `aria-expanded`, `onClick`)
@@ -420,6 +424,7 @@ UIKit adapter (`cv-context-menu`) will:
 - `contracts.getSubmenuProps(id)` -- applied to sub-menu container elements (provides `id`, `role`, `tabindex`, `hidden`)
 
 **UIKit-only concerns (NOT in headless):**
+
 - Fixed positioning via CSS custom properties (`--cv-context-menu-x`, `--cv-context-menu-y`)
 - Document-level `pointerdown` listener registration/cleanup for outside-click detection
 - Slotted item element discovery and `slotchange` observation
@@ -455,38 +460,38 @@ UIKit adapter (`cv-context-menu`) will:
 
 ### Target Element
 
-| Key | Action |
-| --- | --- |
+| Key           | Action                                                           |
+| ------------- | ---------------------------------------------------------------- |
 | `ContextMenu` | Open menu at current anchor coordinates with `source='keyboard'` |
-| `Shift+F10` | Open menu at current anchor coordinates with `source='keyboard'` |
+| `Shift+F10`   | Open menu at current anchor coordinates with `source='keyboard'` |
 
 ### Menu Element (when open, no sub-menu)
 
-| Key | Action |
-| --- | --- |
-| `Escape` | Close menu, restore focus to target |
-| `Tab` | Close menu, restore focus to target |
-| `ArrowDown` | Move active to next enabled item (wrapping) |
-| `ArrowUp` | Move active to previous enabled item (wrapping) |
-| `ArrowRight` | If active item is a submenu: open sub-menu, focus first child |
-| `Home` | Move active to first enabled item |
-| `End` | Move active to last enabled item |
-| `Enter` | Select active item |
-| `Space` | Select active item |
+| Key                 | Action                                                                  |
+| ------------------- | ----------------------------------------------------------------------- |
+| `Escape`            | Close menu, restore focus to target                                     |
+| `Tab`               | Close menu, restore focus to target                                     |
+| `ArrowDown`         | Move active to next enabled item (wrapping)                             |
+| `ArrowUp`           | Move active to previous enabled item (wrapping)                         |
+| `ArrowRight`        | If active item is a submenu: open sub-menu, focus first child           |
+| `Home`              | Move active to first enabled item                                       |
+| `End`               | Move active to last enabled item                                        |
+| `Enter`             | Select active item                                                      |
+| `Space`             | Select active item                                                      |
 | Printable character | Type-ahead: advance query, move active to matching item by label prefix |
 
 ### Sub-menu (when open)
 
-| Key | Action |
-| --- | --- |
-| `Escape` | Close sub-menu, return to parent menu |
-| `ArrowLeft` | Close sub-menu, return to parent menu |
-| `ArrowDown` | Move submenuActiveId to next enabled sub-menu item (wrapping) |
-| `ArrowUp` | Move submenuActiveId to previous enabled sub-menu item (wrapping) |
-| `Home` | Move submenuActiveId to first enabled sub-menu item |
-| `End` | Move submenuActiveId to last enabled sub-menu item |
-| `Enter` | Select active sub-menu item |
-| `Space` | Select active sub-menu item |
+| Key         | Action                                                            |
+| ----------- | ----------------------------------------------------------------- |
+| `Escape`    | Close sub-menu, return to parent menu                             |
+| `ArrowLeft` | Close sub-menu, return to parent menu                             |
+| `ArrowDown` | Move submenuActiveId to next enabled sub-menu item (wrapping)     |
+| `ArrowUp`   | Move submenuActiveId to previous enabled sub-menu item (wrapping) |
+| `Home`      | Move submenuActiveId to first enabled sub-menu item               |
+| `End`       | Move submenuActiveId to last enabled sub-menu item                |
+| `Enter`     | Select active sub-menu item                                       |
+| `Space`     | Select active sub-menu item                                       |
 
 All menu keyboard handling is no-op when the menu is closed.
 
@@ -539,9 +544,9 @@ All menu keyboard handling is no-op when the menu is closed.
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

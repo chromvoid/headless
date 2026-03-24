@@ -22,7 +22,7 @@ interface ListboxOption {
   id: string
   label?: string
   disabled?: boolean
-  groupId?: string          // references a ListboxGroup.id; ungrouped when omitted
+  groupId?: string // references a ListboxGroup.id; ungrouped when omitted
 }
 
 interface ListboxGroup {
@@ -39,12 +39,12 @@ Groups and flat options coexist. An option references a group via `groupId`. Opt
 interface CreateListboxOptions {
   options: readonly ListboxOption[]
   groups?: readonly ListboxGroup[]
-  selectionMode?: 'single' | 'multiple'           // default 'single'
-  focusStrategy?: FocusStrategy                     // default 'aria-activedescendant'
-  selectionFollowsFocus?: boolean                   // default false
-  rangeSelection?: boolean | { enabled?: boolean }  // default false
-  orientation?: 'vertical' | 'horizontal'           // default 'vertical'
-  typeahead?: boolean | { enabled?: boolean; timeoutMs?: number }
+  selectionMode?: 'single' | 'multiple' // default 'single'
+  focusStrategy?: FocusStrategy // default 'aria-activedescendant'
+  selectionFollowsFocus?: boolean // default false
+  rangeSelection?: boolean | {enabled?: boolean} // default false
+  orientation?: 'vertical' | 'horizontal' // default 'vertical'
+  typeahead?: boolean | {enabled?: boolean; timeoutMs?: number}
   ariaLabel?: string
   idBase?: string
   initialActiveId?: string | null
@@ -56,48 +56,48 @@ interface CreateListboxOptions {
 
 ## State Signals
 
-| Signal | Type | Description |
-| --- | --- | --- |
-| `activeId()` | `Atom<string \| null>` | Currently focused option id |
-| `selectedIds()` | `Atom<string[]>` | Selected option ids |
-| `isOpen()` | `Atom<boolean>` | Popup visibility (for composite patterns like select) |
-| `hasSelection()` | `Computed<boolean>` | `selectedIds.length > 0` |
-| `selectionMode` | `'single' \| 'multiple'` | Current selection mode (from config) |
-| `focusStrategy` | `FocusStrategy` | Current focus strategy (from config) |
-| `orientation` | `'vertical' \| 'horizontal'` | Current orientation (from config) |
-| `optionCount` | `number` | Total number of options (flat count across all groups). For `aria-setsize`. |
-| `groups` | `readonly ListboxGroup[]` | Configured groups (from config, empty array when no groups) |
+| Signal           | Type                         | Description                                                                 |
+| ---------------- | ---------------------------- | --------------------------------------------------------------------------- |
+| `activeId()`     | `Atom<string \| null>`       | Currently focused option id                                                 |
+| `selectedIds()`  | `Atom<string[]>`             | Selected option ids                                                         |
+| `isOpen()`       | `Atom<boolean>`              | Popup visibility (for composite patterns like select)                       |
+| `hasSelection()` | `Computed<boolean>`          | `selectedIds.length > 0`                                                    |
+| `selectionMode`  | `'single' \| 'multiple'`     | Current selection mode (from config)                                        |
+| `focusStrategy`  | `FocusStrategy`              | Current focus strategy (from config)                                        |
+| `orientation`    | `'vertical' \| 'horizontal'` | Current orientation (from config)                                           |
+| `optionCount`    | `number`                     | Total number of options (flat count across all groups). For `aria-setsize`. |
+| `groups`         | `readonly ListboxGroup[]`    | Configured groups (from config, empty array when no groups)                 |
 
 All reactive state is signal-backed via Reatom atoms. `selectionMode`, `focusStrategy`, `orientation`, `optionCount`, and `groups` are static config values exposed on the state object for adapter convenience.
 
 ## Actions
 
-| Action | Signature | Description |
-| --- | --- | --- |
-| `open` | `() => void` | Sets `isOpen=true`, resets typeahead |
-| `close` | `() => void` | Sets `isOpen=false`, resets typeahead |
-| `setActive` | `(id: string \| null) => void` | Sets active option if enabled; no-op for disabled/unknown ids |
-| `moveNext` | `() => void` | Moves active to next enabled option (linear across groups) |
-| `movePrev` | `() => void` | Moves active to previous enabled option (linear across groups) |
-| `moveFirst` | `() => void` | Sets active to first enabled option |
-| `moveLast` | `() => void` | Sets active to last enabled option |
-| `toggleSelected` | `(id: string) => void` | Toggles selection for the given id. Respects selection mode constraints. |
-| `selectOnly` | `(id: string) => void` | Selects only the given id, clearing previous selection |
-| `clearSelected` | `() => void` | Clears all selection |
-| `handleKeyDown` | `(event: KeyboardEventLike) => void` | Delegates keyboard events to navigation/selection/typeahead transitions |
+| Action           | Signature                            | Description                                                              |
+| ---------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `open`           | `() => void`                         | Sets `isOpen=true`, resets typeahead                                     |
+| `close`          | `() => void`                         | Sets `isOpen=false`, resets typeahead                                    |
+| `setActive`      | `(id: string \| null) => void`       | Sets active option if enabled; no-op for disabled/unknown ids            |
+| `moveNext`       | `() => void`                         | Moves active to next enabled option (linear across groups)               |
+| `movePrev`       | `() => void`                         | Moves active to previous enabled option (linear across groups)           |
+| `moveFirst`      | `() => void`                         | Sets active to first enabled option                                      |
+| `moveLast`       | `() => void`                         | Sets active to last enabled option                                       |
+| `toggleSelected` | `(id: string) => void`               | Toggles selection for the given id. Respects selection mode constraints. |
+| `selectOnly`     | `(id: string) => void`               | Selects only the given id, clearing previous selection                   |
+| `clearSelected`  | `() => void`                         | Clears all selection                                                     |
+| `handleKeyDown`  | `(event: KeyboardEventLike) => void` | Delegates keyboard events to navigation/selection/typeahead transitions  |
 
 UIKit must only call actions, never mutate state atoms directly.
 
 ## Contracts
 
-| Contract | Return Type | Description |
-| --- | --- | --- |
-| `getRootProps()` | `ListboxRootProps` | ARIA attributes for the listbox root element |
-| `getOptionProps(id)` | `ListboxOptionProps` | ARIA attributes for an individual option |
-| `getGroupProps(groupId)` | `ListboxGroupProps` | ARIA attributes for a group container |
-| `getGroupLabelProps(groupId)` | `ListboxGroupLabelProps` | Attributes for the group label element |
-| `getGroupOptions(groupId)` | `readonly ListboxOption[]` | Options belonging to a group, in declaration order |
-| `getUngroupedOptions()` | `readonly ListboxOption[]` | Options not assigned to any group |
+| Contract                      | Return Type                | Description                                        |
+| ----------------------------- | -------------------------- | -------------------------------------------------- |
+| `getRootProps()`              | `ListboxRootProps`         | ARIA attributes for the listbox root element       |
+| `getOptionProps(id)`          | `ListboxOptionProps`       | ARIA attributes for an individual option           |
+| `getGroupProps(groupId)`      | `ListboxGroupProps`        | ARIA attributes for a group container              |
+| `getGroupLabelProps(groupId)` | `ListboxGroupLabelProps`   | Attributes for the group label element             |
+| `getGroupOptions(groupId)`    | `readonly ListboxOption[]` | Options belonging to a group, in declaration order |
+| `getUngroupedOptions()`       | `readonly ListboxOption[]` | Options not assigned to any group                  |
 
 ### Contract Return Types
 
@@ -108,7 +108,7 @@ interface ListboxRootProps {
   'aria-label'?: string
   'aria-orientation': 'vertical' | 'horizontal'
   'aria-multiselectable'?: 'true'
-  'aria-activedescendant'?: string    // present when focusStrategy='aria-activedescendant' and activeId != null
+  'aria-activedescendant'?: string // present when focusStrategy='aria-activedescendant' and activeId != null
 }
 
 interface ListboxOptionProps {
@@ -117,15 +117,15 @@ interface ListboxOptionProps {
   tabindex: '0' | '-1'
   'aria-disabled'?: 'true'
   'aria-selected': 'true' | 'false'
-  'aria-setsize': string              // total option count (flat, across all groups)
-  'aria-posinset': string             // 1-based position in the flat option list
+  'aria-setsize': string // total option count (flat, across all groups)
+  'aria-posinset': string // 1-based position in the flat option list
   'data-active': 'true' | 'false'
 }
 
 interface ListboxGroupProps {
   id: string
   role: 'group'
-  'aria-labelledby': string           // references the group label element id
+  'aria-labelledby': string // references the group label element id
 }
 
 interface ListboxGroupLabelProps {
@@ -222,39 +222,39 @@ interface ListboxGroupLabelProps {
 
 ### Core Transitions
 
-| Event / Action | Preconditions | Next State |
-| --- | --- | --- |
-| `open()` | none | `isOpen=true`; typeahead reset |
-| `close()` | none | `isOpen=false`; typeahead reset |
-| `setActive(id)` | `id` must be enabled | `activeId=id`; if `selectionFollowsFocus` and single mode: `selectedIds=[id]` |
-| `setActive(null)` | none | `activeId=null` |
-| `moveNext()` | none | `activeId` = next enabled option in flat order, or unchanged at end |
-| `movePrev()` | none | `activeId` = previous enabled option in flat order, or unchanged at start |
-| `moveFirst()` | none | `activeId` = first enabled option, or `null` |
-| `moveLast()` | none | `activeId` = last enabled option, or `null` |
+| Event / Action       | Preconditions        | Next State                                                                                  |
+| -------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
+| `open()`             | none                 | `isOpen=true`; typeahead reset                                                              |
+| `close()`            | none                 | `isOpen=false`; typeahead reset                                                             |
+| `setActive(id)`      | `id` must be enabled | `activeId=id`; if `selectionFollowsFocus` and single mode: `selectedIds=[id]`               |
+| `setActive(null)`    | none                 | `activeId=null`                                                                             |
+| `moveNext()`         | none                 | `activeId` = next enabled option in flat order, or unchanged at end                         |
+| `movePrev()`         | none                 | `activeId` = previous enabled option in flat order, or unchanged at start                   |
+| `moveFirst()`        | none                 | `activeId` = first enabled option, or `null`                                                |
+| `moveLast()`         | none                 | `activeId` = last enabled option, or `null`                                                 |
 | `toggleSelected(id)` | `id` must be enabled | In single mode: toggles id in/out. In multiple mode: adds/removes id. Updates range anchor. |
-| `selectOnly(id)` | `id` must be enabled | `selectedIds=[id]`; updates range anchor |
-| `clearSelected()` | none | `selectedIds=[]`; range anchor reset |
+| `selectOnly(id)`     | `id` must be enabled | `selectedIds=[id]`; updates range anchor                                                    |
+| `clearSelected()`    | none                 | `selectedIds=[]`; range anchor reset                                                        |
 
 ### Keyboard Transitions (via `handleKeyDown`)
 
-| Key | Modifiers | Context | Action |
-| --- | --- | --- | --- |
-| `ArrowDown` / `ArrowRight`* | none | any | `moveNext()` |
-| `ArrowUp` / `ArrowLeft`* | none | any | `movePrev()` |
-| `Home` | none | any | `moveFirst()` |
-| `End` | none | any | `moveLast()` |
-| `Space` | none | single mode | `selectOnly(activeId)` |
-| `Space` | none | multiple mode | `toggleSelected(activeId)` |
-| `Enter` | none | single mode | `selectOnly(activeId)` |
-| `Enter` | none | multiple mode | `toggleSelected(activeId)` |
-| `Escape` | none | any | `close()` |
-| `Ctrl/Cmd + A` | none | multiple mode | select all enabled options |
-| `Shift + ArrowDown/ArrowUp` | shift | multiple + rangeSelection | range extend: move + select range from anchor |
-| `Shift + Space` | shift | multiple + rangeSelection | select range from anchor to active |
-| printable char | none | typeahead enabled | typeahead navigation |
+| Key                          | Modifiers | Context                   | Action                                        |
+| ---------------------------- | --------- | ------------------------- | --------------------------------------------- |
+| `ArrowDown` / `ArrowRight`\* | none      | any                       | `moveNext()`                                  |
+| `ArrowUp` / `ArrowLeft`\*    | none      | any                       | `movePrev()`                                  |
+| `Home`                       | none      | any                       | `moveFirst()`                                 |
+| `End`                        | none      | any                       | `moveLast()`                                  |
+| `Space`                      | none      | single mode               | `selectOnly(activeId)`                        |
+| `Space`                      | none      | multiple mode             | `toggleSelected(activeId)`                    |
+| `Enter`                      | none      | single mode               | `selectOnly(activeId)`                        |
+| `Enter`                      | none      | multiple mode             | `toggleSelected(activeId)`                    |
+| `Escape`                     | none      | any                       | `close()`                                     |
+| `Ctrl/Cmd + A`               | none      | multiple mode             | select all enabled options                    |
+| `Shift + ArrowDown/ArrowUp`  | shift     | multiple + rangeSelection | range extend: move + select range from anchor |
+| `Shift + Space`              | shift     | multiple + rangeSelection | select range from anchor to active            |
+| printable char               | none      | typeahead enabled         | typeahead navigation                          |
 
-*Arrow key mapping depends on orientation: vertical uses Up/Down, horizontal uses Left/Right.
+\*Arrow key mapping depends on orientation: vertical uses Up/Down, horizontal uses Left/Right.
 
 ## Invariants
 
@@ -275,6 +275,7 @@ interface ListboxGroupLabelProps {
 UIKit adapter will:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.activeId()` — currently focused option id
 - `state.selectedIds()` — selected option ids
 - `state.isOpen()` — popup visibility
@@ -286,6 +287,7 @@ UIKit adapter will:
 - `state.groups` — group definitions (static, for rendering group structure)
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open()` / `actions.close()` — popup lifecycle
 - `actions.setActive(id)` — pointer hover / programmatic focus
 - `actions.moveNext()` / `actions.movePrev()` — arrow key navigation
@@ -296,16 +298,19 @@ UIKit adapter will:
 - `actions.handleKeyDown(event)` — keyboard delegation
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getRootProps()` — spread onto listbox root element
 - `contracts.getOptionProps(id)` — spread onto each option element
 - `contracts.getGroupProps(groupId)` — spread onto group container element
 - `contracts.getGroupLabelProps(groupId)` — spread onto group label element
 
 **Contracts called for rendering:**
+
 - `contracts.getGroupOptions(groupId)` — options to render within a group
 - `contracts.getUngroupedOptions()` — options to render outside any group
 
 **UIKit-only concerns (NOT in headless):**
+
 - Group visual styling (indentation, separators, headers)
 - Virtual scroll viewport management and option recycling
 - Popup positioning and animation
@@ -335,9 +340,9 @@ UIKit adapter will:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Next Steps

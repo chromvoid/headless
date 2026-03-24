@@ -123,11 +123,13 @@ To ensure consistency across components, we use the following canonical mapping:
 #### Selectors Guidance
 
 Selectors MUST be used for any derived state logic to ensure:
+
 1. Components only re-render when the specific derived value changes.
 2. Business logic is decoupled from the raw state structure.
 3. Complex calculations are memoized via Reatom's `computed`.
 
 Example:
+
 - `createListbox(options) -> { state, selectors, actions, getRootProps, getOptionProps }`.
 
 ### 5. State Runtime Policy
@@ -239,7 +241,7 @@ Issue-ready decomposition is maintained in:
 Deliverables:
 
 - package skeleton with layered directories
-- package-local lint, prettier, boundary checks
+- package-local lint, format, boundary checks
 - dedicated CI workflow for headless paths
 - ADR-001..ADR-004 baseline architecture docs
 
@@ -422,8 +424,8 @@ Exit criteria:
 2. Component spec in `specs/components/<component>.md`.
 3. Export wired in `src/index.ts`.
 4. Full test matrix for supported behavior.
-5. `npm run lint -w packages/headless` is green.
-6. `npm run test -w packages/headless` is green.
+5. `npm run lint` is green.
+6. `npm run test` is green.
 7. Boundary check remains green.
 
 ### Prioritized Execution Order

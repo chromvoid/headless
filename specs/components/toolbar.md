@@ -27,14 +27,14 @@
 
 ## Options (`CreateToolbarOptions`)
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `items` | `readonly ToolbarItem[]` | required | Item definitions. Each has `id: string`, optional `disabled?: boolean`, optional `separator?: boolean`. |
-| `idBase` | `string` | `'toolbar'` | Prefix for generated DOM ids (`{idBase}-root`, `{idBase}.nav-item-{id}`). |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Determines keyboard navigation axis and `aria-orientation` value. |
-| `wrap` | `boolean` | `true` | Whether arrow navigation wraps from last to first and vice versa. `false` clamps at boundaries. |
-| `ariaLabel` | `string \| undefined` | `undefined` | Optional `aria-label` for the toolbar root element. |
-| `initialActiveId` | `string \| null` | first enabled non-separator item | Initial roving-focus item. Normalized to first navigable item if invalid, disabled, or a separator. |
+| Option            | Type                         | Default                          | Description                                                                                             |
+| ----------------- | ---------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `items`           | `readonly ToolbarItem[]`     | required                         | Item definitions. Each has `id: string`, optional `disabled?: boolean`, optional `separator?: boolean`. |
+| `idBase`          | `string`                     | `'toolbar'`                      | Prefix for generated DOM ids (`{idBase}-root`, `{idBase}.nav-item-{id}`).                               |
+| `orientation`     | `'horizontal' \| 'vertical'` | `'horizontal'`                   | Determines keyboard navigation axis and `aria-orientation` value.                                       |
+| `wrap`            | `boolean`                    | `true`                           | Whether arrow navigation wraps from last to first and vice versa. `false` clamps at boundaries.         |
+| `ariaLabel`       | `string \| undefined`        | `undefined`                      | Optional `aria-label` for the toolbar root element.                                                     |
+| `initialActiveId` | `string \| null`             | first enabled non-separator item | Initial roving-focus item. Normalized to first navigable item if invalid, disabled, or a separator.     |
 
 ### `ToolbarItem`
 
@@ -42,7 +42,7 @@
 interface ToolbarItem {
   id: string
   disabled?: boolean
-  separator?: boolean  // non-focusable, non-interactive divider
+  separator?: boolean // non-focusable, non-interactive divider
 }
 ```
 
@@ -124,18 +124,18 @@ The following are computed by the underlying composite-navigation layer and avai
 
 ## Transitions Table
 
-| Event / Action | `activeId` | `lastActiveId` |
-|---|---|---|
-| `setActive(id)` where id is navigable | set to `id` | unchanged |
-| `setActive(id)` where id is disabled/separator/unknown | unchanged | unchanged |
-| `moveNext()` / `movePrev()` | next/prev navigable (wrap or clamp) | unchanged |
-| `moveFirst()` / `moveLast()` | first/last navigable | unchanged |
-| `handleKeyDown` (orientation-matched arrow) | delegates to `moveNext`/`movePrev` | unchanged |
-| `handleKeyDown` (Home/End) | delegates to `moveFirst`/`moveLast` | unchanged |
-| `handleKeyDown` (unrecognized key) | unchanged | unchanged |
-| `handleToolbarBlur()` | unchanged | set to current `activeId` |
-| `handleToolbarFocus()` with valid `lastActiveId` | set to `lastActiveId` | unchanged |
-| `handleToolbarFocus()` with null/stale `lastActiveId` | unchanged | unchanged |
+| Event / Action                                         | `activeId`                          | `lastActiveId`            |
+| ------------------------------------------------------ | ----------------------------------- | ------------------------- |
+| `setActive(id)` where id is navigable                  | set to `id`                         | unchanged                 |
+| `setActive(id)` where id is disabled/separator/unknown | unchanged                           | unchanged                 |
+| `moveNext()` / `movePrev()`                            | next/prev navigable (wrap or clamp) | unchanged                 |
+| `moveFirst()` / `moveLast()`                           | first/last navigable                | unchanged                 |
+| `handleKeyDown` (orientation-matched arrow)            | delegates to `moveNext`/`movePrev`  | unchanged                 |
+| `handleKeyDown` (Home/End)                             | delegates to `moveFirst`/`moveLast` | unchanged                 |
+| `handleKeyDown` (unrecognized key)                     | unchanged                           | unchanged                 |
+| `handleToolbarBlur()`                                  | unchanged                           | set to current `activeId` |
+| `handleToolbarFocus()` with valid `lastActiveId`       | set to `lastActiveId`               | unchanged                 |
+| `handleToolbarFocus()` with null/stale `lastActiveId`  | unchanged                           | unchanged                 |
 
 ## Contracts
 
@@ -145,10 +145,10 @@ Contracts return ready-to-spread ARIA attribute maps.
 
 ```ts
 interface ToolbarRootProps {
-  id: string                              // '{idBase}-root'
+  id: string // '{idBase}-root'
   role: 'toolbar'
   'aria-orientation': 'horizontal' | 'vertical'
-  'aria-label'?: string                   // from options.ariaLabel
+  'aria-label'?: string // from options.ariaLabel
 }
 ```
 
@@ -158,11 +158,11 @@ Returns props for a navigable (non-separator) item. Throws `Error` if `id` is un
 
 ```ts
 interface ToolbarItemProps {
-  id: string                              // '{idBase}.nav-item-{id}'
-  tabindex: '0' | '-1'                   // '0' if active, '-1' otherwise
-  'aria-disabled'?: 'true'               // present only when item is disabled
-  'data-active': 'true' | 'false'        // matches activeId
-  onFocus: () => void                    // calls setActive(id)
+  id: string // '{idBase}.nav-item-{id}'
+  tabindex: '0' | '-1' // '0' if active, '-1' otherwise
+  'aria-disabled'?: 'true' // present only when item is disabled
+  'data-active': 'true' | 'false' // matches activeId
+  onFocus: () => void // calls setActive(id)
 }
 ```
 
@@ -172,9 +172,9 @@ Returns props for a separator item. Throws `Error` if `id` is unknown or not a s
 
 ```ts
 interface ToolbarSeparatorProps {
-  id: string                              // '{idBase}-separator-{id}'
+  id: string // '{idBase}-separator-{id}'
   role: 'separator'
-  'aria-orientation': 'vertical' | 'horizontal'  // perpendicular to toolbar orientation
+  'aria-orientation': 'vertical' | 'horizontal' // perpendicular to toolbar orientation
 }
 ```
 
@@ -213,29 +213,29 @@ This section lists exactly what the UIKit adapter layer binds to.
 
 ### Signals Read
 
-| Signal | UIKit Usage |
-|---|---|
-| `state.activeId()` | Determines roving tabindex; drives `data-active` attribute on item elements; used for programmatic focus management (calling `.focus()` on the active DOM element). |
-| `state.lastActiveId()` | Not directly read by UIKit for rendering; consumed internally by `handleToolbarFocus`. UIKit only needs to call the action. |
+| Signal                 | UIKit Usage                                                                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `state.activeId()`     | Determines roving tabindex; drives `data-active` attribute on item elements; used for programmatic focus management (calling `.focus()` on the active DOM element). |
+| `state.lastActiveId()` | Not directly read by UIKit for rendering; consumed internally by `handleToolbarFocus`. UIKit only needs to call the action.                                         |
 
 ### Actions Called
 
-| Action | UIKit Trigger |
-|---|---|
-| `setActive(id)` | An item receives focus via pointer click or programmatic focus. Also called internally by `getItemProps(id).onFocus`. |
-| `handleKeyDown(event)` | `keydown` event on a toolbar item or the toolbar root. |
-| `handleToolbarFocus()` | `focusin` event on the toolbar root when toolbar was not previously focused (re-entry detection). UIKit must track whether toolbar already has focus to avoid calling on internal focus moves. |
-| `handleToolbarBlur()` | `focusout` event on the toolbar root when `relatedTarget` is outside the toolbar (full blur detection). |
-| `moveNext()` / `movePrev()` | Not called directly by UIKit; delegated through `handleKeyDown`. |
-| `moveFirst()` / `moveLast()` | Not called directly by UIKit; delegated through `handleKeyDown`. |
+| Action                       | UIKit Trigger                                                                                                                                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `setActive(id)`              | An item receives focus via pointer click or programmatic focus. Also called internally by `getItemProps(id).onFocus`.                                                                          |
+| `handleKeyDown(event)`       | `keydown` event on a toolbar item or the toolbar root.                                                                                                                                         |
+| `handleToolbarFocus()`       | `focusin` event on the toolbar root when toolbar was not previously focused (re-entry detection). UIKit must track whether toolbar already has focus to avoid calling on internal focus moves. |
+| `handleToolbarBlur()`        | `focusout` event on the toolbar root when `relatedTarget` is outside the toolbar (full blur detection).                                                                                        |
+| `moveNext()` / `movePrev()`  | Not called directly by UIKit; delegated through `handleKeyDown`.                                                                                                                               |
+| `moveFirst()` / `moveLast()` | Not called directly by UIKit; delegated through `handleKeyDown`.                                                                                                                               |
 
 ### Contracts Spread
 
-| Contract | UIKit Target |
-|---|---|
-| `getRootProps()` | Spread onto the toolbar root container element. |
-| `getItemProps(id)` | Spread onto each navigable (non-separator) item element. The `onFocus` callback is bound to the element's `focus` event. |
-| `getSeparatorProps(id)` | Spread onto each separator element. |
+| Contract                | UIKit Target                                                                                                             |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `getRootProps()`        | Spread onto the toolbar root container element.                                                                          |
+| `getItemProps(id)`      | Spread onto each navigable (non-separator) item element. The `onFocus` callback is bound to the element's `focus` event. |
+| `getSeparatorProps(id)` | Spread onto each separator element.                                                                                      |
 
 ### UIKit-Only Concerns (Not in Headless)
 
@@ -264,9 +264,9 @@ This section lists exactly what the UIKit adapter layer binds to.
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

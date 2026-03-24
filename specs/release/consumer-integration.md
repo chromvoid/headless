@@ -45,9 +45,9 @@ Covered flow:
 
 Recommended package-level gates:
 
-- `npm run lint -w packages/headless`
-- `npm run test -w packages/headless`
+- `npm run lint`
+- `npm run test`
 
 Targeted integration evidence:
 
-- `npm run test -w packages/headless -- src/adapters/adapters.integration.test.ts`
+- `npm run test:unit -- src/adapters/adapters.integration.test.ts`

@@ -27,15 +27,15 @@ orientation-aware keyboard navigation, and panel linkage contracts.
 
 ## Options (`CreateTabsOptions`)
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `tabs` | `readonly TabItem[]` | required | Tab definitions. Each `TabItem` has `id: string` and optional `disabled?: boolean`. |
-| `idBase` | `string` | `'tabs'` | Prefix for generated DOM ids (`{idBase}-tablist`, `{idBase}-tab-{id}`, `{idBase}-panel-{id}`). |
-| `ariaLabel` | `string \| undefined` | `undefined` | Optional `aria-label` for the tablist element. |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Determines keyboard navigation axis and `aria-orientation` value. |
-| `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | Whether navigation also selects (`automatic`) or only Enter/Space selects (`manual`). |
-| `initialActiveTabId` | `string \| null` | falls back to `initialSelectedTabId` | Initial roving-focus tab. Normalized to first enabled tab if invalid or disabled. |
-| `initialSelectedTabId` | `string \| null` | first enabled tab | Initial selected tab. Normalized to first enabled tab if invalid or disabled. |
+| Option                 | Type                         | Default                              | Description                                                                                    |
+| ---------------------- | ---------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `tabs`                 | `readonly TabItem[]`         | required                             | Tab definitions. Each `TabItem` has `id: string` and optional `disabled?: boolean`.            |
+| `idBase`               | `string`                     | `'tabs'`                             | Prefix for generated DOM ids (`{idBase}-tablist`, `{idBase}-tab-{id}`, `{idBase}-panel-{id}`). |
+| `ariaLabel`            | `string \| undefined`        | `undefined`                          | Optional `aria-label` for the tablist element.                                                 |
+| `orientation`          | `'horizontal' \| 'vertical'` | `'horizontal'`                       | Determines keyboard navigation axis and `aria-orientation` value.                              |
+| `activationMode`       | `'automatic' \| 'manual'`    | `'automatic'`                        | Whether navigation also selects (`automatic`) or only Enter/Space selects (`manual`).          |
+| `initialActiveTabId`   | `string \| null`             | falls back to `initialSelectedTabId` | Initial roving-focus tab. Normalized to first enabled tab if invalid or disabled.              |
+| `initialSelectedTabId` | `string \| null`             | first enabled tab                    | Initial selected tab. Normalized to first enabled tab if invalid or disabled.                  |
 
 ### Initial State Resolution
 
@@ -102,19 +102,19 @@ Headless Tabs exposes state as reactive signal-backed getters.
 
 ## Transitions Table
 
-| Event / Action | `activeTabId` | `selectedTabId` |
-|---|---|---|
-| `setActive(id)` where id is enabled | set to `id` | set to `id` if `automatic`; unchanged if `manual` |
-| `setActive(null)` | set to `null` | unchanged |
-| `setActive(id)` where id is disabled/unknown | unchanged | unchanged |
-| `select(id)` where id is enabled | set to `id` | set to `id` |
-| `select(id)` where id is disabled/unknown | unchanged | unchanged |
-| `moveNext()` / `movePrev()` | next/prev enabled (wrapping) | follows `activeTabId` if `automatic`; unchanged if `manual` |
-| `moveFirst()` / `moveLast()` | first/last enabled | follows `activeTabId` if `automatic`; unchanged if `manual` |
-| `handleKeyDown` (arrow key) | delegates to `moveNext`/`movePrev` | per activation mode |
-| `handleKeyDown` (Home/End) | delegates to `moveFirst`/`moveLast` | per activation mode |
-| `handleKeyDown` (Enter/Space) | unchanged | set to `activeTabId` (via `select`) |
-| `handleKeyDown` (unrecognized key) | unchanged | unchanged |
+| Event / Action                               | `activeTabId`                       | `selectedTabId`                                             |
+| -------------------------------------------- | ----------------------------------- | ----------------------------------------------------------- |
+| `setActive(id)` where id is enabled          | set to `id`                         | set to `id` if `automatic`; unchanged if `manual`           |
+| `setActive(null)`                            | set to `null`                       | unchanged                                                   |
+| `setActive(id)` where id is disabled/unknown | unchanged                           | unchanged                                                   |
+| `select(id)` where id is enabled             | set to `id`                         | set to `id`                                                 |
+| `select(id)` where id is disabled/unknown    | unchanged                           | unchanged                                                   |
+| `moveNext()` / `movePrev()`                  | next/prev enabled (wrapping)        | follows `activeTabId` if `automatic`; unchanged if `manual` |
+| `moveFirst()` / `moveLast()`                 | first/last enabled                  | follows `activeTabId` if `automatic`; unchanged if `manual` |
+| `handleKeyDown` (arrow key)                  | delegates to `moveNext`/`movePrev`  | per activation mode                                         |
+| `handleKeyDown` (Home/End)                   | delegates to `moveFirst`/`moveLast` | per activation mode                                         |
+| `handleKeyDown` (Enter/Space)                | unchanged                           | set to `activeTabId` (via `select`)                         |
+| `handleKeyDown` (unrecognized key)           | unchanged                           | unchanged                                                   |
 
 ## Contracts
 
@@ -124,10 +124,10 @@ Contracts return ready-to-spread ARIA attribute maps.
 
 ```ts
 interface TabListProps {
-  id: string                              // '{idBase}-tablist'
+  id: string // '{idBase}-tablist'
   role: 'tablist'
   'aria-orientation': 'horizontal' | 'vertical'
-  'aria-label'?: string                   // from options.ariaLabel
+  'aria-label'?: string // from options.ariaLabel
 }
 ```
 
@@ -137,14 +137,14 @@ Throws `Error` if `id` is not a known tab.
 
 ```ts
 interface TabProps {
-  id: string                              // '{idBase}-tab-{id}'
+  id: string // '{idBase}-tab-{id}'
   role: 'tab'
-  tabindex: '0' | '-1'                   // '0' if active, '-1' otherwise
-  'aria-selected': 'true' | 'false'      // 'true' if selected
-  'aria-controls': string                // '{idBase}-panel-{id}'
-  'aria-disabled'?: 'true'               // present only when tab is disabled
-  'data-active': 'true' | 'false'        // matches activeTabId
-  'data-selected': 'true' | 'false'      // matches selectedTabId
+  tabindex: '0' | '-1' // '0' if active, '-1' otherwise
+  'aria-selected': 'true' | 'false' // 'true' if selected
+  'aria-controls': string // '{idBase}-panel-{id}'
+  'aria-disabled'?: 'true' // present only when tab is disabled
+  'data-active': 'true' | 'false' // matches activeTabId
+  'data-selected': 'true' | 'false' // matches selectedTabId
 }
 ```
 
@@ -154,11 +154,11 @@ Throws `Error` if `id` is not a known tab.
 
 ```ts
 interface TabPanelProps {
-  id: string                              // '{idBase}-panel-{id}'
+  id: string // '{idBase}-panel-{id}'
   role: 'tabpanel'
-  tabindex: '0' | '-1'                   // '0' if selected, '-1' otherwise
-  'aria-labelledby': string              // '{idBase}-tab-{id}'
-  hidden: boolean                         // true if not selected
+  tabindex: '0' | '-1' // '0' if selected, '-1' otherwise
+  'aria-labelledby': string // '{idBase}-tab-{id}'
+  hidden: boolean // true if not selected
 }
 ```
 
@@ -207,28 +207,28 @@ This section lists exactly what the UIKit adapter layer binds to.
 
 ### Signals Read
 
-| Signal | UIKit Usage |
-|---|---|
-| `state.activeTabId()` | Determines roving tabindex; drives `data-active` attribute on tab elements; used for focus management. |
+| Signal                  | UIKit Usage                                                                                                                                      |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `state.activeTabId()`   | Determines roving tabindex; drives `data-active` attribute on tab elements; used for focus management.                                           |
 | `state.selectedTabId()` | Determines `aria-selected` on tabs; drives panel visibility (`hidden`); drives `data-selected` attribute; used for active indicator positioning. |
 
 ### Actions Called
 
-| Action | UIKit Trigger |
-|---|---|
-| `setActive(id)` | Tab receives focus (e.g., pointer click on a tab). |
-| `select(id)` | Tab is clicked or tapped (pointer activation). |
-| `handleKeyDown(event)` | `keydown` event on the tablist or individual tab. |
-| `moveNext()` / `movePrev()` | Not called directly by UIKit; delegated through `handleKeyDown`. |
+| Action                       | UIKit Trigger                                                    |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `setActive(id)`              | Tab receives focus (e.g., pointer click on a tab).               |
+| `select(id)`                 | Tab is clicked or tapped (pointer activation).                   |
+| `handleKeyDown(event)`       | `keydown` event on the tablist or individual tab.                |
+| `moveNext()` / `movePrev()`  | Not called directly by UIKit; delegated through `handleKeyDown`. |
 | `moveFirst()` / `moveLast()` | Not called directly by UIKit; delegated through `handleKeyDown`. |
 
 ### Contracts Spread
 
-| Contract | UIKit Target |
-|---|---|
+| Contract            | UIKit Target                               |
+| ------------------- | ------------------------------------------ |
 | `getTabListProps()` | Spread onto the tablist container element. |
-| `getTabProps(id)` | Spread onto each tab trigger element. |
-| `getPanelProps(id)` | Spread onto each tab panel element. |
+| `getTabProps(id)`   | Spread onto each tab trigger element.      |
+| `getPanelProps(id)` | Spread onto each tab panel element.        |
 
 ### UIKit-Only Concerns (Not in Headless)
 
@@ -252,9 +252,9 @@ This section lists exactly what the UIKit adapter layer binds to.
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

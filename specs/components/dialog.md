@@ -39,30 +39,30 @@
 
 ## CreateDialogOptions
 
-| Option                  | Type                           | Default       | Description                                            |
-|-------------------------|--------------------------------|---------------|--------------------------------------------------------|
-| `idBase`                | `string`                       | `'dialog'`    | Base id prefix for all generated ids                   |
-| `type`                  | `'dialog' \| 'alertdialog'`   | `'dialog'`    | ARIA role for the content element                      |
-| `initialOpen`           | `boolean`                      | `false`       | Whether the dialog starts open                         |
-| `isModal`               | `boolean`                      | `true`        | Modal mode enables focus trap and scroll lock          |
-| `closeOnEscape`         | `boolean`                      | `true`        | Whether Escape key closes the dialog                   |
-| `closeOnOutsidePointer` | `boolean`                      | `true`        | Whether clicking outside closes the dialog             |
-| `closeOnOutsideFocus`   | `boolean`                      | `true`        | Whether focusing outside closes the dialog             |
-| `initialFocusId`        | `string`                       | —             | Id of element to receive initial focus on open         |
-| `ariaLabelledBy`        | `string`                       | `{idBase}-title` | Custom id for `aria-labelledby`                     |
-| `ariaDescribedBy`       | `string`                       | `{idBase}-description` | Custom id for `aria-describedby`             |
+| Option                  | Type                        | Default                | Description                                    |
+| ----------------------- | --------------------------- | ---------------------- | ---------------------------------------------- |
+| `idBase`                | `string`                    | `'dialog'`             | Base id prefix for all generated ids           |
+| `type`                  | `'dialog' \| 'alertdialog'` | `'dialog'`             | ARIA role for the content element              |
+| `initialOpen`           | `boolean`                   | `false`                | Whether the dialog starts open                 |
+| `isModal`               | `boolean`                   | `true`                 | Modal mode enables focus trap and scroll lock  |
+| `closeOnEscape`         | `boolean`                   | `true`                 | Whether Escape key closes the dialog           |
+| `closeOnOutsidePointer` | `boolean`                   | `true`                 | Whether clicking outside closes the dialog     |
+| `closeOnOutsideFocus`   | `boolean`                   | `true`                 | Whether focusing outside closes the dialog     |
+| `initialFocusId`        | `string`                    | —                      | Id of element to receive initial focus on open |
+| `ariaLabelledBy`        | `string`                    | `{idBase}-title`       | Custom id for `aria-labelledby`                |
+| `ariaDescribedBy`       | `string`                    | `{idBase}-description` | Custom id for `aria-describedby`               |
 
 ## State Signal Surface
 
-| Signal                  | Type                  | Derived? | Description                                               |
-|-------------------------|-----------------------|----------|-----------------------------------------------------------|
-| `isOpen`                | `Atom<boolean>`       | No       | Single source of truth for visibility                     |
-| `isModal`               | `Atom<boolean>`       | No       | Whether modal behaviors (focus trap, scroll lock) are on  |
-| `type`                  | `Atom<'dialog' \| 'alertdialog'>` | No | ARIA role type                                     |
-| `restoreTargetId`       | `Atom<string \| null>`| No       | Element id to return focus to after close                 |
-| `isFocusTrapped`        | `Computed<boolean>`   | Yes      | `isOpen() && isModal()`                                   |
-| `shouldLockScroll`      | `Computed<boolean>`   | Yes      | `isOpen() && isModal()`                                   |
-| `initialFocusTargetId`  | `Atom<string \| null>`| No       | Id of element to receive focus when dialog opens          |
+| Signal                 | Type                              | Derived? | Description                                              |
+| ---------------------- | --------------------------------- | -------- | -------------------------------------------------------- |
+| `isOpen`               | `Atom<boolean>`                   | No       | Single source of truth for visibility                    |
+| `isModal`              | `Atom<boolean>`                   | No       | Whether modal behaviors (focus trap, scroll lock) are on |
+| `type`                 | `Atom<'dialog' \| 'alertdialog'>` | No       | ARIA role type                                           |
+| `restoreTargetId`      | `Atom<string \| null>`            | No       | Element id to return focus to after close                |
+| `isFocusTrapped`       | `Computed<boolean>`               | Yes      | `isOpen() && isModal()`                                  |
+| `shouldLockScroll`     | `Computed<boolean>`               | Yes      | `isOpen() && isModal()`                                  |
+| `initialFocusTargetId` | `Atom<string \| null>`            | No       | Id of element to receive focus when dialog opens         |
 
 ## APG and A11y Contract
 
@@ -83,6 +83,7 @@
 ## Behavior Contract
 
 ### Modal (`isModal: true`, default)
+
 - `Escape` key closes the dialog (configurable via `closeOnEscape`)
 - Outside pointer click closes the dialog (configurable via `closeOnOutsidePointer`)
 - Outside focus closes the dialog (configurable via `closeOnOutsideFocus`)
@@ -91,6 +92,7 @@
 - Initial focus: defaults to the first focusable element, can be overridden via `initialFocusId`
 
 ### Non-modal (`isModal: false`)
+
 - `Escape` key closes the dialog (configurable via `closeOnEscape`)
 - Outside pointer click closes the dialog (configurable via `closeOnOutsidePointer`)
 - Outside focus closes the dialog (configurable via `closeOnOutsideFocus`)
@@ -102,6 +104,7 @@
 ## Contract Prop Shapes
 
 ### `getTriggerProps()`
+
 ```ts
 {
   id: string                          // trigger element id
@@ -116,6 +119,7 @@
 ```
 
 ### `getOverlayProps()`
+
 ```ts
 {
   id: string                          // overlay element id
@@ -127,6 +131,7 @@
 ```
 
 ### `getContentProps()`
+
 ```ts
 {
   id: string                          // content element id
@@ -141,20 +146,23 @@
 ```
 
 ### `getTitleProps()`
+
 ```ts
 {
-  id: string                          // title element id
+  id: string // title element id
 }
 ```
 
 ### `getDescriptionProps()`
+
 ```ts
 {
-  id: string                          // description element id
+  id: string // description element id
 }
 ```
 
 ### `getCloseButtonProps()` (footer/generic close)
+
 ```ts
 {
   id: string                          // '{idBase}-close'
@@ -165,6 +173,7 @@
 ```
 
 ### `getHeaderCloseButtonProps()` (header close icon)
+
 ```ts
 {
   id: string                          // '{idBase}-header-close'
@@ -177,29 +186,29 @@
 
 ## Transitions Table
 
-| Event / Action                      | Current State     | Next State / Effect                                          |
-|-------------------------------------|-------------------|--------------------------------------------------------------|
-| `open(source)`                      | `isOpen = false`  | `isOpen = true`; restore target cleared; focus management begins |
-| `close(intent)`                     | `isOpen = true`   | `isOpen = false`; `restoreTargetId` set to trigger id        |
-| `toggle(source)`                    | `isOpen = false`  | calls `open(source)`                                         |
-| `toggle(source)`                    | `isOpen = true`   | calls `close('programmatic')`                                |
-| `handleTriggerClick()`              | any               | calls `toggle('pointer')`                                    |
-| `handleTriggerKeyDown(Enter/Space)` | any               | calls `toggle('keyboard')`                                   |
-| `handleKeyDown(Escape)`             | `isOpen = true`, `closeOnEscape = true` | calls `close('escape')`                     |
-| `handleKeyDown(Escape)`             | `closeOnEscape = false` | no-op                                                  |
-| `handleOutsidePointer()`            | `isOpen = true`, `closeOnOutsidePointer = true` | calls `close('outside-pointer')` |
-| `handleOutsidePointer()`            | `closeOnOutsidePointer = false` | no-op                                           |
-| `handleOutsideFocus()`              | `isOpen = true`, `closeOnOutsideFocus = true` | calls `close('outside-focus')`    |
-| `handleOutsideFocus()`              | `closeOnOutsideFocus = false` | no-op                                             |
-| `setTriggerId(id)`                  | any               | trigger id updated; affects future `restoreTargetId`         |
+| Event / Action                      | Current State                                   | Next State / Effect                                              |
+| ----------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------- |
+| `open(source)`                      | `isOpen = false`                                | `isOpen = true`; restore target cleared; focus management begins |
+| `close(intent)`                     | `isOpen = true`                                 | `isOpen = false`; `restoreTargetId` set to trigger id            |
+| `toggle(source)`                    | `isOpen = false`                                | calls `open(source)`                                             |
+| `toggle(source)`                    | `isOpen = true`                                 | calls `close('programmatic')`                                    |
+| `handleTriggerClick()`              | any                                             | calls `toggle('pointer')`                                        |
+| `handleTriggerKeyDown(Enter/Space)` | any                                             | calls `toggle('keyboard')`                                       |
+| `handleKeyDown(Escape)`             | `isOpen = true`, `closeOnEscape = true`         | calls `close('escape')`                                          |
+| `handleKeyDown(Escape)`             | `closeOnEscape = false`                         | no-op                                                            |
+| `handleOutsidePointer()`            | `isOpen = true`, `closeOnOutsidePointer = true` | calls `close('outside-pointer')`                                 |
+| `handleOutsidePointer()`            | `closeOnOutsidePointer = false`                 | no-op                                                            |
+| `handleOutsideFocus()`              | `isOpen = true`, `closeOnOutsideFocus = true`   | calls `close('outside-focus')`                                   |
+| `handleOutsideFocus()`              | `closeOnOutsideFocus = false`                   | no-op                                                            |
+| `setTriggerId(id)`                  | any                                             | trigger id updated; affects future `restoreTargetId`             |
 
 ### Derived state reactions
 
-| State Change      | `isFocusTrapped`            | `shouldLockScroll`          |
-|-------------------|-----------------------------|-----------------------------|
-| open + modal      | `true`                      | `true`                      |
-| open + non-modal  | `false`                     | `false`                     |
-| closed (any)      | `false`                     | `false`                     |
+| State Change     | `isFocusTrapped` | `shouldLockScroll` |
+| ---------------- | ---------------- | ------------------ |
+| open + modal     | `true`           | `true`             |
+| open + non-modal | `false`          | `false`            |
+| closed (any)     | `false`          | `false`            |
 
 ## Invariants
 
@@ -219,6 +228,7 @@
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOpen()` — whether the dialog is visible
 - `state.isModal()` — whether modal behaviors are active
 - `state.type()` — dialog type for role assignment
@@ -228,6 +238,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `state.initialFocusTargetId()` — element id to focus on open
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open(source?)` / `actions.close(intent?)` — programmatic open/close
 - `actions.toggle(source?)` — toggle open state
 - `actions.setTriggerId(id)` — set custom trigger element id
@@ -238,6 +249,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.handleOutsideFocus()` — on focus outside the dialog
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getTriggerProps()` — spread onto the trigger button element
 - `contracts.getOverlayProps()` — spread onto the overlay/backdrop element
 - `contracts.getContentProps()` — spread onto the dialog content panel (returns `role: 'dialog' | 'alertdialog'` based on `type`)
@@ -247,6 +259,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `contracts.getHeaderCloseButtonProps()` — spread onto a header close icon button (includes `aria-label: 'Close'`)
 
 **UIKit-only concerns (NOT in headless):**
+
 - Lifecycle events (`cv-open`, `cv-close`, `cv-after-open`, `cv-after-close`)
 - CSS transitions and animations
 - Backdrop rendering and styling

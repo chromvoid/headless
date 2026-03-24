@@ -37,21 +37,21 @@
 
 ## CreateDisclosureOptions
 
-| Option         | Type                           | Default        | Description                                              |
-|----------------|--------------------------------|----------------|----------------------------------------------------------|
-| `idBase`       | `string`                       | `'disclosure'` | Base id prefix for all generated ids                     |
-| `isOpen`       | `boolean`                      | `false`        | Whether the disclosure starts open                       |
-| `isDisabled`   | `boolean`                      | `false`        | Whether user interaction is initially blocked            |
-| `name`         | `string`                       | —              | Group name for exclusive behavior                        |
-| `onOpenChange` | `(isOpen: boolean) => void`    | —              | Callback fired when `isOpen` changes                     |
+| Option         | Type                        | Default        | Description                                   |
+| -------------- | --------------------------- | -------------- | --------------------------------------------- |
+| `idBase`       | `string`                    | `'disclosure'` | Base id prefix for all generated ids          |
+| `isOpen`       | `boolean`                   | `false`        | Whether the disclosure starts open            |
+| `isDisabled`   | `boolean`                   | `false`        | Whether user interaction is initially blocked |
+| `name`         | `string`                    | —              | Group name for exclusive behavior             |
+| `onOpenChange` | `(isOpen: boolean) => void` | —              | Callback fired when `isOpen` changes          |
 
 ## State Signal Surface
 
-| Signal       | Type              | Derived? | Description                                          |
-|--------------|-------------------|----------|------------------------------------------------------|
-| `isOpen`     | `Atom<boolean>`   | No       | Single source of truth for visibility                |
-| `isDisabled` | `Atom<boolean>`   | No       | Whether user interaction is blocked                  |
-| `name`       | `Atom<string \| null>` | No  | Group name for exclusive behavior, or `null`         |
+| Signal       | Type                   | Derived? | Description                                  |
+| ------------ | ---------------------- | -------- | -------------------------------------------- |
+| `isOpen`     | `Atom<boolean>`        | No       | Single source of truth for visibility        |
+| `isDisabled` | `Atom<boolean>`        | No       | Whether user interaction is blocked          |
+| `name`       | `Atom<string \| null>` | No       | Group name for exclusive behavior, or `null` |
 
 ## APG and A11y Contract
 
@@ -66,12 +66,12 @@
 
 ## Keyboard Contract
 
-| Key                        | Action                                                          |
-|----------------------------|-----------------------------------------------------------------|
-| `Enter`                    | Toggle the `isOpen` state; calls `preventDefault`               |
-| `Space`                    | Toggle the `isOpen` state; calls `preventDefault`               |
-| `ArrowDown` / `ArrowRight` | Expand (open) if currently closed; calls `preventDefault`      |
-| `ArrowUp` / `ArrowLeft`    | Collapse (close) if currently open; calls `preventDefault`     |
+| Key                        | Action                                                     |
+| -------------------------- | ---------------------------------------------------------- |
+| `Enter`                    | Toggle the `isOpen` state; calls `preventDefault`          |
+| `Space`                    | Toggle the `isOpen` state; calls `preventDefault`          |
+| `ArrowDown` / `ArrowRight` | Expand (open) if currently closed; calls `preventDefault`  |
+| `ArrowUp` / `ArrowLeft`    | Collapse (close) if currently open; calls `preventDefault` |
 
 All keyboard actions are no-ops when `isDisabled` is `true`.
 
@@ -98,6 +98,7 @@ All keyboard actions are no-ops when `isDisabled` is `true`.
 ## Contract Prop Shapes
 
 ### `getTriggerProps()`
+
 ```ts
 {
   id: string                          // '{idBase}-trigger'
@@ -112,6 +113,7 @@ All keyboard actions are no-ops when `isDisabled` is `true`.
 ```
 
 ### `getPanelProps()`
+
 ```ts
 {
   id: string                          // '{idBase}-panel'
@@ -122,37 +124,37 @@ All keyboard actions are no-ops when `isDisabled` is `true`.
 
 ## Transitions Table
 
-| Event / Action                   | Current State              | Next State / Effect                                                      |
-|----------------------------------|----------------------------|--------------------------------------------------------------------------|
-| `open()`                         | `isOpen = false`           | `isOpen = true`; if `name` set, close all other group members            |
-| `open()`                         | `isOpen = true`            | no-op                                                                    |
-| `close()`                        | `isOpen = true`            | `isOpen = false`                                                         |
-| `close()`                        | `isOpen = false`           | no-op                                                                    |
-| `toggle()`                       | `isOpen = false`           | delegates to `open()`                                                    |
-| `toggle()`                       | `isOpen = true`            | delegates to `close()`                                                   |
-| `handleClick()`                  | any                        | delegates to `toggle()`                                                  |
-| `handleKeyDown(Enter)`           | any, not disabled          | delegates to `toggle()`; `preventDefault`                                |
-| `handleKeyDown(Space)`           | any, not disabled          | delegates to `toggle()`; `preventDefault`                                |
-| `handleKeyDown(ArrowDown)`       | `isOpen = false`, not disabled | delegates to `open()`; `preventDefault`                              |
-| `handleKeyDown(ArrowRight)`      | `isOpen = false`, not disabled | delegates to `open()`; `preventDefault`                              |
-| `handleKeyDown(ArrowDown)`       | `isOpen = true`, not disabled  | no-op (already open); `preventDefault`                               |
-| `handleKeyDown(ArrowRight)`      | `isOpen = true`, not disabled  | no-op (already open); `preventDefault`                               |
-| `handleKeyDown(ArrowUp)`         | `isOpen = true`, not disabled  | delegates to `close()`; `preventDefault`                             |
-| `handleKeyDown(ArrowLeft)`       | `isOpen = true`, not disabled  | delegates to `close()`; `preventDefault`                             |
-| `handleKeyDown(ArrowUp)`         | `isOpen = false`, not disabled | no-op (already closed); `preventDefault`                             |
-| `handleKeyDown(ArrowLeft)`       | `isOpen = false`, not disabled | no-op (already closed); `preventDefault`                             |
-| `handleKeyDown(other)`           | any                        | no-op; no `preventDefault`                                               |
-| `handleKeyDown(any)`             | `isDisabled = true`        | no-op; no `preventDefault`                                               |
-| `setDisabled(value)`             | any                        | `isDisabled = value`                                                     |
-| `setName(value)`                 | any                        | unregister from old group; `name = value`; register in new group         |
-| `destroy()`                      | any                        | unregister from group registry                                           |
+| Event / Action              | Current State                  | Next State / Effect                                              |
+| --------------------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `open()`                    | `isOpen = false`               | `isOpen = true`; if `name` set, close all other group members    |
+| `open()`                    | `isOpen = true`                | no-op                                                            |
+| `close()`                   | `isOpen = true`                | `isOpen = false`                                                 |
+| `close()`                   | `isOpen = false`               | no-op                                                            |
+| `toggle()`                  | `isOpen = false`               | delegates to `open()`                                            |
+| `toggle()`                  | `isOpen = true`                | delegates to `close()`                                           |
+| `handleClick()`             | any                            | delegates to `toggle()`                                          |
+| `handleKeyDown(Enter)`      | any, not disabled              | delegates to `toggle()`; `preventDefault`                        |
+| `handleKeyDown(Space)`      | any, not disabled              | delegates to `toggle()`; `preventDefault`                        |
+| `handleKeyDown(ArrowDown)`  | `isOpen = false`, not disabled | delegates to `open()`; `preventDefault`                          |
+| `handleKeyDown(ArrowRight)` | `isOpen = false`, not disabled | delegates to `open()`; `preventDefault`                          |
+| `handleKeyDown(ArrowDown)`  | `isOpen = true`, not disabled  | no-op (already open); `preventDefault`                           |
+| `handleKeyDown(ArrowRight)` | `isOpen = true`, not disabled  | no-op (already open); `preventDefault`                           |
+| `handleKeyDown(ArrowUp)`    | `isOpen = true`, not disabled  | delegates to `close()`; `preventDefault`                         |
+| `handleKeyDown(ArrowLeft)`  | `isOpen = true`, not disabled  | delegates to `close()`; `preventDefault`                         |
+| `handleKeyDown(ArrowUp)`    | `isOpen = false`, not disabled | no-op (already closed); `preventDefault`                         |
+| `handleKeyDown(ArrowLeft)`  | `isOpen = false`, not disabled | no-op (already closed); `preventDefault`                         |
+| `handleKeyDown(other)`      | any                            | no-op; no `preventDefault`                                       |
+| `handleKeyDown(any)`        | `isDisabled = true`            | no-op; no `preventDefault`                                       |
+| `setDisabled(value)`        | any                            | `isDisabled = value`                                             |
+| `setName(value)`            | any                            | unregister from old group; `name = value`; register in new group |
+| `destroy()`                 | any                            | unregister from group registry                                   |
 
 ### Group Side Effects
 
-| Trigger              | Side Effect on Other Group Members                          |
-|----------------------|-------------------------------------------------------------|
-| `open()` with `name` | all other disclosures with the same `name` receive `close()` |
-| `close()` with `name`| none                                                        |
+| Trigger               | Side Effect on Other Group Members                           |
+| --------------------- | ------------------------------------------------------------ |
+| `open()` with `name`  | all other disclosures with the same `name` receive `close()` |
+| `close()` with `name` | none                                                         |
 
 ## Invariants
 
@@ -175,11 +177,13 @@ const groupRegistry = new Map<string, Set<DisclosureModel>>()
 ```
 
 **Registration lifecycle:**
+
 - On `createDisclosure({ name })`: if `name` is provided, add the model to `groupRegistry.get(name)`
 - On `setName(newName)`: remove from old group set, add to new group set
 - On `destroy()`: remove from current group set; clean up empty sets from the map
 
 **Exclusive open enforcement:**
+
 - When `open()` is called on a model with a `name`, iterate `groupRegistry.get(name)` and call `close()` on every other model in the set
 - This is an internal side effect of `open()`, not a separate action
 
@@ -188,11 +192,13 @@ const groupRegistry = new Map<string, Set<DisclosureModel>>()
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOpen()` — whether the disclosure content is visible
 - `state.isDisabled()` — whether user interaction is blocked
 - `state.name()` — current group name (used for registration lifecycle)
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open()` / `actions.close()` — programmatic show/hide
 - `actions.toggle()` — toggle visibility
 - `actions.setDisabled(value)` — update disabled state
@@ -202,10 +208,12 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.destroy()` — on `disconnectedCallback` or equivalent teardown
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getTriggerProps()` — spread onto the trigger button element
 - `contracts.getPanelProps()` — spread onto the content panel element
 
 **UIKit-only concerns (NOT in headless):**
+
 - CSS animations and transitions for open/close
 - `show()` / `hide()` imperative methods (delegate to `actions.open()` / `actions.close()`)
 - CSS custom properties and animation tokens
@@ -236,9 +244,9 @@ UIKit adapters MUST bind to the headless model as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

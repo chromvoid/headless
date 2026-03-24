@@ -61,17 +61,17 @@
 
 ## Transitions Table
 
-| Event | Guard | Action | Next State |
-|-------|-------|--------|------------|
-| click | `!isDisabled && !isLoading` | `press()` | calls `onPress`; if toggle: `isPressed = !isPressed` |
-| click | `isDisabled \|\| isLoading` | — | no change |
-| `keydown Enter` | `!isDisabled && !isLoading` | `handleKeyDown(e)` | calls `onPress`; if toggle: `isPressed = !isPressed` |
-| `keydown Enter` | `isDisabled \|\| isLoading` | — | no change |
-| `keyup Space` | `!isDisabled && !isLoading` | `handleKeyUp(e)` | calls `onPress`; if toggle: `isPressed = !isPressed` |
-| `keyup Space` | `isDisabled \|\| isLoading` | — | no change |
-| `setDisabled(next)` | — | `setDisabled(next)` | `isDisabled = next` |
-| `setLoading(next)` | — | `setLoading(next)` | `isLoading = next` |
-| `setPressed(next)` | — | `setPressed(next)` | `isPressed = next` |
+| Event               | Guard                       | Action              | Next State                                           |
+| ------------------- | --------------------------- | ------------------- | ---------------------------------------------------- |
+| click               | `!isDisabled && !isLoading` | `press()`           | calls `onPress`; if toggle: `isPressed = !isPressed` |
+| click               | `isDisabled \|\| isLoading` | —                   | no change                                            |
+| `keydown Enter`     | `!isDisabled && !isLoading` | `handleKeyDown(e)`  | calls `onPress`; if toggle: `isPressed = !isPressed` |
+| `keydown Enter`     | `isDisabled \|\| isLoading` | —                   | no change                                            |
+| `keyup Space`       | `!isDisabled && !isLoading` | `handleKeyUp(e)`    | calls `onPress`; if toggle: `isPressed = !isPressed` |
+| `keyup Space`       | `isDisabled \|\| isLoading` | —                   | no change                                            |
+| `setDisabled(next)` | —                           | `setDisabled(next)` | `isDisabled = next`                                  |
+| `setLoading(next)`  | —                           | `setLoading(next)`  | `isLoading = next`                                   |
+| `setPressed(next)`  | —                           | `setPressed(next)`  | `isPressed = next`                                   |
 
 ## Adapter Expectations
 
@@ -103,9 +103,9 @@ UIKit (`cv-button`) binds to the headless contract as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

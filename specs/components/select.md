@@ -124,6 +124,7 @@ Follows the W3C APG Select-Only Combobox pattern. DOM focus stays on the trigger
 ## Adapter Expectations
 
 UIKit adapter will:
+
 - Read: `state.isOpen`, `state.activeId`, `state.selectedId`, `state.selectedLabel`, `state.selectedIds`, `state.selectedLabels`, `state.disabled`, `state.required`, `state.restoreTargetId`
 - Call: `actions.open`, `actions.close`, `actions.toggle`, `actions.select`, `actions.clear`, `actions.setDisabled`, `actions.setRequired`, `actions.handleTriggerKeyDown`, `actions.handleListboxKeyDown`
 - Spread: `contracts.getTriggerProps()` onto trigger element, `contracts.getListboxProps()` onto listbox container, `contracts.getOptionProps(id)` onto each option
@@ -131,9 +132,9 @@ UIKit adapter will:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

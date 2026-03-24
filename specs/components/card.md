@@ -11,13 +11,13 @@
 
 ## Options (`CreateCardOptions`)
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `idBase` | `string` | `'card'` | Base id prefix for generated ids |
-| `isExpandable` | `boolean` | `false` | Whether the card has disclosure (expand/collapse) behavior |
-| `isExpanded` | `boolean` | `false` | Initial expanded state (only meaningful when `isExpandable` is `true`) |
-| `isDisabled` | `boolean` | `false` | Whether interaction is blocked (only meaningful when `isExpandable` is `true`) |
-| `onExpandedChange` | `(isExpanded: boolean) => void` | `undefined` | Callback fired when expanded state changes |
+| Option             | Type                            | Default     | Description                                                                    |
+| ------------------ | ------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| `idBase`           | `string`                        | `'card'`    | Base id prefix for generated ids                                               |
+| `isExpandable`     | `boolean`                       | `false`     | Whether the card has disclosure (expand/collapse) behavior                     |
+| `isExpanded`       | `boolean`                       | `false`     | Initial expanded state (only meaningful when `isExpandable` is `true`)         |
+| `isDisabled`       | `boolean`                       | `false`     | Whether interaction is blocked (only meaningful when `isExpandable` is `true`) |
+| `onExpandedChange` | `(isExpanded: boolean) => void` | `undefined` | Callback fired when expanded state changes                                     |
 
 ## Public API
 
@@ -25,30 +25,30 @@
 
 ### State (signal-backed)
 
-| Signal | Type | Derived? | Description |
-|--------|------|----------|-------------|
-| `isExpandable` | `Atom<boolean>` | No | Whether the card has disclosure behavior |
-| `isExpanded` | `Atom<boolean>` | No | Whether the card body content is visible (only meaningful when expandable) |
-| `isDisabled` | `Atom<boolean>` | No | Whether user interaction is blocked (only meaningful when expandable) |
+| Signal         | Type            | Derived? | Description                                                                |
+| -------------- | --------------- | -------- | -------------------------------------------------------------------------- |
+| `isExpandable` | `Atom<boolean>` | No       | Whether the card has disclosure behavior                                   |
+| `isExpanded`   | `Atom<boolean>` | No       | Whether the card body content is visible (only meaningful when expandable) |
+| `isDisabled`   | `Atom<boolean>` | No       | Whether user interaction is blocked (only meaningful when expandable)      |
 
 ### Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `toggle` | `() => void` | Toggles expanded state; no-op when not expandable or disabled |
-| `expand` | `() => void` | Sets expanded to `true`; no-op when not expandable, disabled, or already expanded |
-| `collapse` | `() => void` | Sets expanded to `false`; no-op when not expandable, disabled, or already collapsed |
-| `setDisabled` | `(value: boolean) => void` | Updates the disabled state |
-| `handleClick` | `() => void` | Delegates to `toggle()`; intended for the trigger element |
-| `handleKeyDown` | `(event: Pick<KeyboardEvent, 'key'> & { preventDefault?: () => void }) => void` | Processes keyboard input on the trigger (see Keyboard Contract) |
+| Action          | Signature                                                                       | Description                                                                         |
+| --------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `toggle`        | `() => void`                                                                    | Toggles expanded state; no-op when not expandable or disabled                       |
+| `expand`        | `() => void`                                                                    | Sets expanded to `true`; no-op when not expandable, disabled, or already expanded   |
+| `collapse`      | `() => void`                                                                    | Sets expanded to `false`; no-op when not expandable, disabled, or already collapsed |
+| `setDisabled`   | `(value: boolean) => void`                                                      | Updates the disabled state                                                          |
+| `handleClick`   | `() => void`                                                                    | Delegates to `toggle()`; intended for the trigger element                           |
+| `handleKeyDown` | `(event: Pick<KeyboardEvent, 'key'> & { preventDefault?: () => void }) => void` | Processes keyboard input on the trigger (see Keyboard Contract)                     |
 
 ### Contracts
 
-| Contract | Return Type | Description |
-|----------|-------------|-------------|
-| `getCardProps()` | `CardProps` | Ready-to-spread ARIA attribute map for the card root element |
+| Contract            | Return Type        | Description                                                                              |
+| ------------------- | ------------------ | ---------------------------------------------------------------------------------------- |
+| `getCardProps()`    | `CardProps`        | Ready-to-spread ARIA attribute map for the card root element                             |
 | `getTriggerProps()` | `CardTriggerProps` | Ready-to-spread ARIA and event handler attribute map for the expandable trigger (header) |
-| `getContentProps()` | `CardContentProps` | Ready-to-spread ARIA attribute map for the expandable content region (body) |
+| `getContentProps()` | `CardContentProps` | Ready-to-spread ARIA attribute map for the expandable content region (body)              |
 
 ## Contract Prop Shapes
 
@@ -127,12 +127,12 @@ Only meaningful when `isExpandable` is `true`. When `isExpandable` is `false`, r
 
 Only applies when `isExpandable` is `true`. All keyboard actions are no-ops when `isDisabled` is `true`.
 
-| Key | Action |
-|-----|--------|
-| `Enter` | Toggle the `isExpanded` state; calls `preventDefault` |
-| `Space` | Toggle the `isExpanded` state; calls `preventDefault` |
-| `ArrowDown` / `ArrowRight` | Expand (show content) if currently collapsed; calls `preventDefault` |
-| `ArrowUp` / `ArrowLeft` | Collapse (hide content) if currently expanded; calls `preventDefault` |
+| Key                        | Action                                                                |
+| -------------------------- | --------------------------------------------------------------------- |
+| `Enter`                    | Toggle the `isExpanded` state; calls `preventDefault`                 |
+| `Space`                    | Toggle the `isExpanded` state; calls `preventDefault`                 |
+| `ArrowDown` / `ArrowRight` | Expand (show content) if currently collapsed; calls `preventDefault`  |
+| `ArrowUp` / `ArrowLeft`    | Collapse (hide content) if currently expanded; calls `preventDefault` |
 
 ## Behavior Contract
 
@@ -154,29 +154,29 @@ Only applies when `isExpandable` is `true`. All keyboard actions are no-ops when
 
 ## Transitions Table
 
-| Event / Action | Guard | Next State / Effect |
-|----------------|-------|---------------------|
-| `toggle()` | `isExpandable && !isDisabled && !isExpanded` | `isExpanded = true`; fires `onExpandedChange(true)` |
-| `toggle()` | `isExpandable && !isDisabled && isExpanded` | `isExpanded = false`; fires `onExpandedChange(false)` |
-| `toggle()` | `!isExpandable \|\| isDisabled` | no-op |
-| `expand()` | `isExpandable && !isDisabled && !isExpanded` | `isExpanded = true`; fires `onExpandedChange(true)` |
-| `expand()` | `!isExpandable \|\| isDisabled \|\| isExpanded` | no-op |
-| `collapse()` | `isExpandable && !isDisabled && isExpanded` | `isExpanded = false`; fires `onExpandedChange(false)` |
-| `collapse()` | `!isExpandable \|\| isDisabled \|\| !isExpanded` | no-op |
-| `handleClick()` | any | delegates to `toggle()` |
-| `handleKeyDown(Enter)` | `isExpandable && !isDisabled` | delegates to `toggle()`; `preventDefault` |
-| `handleKeyDown(Space)` | `isExpandable && !isDisabled` | delegates to `toggle()`; `preventDefault` |
-| `handleKeyDown(ArrowDown)` | `isExpandable && !isDisabled && !isExpanded` | delegates to `expand()`; `preventDefault` |
-| `handleKeyDown(ArrowRight)` | `isExpandable && !isDisabled && !isExpanded` | delegates to `expand()`; `preventDefault` |
-| `handleKeyDown(ArrowDown)` | `isExpandable && !isDisabled && isExpanded` | no-op (already expanded); `preventDefault` |
-| `handleKeyDown(ArrowRight)` | `isExpandable && !isDisabled && isExpanded` | no-op (already expanded); `preventDefault` |
-| `handleKeyDown(ArrowUp)` | `isExpandable && !isDisabled && isExpanded` | delegates to `collapse()`; `preventDefault` |
-| `handleKeyDown(ArrowLeft)` | `isExpandable && !isDisabled && isExpanded` | delegates to `collapse()`; `preventDefault` |
-| `handleKeyDown(ArrowUp)` | `isExpandable && !isDisabled && !isExpanded` | no-op (already collapsed); `preventDefault` |
-| `handleKeyDown(ArrowLeft)` | `isExpandable && !isDisabled && !isExpanded` | no-op (already collapsed); `preventDefault` |
-| `handleKeyDown(other)` | any | no-op; no `preventDefault` |
-| `handleKeyDown(any)` | `!isExpandable \|\| isDisabled` | no-op; no `preventDefault` |
-| `setDisabled(value)` | any | `isDisabled = value` |
+| Event / Action              | Guard                                            | Next State / Effect                                   |
+| --------------------------- | ------------------------------------------------ | ----------------------------------------------------- |
+| `toggle()`                  | `isExpandable && !isDisabled && !isExpanded`     | `isExpanded = true`; fires `onExpandedChange(true)`   |
+| `toggle()`                  | `isExpandable && !isDisabled && isExpanded`      | `isExpanded = false`; fires `onExpandedChange(false)` |
+| `toggle()`                  | `!isExpandable \|\| isDisabled`                  | no-op                                                 |
+| `expand()`                  | `isExpandable && !isDisabled && !isExpanded`     | `isExpanded = true`; fires `onExpandedChange(true)`   |
+| `expand()`                  | `!isExpandable \|\| isDisabled \|\| isExpanded`  | no-op                                                 |
+| `collapse()`                | `isExpandable && !isDisabled && isExpanded`      | `isExpanded = false`; fires `onExpandedChange(false)` |
+| `collapse()`                | `!isExpandable \|\| isDisabled \|\| !isExpanded` | no-op                                                 |
+| `handleClick()`             | any                                              | delegates to `toggle()`                               |
+| `handleKeyDown(Enter)`      | `isExpandable && !isDisabled`                    | delegates to `toggle()`; `preventDefault`             |
+| `handleKeyDown(Space)`      | `isExpandable && !isDisabled`                    | delegates to `toggle()`; `preventDefault`             |
+| `handleKeyDown(ArrowDown)`  | `isExpandable && !isDisabled && !isExpanded`     | delegates to `expand()`; `preventDefault`             |
+| `handleKeyDown(ArrowRight)` | `isExpandable && !isDisabled && !isExpanded`     | delegates to `expand()`; `preventDefault`             |
+| `handleKeyDown(ArrowDown)`  | `isExpandable && !isDisabled && isExpanded`      | no-op (already expanded); `preventDefault`            |
+| `handleKeyDown(ArrowRight)` | `isExpandable && !isDisabled && isExpanded`      | no-op (already expanded); `preventDefault`            |
+| `handleKeyDown(ArrowUp)`    | `isExpandable && !isDisabled && isExpanded`      | delegates to `collapse()`; `preventDefault`           |
+| `handleKeyDown(ArrowLeft)`  | `isExpandable && !isDisabled && isExpanded`      | delegates to `collapse()`; `preventDefault`           |
+| `handleKeyDown(ArrowUp)`    | `isExpandable && !isDisabled && !isExpanded`     | no-op (already collapsed); `preventDefault`           |
+| `handleKeyDown(ArrowLeft)`  | `isExpandable && !isDisabled && !isExpanded`     | no-op (already collapsed); `preventDefault`           |
+| `handleKeyDown(other)`      | any                                              | no-op; no `preventDefault`                            |
+| `handleKeyDown(any)`        | `!isExpandable \|\| isDisabled`                  | no-op; no `preventDefault`                            |
+| `setDisabled(value)`        | any                                              | `isDisabled = value`                                  |
 
 ## Invariants
 
@@ -197,38 +197,38 @@ This section defines what UIKit (`cv-card`) binds to from the headless model.
 
 ### Signals read by adapter
 
-| Signal | UIKit usage |
-|--------|-------------|
+| Signal                 | UIKit usage                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- |
 | `state.isExpandable()` | Determines whether to render the trigger and toggle content visibility; sets `expandable` host attribute |
-| `state.isExpanded()` | Reflects expanded state on host; controls content region visibility |
-| `state.isDisabled()` | Reflects disabled state on host; prevents interaction |
+| `state.isExpanded()`   | Reflects expanded state on host; controls content region visibility                                      |
+| `state.isDisabled()`   | Reflects disabled state on host; prevents interaction                                                    |
 
 ### Actions called by adapter
 
-| Action | UIKit trigger |
-|--------|--------------|
-| `actions.toggle()` | Programmatic toggle (e.g., from imperative `toggle()` method on element) |
-| `actions.expand()` | Programmatic expand (e.g., from imperative `expand()` method on element) |
-| `actions.collapse()` | Programmatic collapse (e.g., from imperative `collapse()` method on element) |
-| `actions.setDisabled(v)` | When `disabled` attribute/property changes on the host element |
-| `actions.handleClick()` | Not called directly by adapter; included in `getTriggerProps()` spread |
-| `actions.handleKeyDown(e)` | Not called directly by adapter; included in `getTriggerProps()` spread |
+| Action                     | UIKit trigger                                                                |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| `actions.toggle()`         | Programmatic toggle (e.g., from imperative `toggle()` method on element)     |
+| `actions.expand()`         | Programmatic expand (e.g., from imperative `expand()` method on element)     |
+| `actions.collapse()`       | Programmatic collapse (e.g., from imperative `collapse()` method on element) |
+| `actions.setDisabled(v)`   | When `disabled` attribute/property changes on the host element               |
+| `actions.handleClick()`    | Not called directly by adapter; included in `getTriggerProps()` spread       |
+| `actions.handleKeyDown(e)` | Not called directly by adapter; included in `getTriggerProps()` spread       |
 
 ### Contracts spread by adapter
 
-| Contract | Target element | Notes |
-|----------|---------------|-------|
-| `getCardProps()` | Card root element (`part="base"`) | Spread as attributes on the outermost container |
+| Contract            | Target element                           | Notes                                                                                                                                                                |
+| ------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getCardProps()`    | Card root element (`part="base"`)        | Spread as attributes on the outermost container                                                                                                                      |
 | `getTriggerProps()` | Header/trigger element (`part="header"`) | Spread onto the clickable header area; provides `role`, `aria-expanded`, `aria-controls`, `tabindex`, and event handlers. Only spread when `isExpandable` is `true`. |
-| `getContentProps()` | Body/content element (`part="body"`) | Spread onto the content region; provides `id`, `role="region"`, `aria-labelledby`, `hidden`. Only spread when `isExpandable` is `true`. |
+| `getContentProps()` | Body/content element (`part="body"`)     | Spread onto the content region; provides `id`, `role="region"`, `aria-labelledby`, `hidden`. Only spread when `isExpandable` is `true`.                              |
 
 ### Options passed through from UIKit attributes
 
-| UIKit attribute | Headless option | Notes |
-|-----------------|----------------|-------|
-| `expandable` | `isExpandable` | Boolean attribute; enables disclosure behavior |
-| `expanded` | `isExpanded` | Boolean attribute; initial expanded state |
-| `disabled` | `isDisabled` | Boolean attribute; prevents interaction |
+| UIKit attribute | Headless option | Notes                                          |
+| --------------- | --------------- | ---------------------------------------------- |
+| `expandable`    | `isExpandable`  | Boolean attribute; enables disclosure behavior |
+| `expanded`      | `isExpanded`    | Boolean attribute; initial expanded state      |
+| `disabled`      | `isDisabled`    | Boolean attribute; prevents interaction        |
 
 ### UIKit-only concerns (NOT in headless)
 

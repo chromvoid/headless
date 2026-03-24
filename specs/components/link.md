@@ -20,7 +20,7 @@ Per strict APG guidance, links do not support a disabled state. If a link destin
     - `isSemanticHost?`: boolean - set `true` when the host element is a native `<a>` tag (omits `role` and `tabindex` from contract)
     - `onPress?`: callback function - invoked on activation (click or `Enter` keydown)
 - `state` (signal-backed):
-  - *(none)* - link has no mutable headless state; all configuration is immutable from options
+  - _(none)_ - link has no mutable headless state; all configuration is immutable from options
 - `actions`:
   - `press()` - manually triggers the link's `onPress` callback
   - `handleClick(event?)` - handles click events; delegates to `press()`
@@ -30,16 +30,16 @@ Per strict APG guidance, links do not support a disabled state. If a link destin
 
 ## State Signal Surface
 
-| Signal | Type | Description |
-|--------|------|-------------|
-| *(none)* | — | Link is stateless at the headless level; all behavior derives from immutable options |
+| Signal   | Type | Description                                                                          |
+| -------- | ---- | ------------------------------------------------------------------------------------ |
+| _(none)_ | —    | Link is stateless at the headless level; all behavior derives from immutable options |
 
 ## Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `press` | `() => void` | Invokes `onPress` callback if provided |
-| `handleClick` | `(event?) => void` | Click handler; delegates to `press()` |
+| Action          | Signature                                                     | Description                                                      |
+| --------------- | ------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `press`         | `() => void`                                                  | Invokes `onPress` callback if provided                           |
+| `handleClick`   | `(event?) => void`                                            | Click handler; delegates to `press()`                            |
 | `handleKeyDown` | `(event: {key: string; preventDefault?: () => void}) => void` | Keyboard handler; calls `press()` on `Enter`, ignores other keys |
 
 ## Contracts
@@ -48,14 +48,14 @@ Per strict APG guidance, links do not support a disabled state. If a link destin
 
 Returns a complete attribute map to spread onto the link host element.
 
-| Property | Type | Value |
-|----------|------|-------|
-| `id` | `string` | `"{idBase}-root"` |
-| `role` | `"link" \| undefined` | `"link"` for non-semantic hosts; `undefined` when `isSemanticHost` is `true` |
-| `href` | `string \| undefined` | Passthrough of `options.href` |
-| `tabindex` | `"0" \| undefined` | `"0"` for non-semantic hosts; `undefined` when `isSemanticHost` is `true` |
-| `onClick` | `(event?) => void` | Bound to `handleClick` action |
-| `onKeyDown` | `(event) => void` | Bound to `handleKeyDown` action |
+| Property    | Type                  | Value                                                                        |
+| ----------- | --------------------- | ---------------------------------------------------------------------------- |
+| `id`        | `string`              | `"{idBase}-root"`                                                            |
+| `role`      | `"link" \| undefined` | `"link"` for non-semantic hosts; `undefined` when `isSemanticHost` is `true` |
+| `href`      | `string \| undefined` | Passthrough of `options.href`                                                |
+| `tabindex`  | `"0" \| undefined`    | `"0"` for non-semantic hosts; `undefined` when `isSemanticHost` is `true`    |
+| `onClick`   | `(event?) => void`    | Bound to `handleClick` action                                                |
+| `onKeyDown` | `(event) => void`     | Bound to `handleKeyDown` action                                              |
 
 ## APG and A11y Contract
 
@@ -83,11 +83,11 @@ Returns a complete attribute map to spread onto the link host element.
 
 ## Transitions Table
 
-| Event | Guard | Action | Next State |
-|-------|-------|--------|------------|
-| click | — | `handleClick(e)` -> `press()` | calls `onPress` |
-| `keydown Enter` | `key === "Enter"` | `handleKeyDown(e)` -> `press()` | calls `onPress` |
-| `keydown` (other) | `key !== "Enter"` | — | no change |
+| Event             | Guard             | Action                          | Next State      |
+| ----------------- | ----------------- | ------------------------------- | --------------- |
+| click             | —                 | `handleClick(e)` -> `press()`   | calls `onPress` |
+| `keydown Enter`   | `key === "Enter"` | `handleKeyDown(e)` -> `press()` | calls `onPress` |
+| `keydown` (other) | `key !== "Enter"` | —                               | no change       |
 
 ## Invariants
 
@@ -101,8 +101,8 @@ Returns a complete attribute map to spread onto the link host element.
 
 UIKit (`cv-link`) binds to the headless contract as follows:
 
-- **Signals read**: *(none)* — link has no mutable headless state
-- **Actions called**: *(none directly)* — activation is handled via event handlers wired through the contract
+- **Signals read**: _(none)_ — link has no mutable headless state
+- **Actions called**: _(none directly)_ — activation is handled via event handlers wired through the contract
 - **Contracts spread**: `contracts.getLinkProps()` — spread onto the inner `<a>` element (or `[part="base"]`) to apply `id`, `role`, `href`, `tabindex`, and keyboard/click handlers
 - **Slots**: UIKit provides `prefix` and `suffix` slots for icon placement (visual-layer concern, not headless)
 - **Attribute reflection**: `href` attribute on the host is forwarded to `createLink` options; `isSemanticHost` is determined by the adapter based on whether the inner element is a native `<a>`
@@ -121,9 +121,9 @@ UIKit (`cv-link`) binds to the headless contract as follows:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

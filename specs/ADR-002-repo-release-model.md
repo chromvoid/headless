@@ -65,7 +65,7 @@ MUST:
 
 Before release:
 
-1. run `lint` (types + oxlint + prettier + boundaries);
+1. run `lint` (types + oxlint + oxfmt + boundaries);
 2. run package tests;
 3. update changelog;
 4. bump version according to SemVer;

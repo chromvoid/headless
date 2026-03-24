@@ -15,19 +15,19 @@ Unlike a progress bar, a meter represents a static measurement rather than the p
 
 `createMeter(options?: CreateMeterOptions)` accepts:
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `idBase` | `string` | `'meter'` | Prefix for generated element IDs |
-| `value` | `number` | `min` | Initial measured value |
-| `min` | `number` | `0` | Minimum of the range |
-| `max` | `number` | `100` | Maximum of the range (percentage convention) |
-| `low` | `number` | — | Low threshold boundary |
-| `high` | `number` | — | High threshold boundary |
-| `optimum` | `number` | — | Optimum value within the range |
-| `ariaLabel` | `string` | — | Accessible label |
-| `ariaLabelledBy` | `string` | — | ID of labelling element |
-| `ariaDescribedBy` | `string` | — | ID of describing element |
-| `formatValueText` | `(value: number) => string` | — | Custom formatter for `aria-valuetext` |
+| Option            | Type                        | Default   | Description                                  |
+| ----------------- | --------------------------- | --------- | -------------------------------------------- |
+| `idBase`          | `string`                    | `'meter'` | Prefix for generated element IDs             |
+| `value`           | `number`                    | `min`     | Initial measured value                       |
+| `min`             | `number`                    | `0`       | Minimum of the range                         |
+| `max`             | `number`                    | `100`     | Maximum of the range (percentage convention) |
+| `low`             | `number`                    | —         | Low threshold boundary                       |
+| `high`            | `number`                    | —         | High threshold boundary                      |
+| `optimum`         | `number`                    | —         | Optimum value within the range               |
+| `ariaLabel`       | `string`                    | —         | Accessible label                             |
+| `ariaLabelledBy`  | `string`                    | —         | ID of labelling element                      |
+| `ariaDescribedBy` | `string`                    | —         | ID of describing element                     |
+| `formatValueText` | `(value: number) => string` | —         | Custom formatter for `aria-valuetext`        |
 
 ## Public API
 
@@ -92,8 +92,8 @@ Status is computed by `getMeterStatus(value, low, high, optimum)`:
 
 ## Transitions Table
 
-| Trigger | Action | State Change |
-|---------|--------|-------------|
+| Trigger                   | Action                | State Change                                                      |
+| ------------------------- | --------------------- | ----------------------------------------------------------------- |
 | Programmatic value update | `actions.setValue(n)` | `value` = clamp(n, min, max); `percentage` and `status` recompute |
 
 Note: Meter has no user-interactive transitions (no keyboard/pointer). All state changes are programmatic via `setValue`.
@@ -110,14 +110,14 @@ Note: Meter has no user-interactive transitions (no keyboard/pointer). All state
 
 UIKit binds to the headless model as follows:
 
-| Binding | Kind | Usage |
-|---------|------|-------|
-| `state.value` | signal read | Display current value |
-| `state.min` | signal read | Range boundary |
-| `state.max` | signal read | Range boundary |
-| `state.percentage` | signal read | Indicator width (`width: ${percentage}%`) |
-| `state.status` | signal read | Zone color mapping via CSS custom properties or class |
-| `actions.setValue(n)` | action call | Update value from host property/attribute |
+| Binding                     | Kind            | Usage                                                  |
+| --------------------------- | --------------- | ------------------------------------------------------ |
+| `state.value`               | signal read     | Display current value                                  |
+| `state.min`                 | signal read     | Range boundary                                         |
+| `state.max`                 | signal read     | Range boundary                                         |
+| `state.percentage`          | signal read     | Indicator width (`width: ${percentage}%`)              |
+| `state.status`              | signal read     | Zone color mapping via CSS custom properties or class  |
+| `actions.setValue(n)`       | action call     | Update value from host property/attribute              |
 | `contracts.getMeterProps()` | contract spread | Spread onto the root meter element for ARIA compliance |
 
 UIKit should **never** compute percentage, status, or ARIA attributes itself. All derived state comes from the headless model.
@@ -137,9 +137,9 @@ A default slot is supported in the UIKit layer for custom label content inside t
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

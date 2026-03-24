@@ -11,12 +11,12 @@
 
 ## Options (`CreateCalloutOptions`)
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `idBase` | `string` | `'callout'` | Base id prefix for generated ids |
-| `variant` | `CalloutVariant` | `'info'` | Visual variant for theming |
-| `closable` | `boolean` | `false` | Whether the callout can be dismissed by the user |
-| `open` | `boolean` | `true` | Initial visibility state |
+| Option     | Type             | Default     | Description                                      |
+| ---------- | ---------------- | ----------- | ------------------------------------------------ |
+| `idBase`   | `string`         | `'callout'` | Base id prefix for generated ids                 |
+| `variant`  | `CalloutVariant` | `'info'`    | Visual variant for theming                       |
+| `closable` | `boolean`        | `false`     | Whether the callout can be dismissed by the user |
+| `open`     | `boolean`        | `true`      | Initial visibility state                         |
 
 ## Type Definitions
 
@@ -30,27 +30,27 @@ type CalloutVariant = 'info' | 'success' | 'warning' | 'danger' | 'neutral'
 
 ### State (signal-backed)
 
-| Signal | Type | Derived? | Description |
-|--------|------|----------|-------------|
-| `variant` | `Atom<CalloutVariant>` | No | Current visual variant |
-| `closable` | `Atom<boolean>` | No | Whether the close button is available |
-| `open` | `Atom<boolean>` | No | Whether the callout is visible |
+| Signal     | Type                   | Derived? | Description                           |
+| ---------- | ---------------------- | -------- | ------------------------------------- |
+| `variant`  | `Atom<CalloutVariant>` | No       | Current visual variant                |
+| `closable` | `Atom<boolean>`        | No       | Whether the close button is available |
+| `open`     | `Atom<boolean>`        | No       | Whether the callout is visible        |
 
 ### Actions
 
-| Action | Signature | Description |
-|--------|-----------|-------------|
-| `setVariant` | `(value: CalloutVariant) => void` | Updates the visual variant |
-| `setClosable` | `(value: boolean) => void` | Toggles whether the callout is closable |
-| `close` | `() => void` | Sets `open` to `false`. No-op if `closable` is `false`. |
-| `show` | `() => void` | Sets `open` to `true` |
+| Action        | Signature                         | Description                                             |
+| ------------- | --------------------------------- | ------------------------------------------------------- |
+| `setVariant`  | `(value: CalloutVariant) => void` | Updates the visual variant                              |
+| `setClosable` | `(value: boolean) => void`        | Toggles whether the callout is closable                 |
+| `close`       | `() => void`                      | Sets `open` to `false`. No-op if `closable` is `false`. |
+| `show`        | `() => void`                      | Sets `open` to `true`                                   |
 
 ### Contracts
 
-| Contract | Return type | Description |
-|----------|-------------|-------------|
-| `getCalloutProps()` | `CalloutProps` | Ready-to-spread ARIA attribute map for the callout root element |
-| `getCloseButtonProps()` | `CalloutCloseButtonProps` | Ready-to-spread attribute map for the close button element |
+| Contract                | Return type               | Description                                                     |
+| ----------------------- | ------------------------- | --------------------------------------------------------------- |
+| `getCalloutProps()`     | `CalloutProps`            | Ready-to-spread ARIA attribute map for the callout root element |
+| `getCloseButtonProps()` | `CalloutCloseButtonProps` | Ready-to-spread attribute map for the close button element      |
 
 #### `CalloutProps` Shape
 
@@ -87,8 +87,8 @@ The close button props are only meaningful when `closable` is `true`. UIKit shou
 
 ## Keyboard Contract
 
-| Key | Element | Condition | Action |
-|-----|---------|-----------|--------|
+| Key     | Element      | Condition            | Action                                                  |
+| ------- | ------------ | -------------------- | ------------------------------------------------------- |
 | `Enter` | Close button | `closable` is `true` | Activates close (handled by native button or `onClick`) |
 | `Space` | Close button | `closable` is `true` | Activates close (handled by native button or `onClick`) |
 
@@ -106,16 +106,16 @@ No keyboard handling is needed on the callout root itself.
 
 ## Transitions Table
 
-| Trigger | Precondition | State Change | Contract Effect |
-|---------|-------------|-------------|-----------------|
-| `actions.setVariant(v)` | valid variant | `variant` = v | `getCalloutProps()` updates `data-variant` |
-| `actions.setVariant(v)` | invalid variant | no change | no effect |
-| `actions.setClosable(v)` | any | `closable` = v | UIKit conditionally renders close button |
-| `actions.close()` | `closable` = `true`, `open` = `true` | `open` = `false` | UIKit hides callout; emits `cv-close` event |
-| `actions.close()` | `closable` = `false` | no change | no-op |
-| `actions.close()` | `open` = `false` | no change | no-op |
-| `actions.show()` | `open` = `false` | `open` = `true` | UIKit shows callout |
-| `actions.show()` | `open` = `true` | no change | no-op |
+| Trigger                  | Precondition                         | State Change     | Contract Effect                             |
+| ------------------------ | ------------------------------------ | ---------------- | ------------------------------------------- |
+| `actions.setVariant(v)`  | valid variant                        | `variant` = v    | `getCalloutProps()` updates `data-variant`  |
+| `actions.setVariant(v)`  | invalid variant                      | no change        | no effect                                   |
+| `actions.setClosable(v)` | any                                  | `closable` = v   | UIKit conditionally renders close button    |
+| `actions.close()`        | `closable` = `true`, `open` = `true` | `open` = `false` | UIKit hides callout; emits `cv-close` event |
+| `actions.close()`        | `closable` = `false`                 | no change        | no-op                                       |
+| `actions.close()`        | `open` = `false`                     | no change        | no-op                                       |
+| `actions.show()`         | `open` = `false`                     | `open` = `true`  | UIKit shows callout                         |
+| `actions.show()`         | `open` = `true`                      | no change        | no-op                                       |
 
 ## Invariants
 
@@ -134,35 +134,35 @@ This section defines what UIKit (`cv-callout`) binds to from the headless model.
 
 ### Signals read by adapter
 
-| Signal | UIKit usage |
-|--------|-------------|
-| `state.variant()` | Maps to `variant` host attribute and CSS class for color theming |
-| `state.closable()` | Determines whether the close button is rendered in the template |
-| `state.open()` | Controls visibility of the callout; maps to `open` attribute on host |
+| Signal             | UIKit usage                                                          |
+| ------------------ | -------------------------------------------------------------------- |
+| `state.variant()`  | Maps to `variant` host attribute and CSS class for color theming     |
+| `state.closable()` | Determines whether the close button is rendered in the template      |
+| `state.open()`     | Controls visibility of the callout; maps to `open` attribute on host |
 
 ### Actions called by adapter
 
-| Action | UIKit trigger |
-|--------|--------------|
-| `actions.setVariant(v)` | When `variant` attribute/property changes on the host element |
+| Action                   | UIKit trigger                                                  |
+| ------------------------ | -------------------------------------------------------------- |
+| `actions.setVariant(v)`  | When `variant` attribute/property changes on the host element  |
 | `actions.setClosable(v)` | When `closable` attribute/property changes on the host element |
-| `actions.close()` | When the close button is clicked; emits `cv-close` event |
-| `actions.show()` | When programmatically re-showing the callout |
+| `actions.close()`        | When the close button is clicked; emits `cv-close` event       |
+| `actions.show()`         | When programmatically re-showing the callout                   |
 
 ### Contracts spread by adapter
 
-| Contract | Target element | Notes |
-|----------|---------------|-------|
-| `getCalloutProps()` | Root callout element (`part="base"`) | Spread as attributes; provides `id`, `role`, `data-variant` |
+| Contract                | Target element                               | Notes                                                         |
+| ----------------------- | -------------------------------------------- | ------------------------------------------------------------- |
+| `getCalloutProps()`     | Root callout element (`part="base"`)         | Spread as attributes; provides `id`, `role`, `data-variant`   |
 | `getCloseButtonProps()` | Close button element (`part="close-button"`) | Spread as attributes; only rendered when `closable` is `true` |
 
 ### Options passed through from UIKit attributes
 
-| UIKit attribute | Headless option | Notes |
-|-----------------|----------------|-------|
-| `variant` | `variant` | String enum, defaults to `'info'` |
-| `closable` | `closable` | Boolean attribute, defaults to `false` |
-| `open` | `open` | Boolean attribute, defaults to `true` |
+| UIKit attribute | Headless option | Notes                                  |
+| --------------- | --------------- | -------------------------------------- |
+| `variant`       | `variant`       | String enum, defaults to `'info'`      |
+| `closable`      | `closable`      | Boolean attribute, defaults to `false` |
+| `open`          | `open`          | Boolean attribute, defaults to `true`  |
 
 ## Minimum Test Matrix
 

@@ -54,16 +54,16 @@ Groups and flat options can be mixed in the `options` array. A group is distingu
 
 ## State Signals
 
-| Signal | Type | Description |
-| --- | --- | --- |
-| `inputValue()` | `string` | Current input field text |
-| `isOpen()` | `boolean` | Popup visibility |
-| `activeId()` | `string \| null` | Currently highlighted option id |
-| `selectedId()` | `string \| null` | First (or only) selected option id. In multi mode, equals `selectedIds[0]` or `null`. |
-| `selectedIds()` | `readonly string[]` | All selected option ids. In single mode, array of zero or one. |
-| `hasSelection()` | `boolean` (computed) | `selectedIds.length > 0` |
-| `type()` | `"editable" \| "select-only"` | Current combobox type (from config, not mutable at runtime) |
-| `multiple()` | `boolean` | Whether multi-select is enabled (from config) |
+| Signal           | Type                          | Description                                                                           |
+| ---------------- | ----------------------------- | ------------------------------------------------------------------------------------- |
+| `inputValue()`   | `string`                      | Current input field text                                                              |
+| `isOpen()`       | `boolean`                     | Popup visibility                                                                      |
+| `activeId()`     | `string \| null`              | Currently highlighted option id                                                       |
+| `selectedId()`   | `string \| null`              | First (or only) selected option id. In multi mode, equals `selectedIds[0]` or `null`. |
+| `selectedIds()`  | `readonly string[]`           | All selected option ids. In single mode, array of zero or one.                        |
+| `hasSelection()` | `boolean` (computed)          | `selectedIds.length > 0`                                                              |
+| `type()`         | `"editable" \| "select-only"` | Current combobox type (from config, not mutable at runtime)                           |
+| `multiple()`     | `boolean`                     | Whether multi-select is enabled (from config)                                         |
 
 ### Backward Compatibility
 
@@ -71,35 +71,35 @@ Groups and flat options can be mixed in the `options` array. A group is distingu
 
 ## Actions
 
-| Action | Signature | Description |
-| --- | --- | --- |
-| `open` | `() => void` | Opens popup, resets typeahead, ensures active option is valid |
-| `close` | `() => void` | Closes popup, resets typeahead |
-| `setInputValue` | `(value: string) => void` | Updates input text, opens popup, revalidates active option. **No-op in select-only mode.** |
-| `setActive` | `(id: string \| null) => void` | Sets active option if visible and enabled |
-| `moveNext` | `() => void` | Opens popup, moves active to next enabled visible option (wrapping) |
-| `movePrev` | `() => void` | Opens popup, moves active to previous enabled visible option (wrapping) |
-| `moveFirst` | `() => void` | Opens popup, sets active to first enabled visible option |
-| `moveLast` | `() => void` | Opens popup, sets active to last enabled visible option |
-| `commitActive` | `() => void` | Commits currently active option. In single mode: sets `selectedId`/`inputValue`, closes if `closeOnSelect`. In multi mode: calls `toggleOption(activeId)`. |
-| `select` | `(id: string) => void` | Commits specific option by id. In single mode: replaces selection. In multi mode: calls `toggleOption(id)`. |
-| `toggleOption` | `(id: string) => void` | **Multi-mode only.** Adds id to `selectedIds` if not present, removes if present. No-op in single mode. |
-| `removeSelected` | `(id: string) => void` | Removes specific id from `selectedIds`. Works in both modes. |
-| `clearSelection` | `() => void` | Resets `selectedIds` to empty, `selectedId` to `null`. Does not clear `inputValue`. |
-| `clear` | `() => void` | Clears both selection and input value. Resets `selectedIds` to empty, `selectedId` to `null`, `inputValue` to `""`. |
-| `handleKeyDown` | `(event: KeyboardEventLike) => void` | Delegates to navigation/commit/dismiss transitions based on key |
+| Action           | Signature                            | Description                                                                                                                                                |
+| ---------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `open`           | `() => void`                         | Opens popup, resets typeahead, ensures active option is valid                                                                                              |
+| `close`          | `() => void`                         | Closes popup, resets typeahead                                                                                                                             |
+| `setInputValue`  | `(value: string) => void`            | Updates input text, opens popup, revalidates active option. **No-op in select-only mode.**                                                                 |
+| `setActive`      | `(id: string \| null) => void`       | Sets active option if visible and enabled                                                                                                                  |
+| `moveNext`       | `() => void`                         | Opens popup, moves active to next enabled visible option (wrapping)                                                                                        |
+| `movePrev`       | `() => void`                         | Opens popup, moves active to previous enabled visible option (wrapping)                                                                                    |
+| `moveFirst`      | `() => void`                         | Opens popup, sets active to first enabled visible option                                                                                                   |
+| `moveLast`       | `() => void`                         | Opens popup, sets active to last enabled visible option                                                                                                    |
+| `commitActive`   | `() => void`                         | Commits currently active option. In single mode: sets `selectedId`/`inputValue`, closes if `closeOnSelect`. In multi mode: calls `toggleOption(activeId)`. |
+| `select`         | `(id: string) => void`               | Commits specific option by id. In single mode: replaces selection. In multi mode: calls `toggleOption(id)`.                                                |
+| `toggleOption`   | `(id: string) => void`               | **Multi-mode only.** Adds id to `selectedIds` if not present, removes if present. No-op in single mode.                                                    |
+| `removeSelected` | `(id: string) => void`               | Removes specific id from `selectedIds`. Works in both modes.                                                                                               |
+| `clearSelection` | `() => void`                         | Resets `selectedIds` to empty, `selectedId` to `null`. Does not clear `inputValue`.                                                                        |
+| `clear`          | `() => void`                         | Clears both selection and input value. Resets `selectedIds` to empty, `selectedId` to `null`, `inputValue` to `""`.                                        |
+| `handleKeyDown`  | `(event: KeyboardEventLike) => void` | Delegates to navigation/commit/dismiss transitions based on key                                                                                            |
 
 ## Contracts
 
-| Contract | Return Type | Description |
-| --- | --- | --- |
-| `getInputProps()` | `ComboboxInputProps` | ARIA attributes for the trigger/input element |
-| `getListboxProps()` | `ComboboxListboxProps` | ARIA attributes for the popup listbox |
-| `getOptionProps(id)` | `ComboboxOptionProps` | ARIA attributes for an individual option |
-| `getGroupProps(groupId)` | `ComboboxGroupProps` | ARIA attributes for an option group container |
-| `getGroupLabelProps(groupId)` | `ComboboxGroupLabelProps` | Attributes for the group label element |
-| `getVisibleOptions()` | `readonly (ComboboxOption \| ComboboxVisibleGroup)[]` | Filtered visible options, preserving group structure when groups exist. Empty groups are omitted. |
-| `getFlatVisibleOptions()` | `readonly ComboboxOption[]` | Flat list of all visible options (groups flattened), for navigation purposes |
+| Contract                      | Return Type                                           | Description                                                                                       |
+| ----------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `getInputProps()`             | `ComboboxInputProps`                                  | ARIA attributes for the trigger/input element                                                     |
+| `getListboxProps()`           | `ComboboxListboxProps`                                | ARIA attributes for the popup listbox                                                             |
+| `getOptionProps(id)`          | `ComboboxOptionProps`                                 | ARIA attributes for an individual option                                                          |
+| `getGroupProps(groupId)`      | `ComboboxGroupProps`                                  | ARIA attributes for an option group container                                                     |
+| `getGroupLabelProps(groupId)` | `ComboboxGroupLabelProps`                             | Attributes for the group label element                                                            |
+| `getVisibleOptions()`         | `readonly (ComboboxOption \| ComboboxVisibleGroup)[]` | Filtered visible options, preserving group structure when groups exist. Empty groups are omitted. |
+| `getFlatVisibleOptions()`     | `readonly ComboboxOption[]`                           | Flat list of all visible options (groups flattened), for navigation purposes                      |
 
 ### Contract Return Types
 
@@ -111,10 +111,10 @@ interface ComboboxInputProps {
   'aria-haspopup': 'listbox'
   'aria-expanded': 'true' | 'false'
   'aria-controls': string
-  'aria-autocomplete'?: 'list'          // present in editable mode, omitted in select-only
-  'aria-activedescendant'?: string      // present when open and active option exists
+  'aria-autocomplete'?: 'list' // present in editable mode, omitted in select-only
+  'aria-activedescendant'?: string // present when open and active option exists
   'aria-label'?: string
-  'aria-multiselectable'?: undefined    // never on combobox; lives on listbox
+  'aria-multiselectable'?: undefined // never on combobox; lives on listbox
 }
 
 interface ComboboxListboxProps {
@@ -122,14 +122,14 @@ interface ComboboxListboxProps {
   role: 'listbox'
   tabindex: '-1'
   'aria-label'?: string
-  'aria-multiselectable'?: 'true'       // present only when multiple=true
+  'aria-multiselectable'?: 'true' // present only when multiple=true
 }
 
 interface ComboboxOptionProps {
   id: string
   role: 'option'
   tabindex: '-1'
-  'aria-selected': 'true' | 'false'    // true for ALL selected options in multi mode
+  'aria-selected': 'true' | 'false' // true for ALL selected options in multi mode
   'aria-disabled'?: 'true'
   'data-active': 'true' | 'false'
 }
@@ -137,7 +137,7 @@ interface ComboboxOptionProps {
 interface ComboboxGroupProps {
   id: string
   role: 'group'
-  'aria-labelledby': string             // references the group label element id
+  'aria-labelledby': string // references the group label element id
 }
 
 interface ComboboxGroupLabelProps {
@@ -148,7 +148,7 @@ interface ComboboxGroupLabelProps {
 interface ComboboxVisibleGroup {
   id: string
   label: string
-  options: readonly ComboboxOption[]    // filtered, non-empty
+  options: readonly ComboboxOption[] // filtered, non-empty
 }
 ```
 
@@ -231,46 +231,46 @@ State is signal-backed, transitions are explicit and testable, and invariants ar
 
 ### Core Transitions (all modes)
 
-| Event / action | Preconditions | Next state |
-| --- | --- | --- |
-| `open()` | none | `isOpen=true`; `activeId` is first enabled visible option or `null` |
-| `close()` | none | `isOpen=false`; `selectedId` and `inputValue` unchanged |
-| `moveNext()` / `movePrev()` | none | `isOpen=true`; `activeId` cycles within enabled visible options, or `null` when none |
-| `moveFirst()` / `moveLast()` | none | `isOpen=true`; `activeId` becomes first/last enabled visible option, or `null` when none |
-| `setActive(id)` | `id` must be visible and enabled | `activeId=id`; invalid/disabled/non-visible ids are ignored |
-| `clearSelection()` | none | `selectedIds=[]`; `selectedId=null`; `inputValue` unchanged |
-| `clear()` | none | `selectedIds=[]`; `selectedId=null`; `inputValue=""`; `isOpen` unchanged |
-| `handleKeyDown(ArrowUp/ArrowDown/Home/End/Enter/Escape)` | keyboard intent recognized | delegates to explicit transitions above |
+| Event / action                                           | Preconditions                    | Next state                                                                               |
+| -------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `open()`                                                 | none                             | `isOpen=true`; `activeId` is first enabled visible option or `null`                      |
+| `close()`                                                | none                             | `isOpen=false`; `selectedId` and `inputValue` unchanged                                  |
+| `moveNext()` / `movePrev()`                              | none                             | `isOpen=true`; `activeId` cycles within enabled visible options, or `null` when none     |
+| `moveFirst()` / `moveLast()`                             | none                             | `isOpen=true`; `activeId` becomes first/last enabled visible option, or `null` when none |
+| `setActive(id)`                                          | `id` must be visible and enabled | `activeId=id`; invalid/disabled/non-visible ids are ignored                              |
+| `clearSelection()`                                       | none                             | `selectedIds=[]`; `selectedId=null`; `inputValue` unchanged                              |
+| `clear()`                                                | none                             | `selectedIds=[]`; `selectedId=null`; `inputValue=""`; `isOpen` unchanged                 |
+| `handleKeyDown(ArrowUp/ArrowDown/Home/End/Enter/Escape)` | keyboard intent recognized       | delegates to explicit transitions above                                                  |
 
 ### Editable Mode Transitions
 
-| Event / action | Preconditions | Next state |
-| --- | --- | --- |
-| `setInputValue(value)` | `type="editable"` | `inputValue=value`; `isOpen=true`; `activeId` revalidated against enabled visible options |
+| Event / action            | Preconditions                               | Next state                                                                                                     |
+| ------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `setInputValue(value)`    | `type="editable"`                           | `inputValue=value`; `isOpen=true`; `activeId` revalidated against enabled visible options                      |
 | `commitActive()` (single) | `activeId!=null`, enabled, `multiple=false` | `selectedId=activeId`; `selectedIds=[activeId]`; `inputValue=selected label`; closes when `closeOnSelect=true` |
-| `commitActive()` (multi) | `activeId!=null`, enabled, `multiple=true` | `toggleOption(activeId)`; `inputValue` unchanged; closes when `closeOnSelect=true` |
-| `select(id)` (single) | `id` exists, enabled, `multiple=false` | same as single `commitActive` for that id |
-| `select(id)` (multi) | `id` exists, enabled, `multiple=true` | `toggleOption(id)`; `inputValue` unchanged; closes when `closeOnSelect=true` |
+| `commitActive()` (multi)  | `activeId!=null`, enabled, `multiple=true`  | `toggleOption(activeId)`; `inputValue` unchanged; closes when `closeOnSelect=true`                             |
+| `select(id)` (single)     | `id` exists, enabled, `multiple=false`      | same as single `commitActive` for that id                                                                      |
+| `select(id)` (multi)      | `id` exists, enabled, `multiple=true`       | `toggleOption(id)`; `inputValue` unchanged; closes when `closeOnSelect=true`                                   |
 
 ### Select-Only Mode Transitions
 
-| Event / action | Preconditions | Next state |
-| --- | --- | --- |
-| `setInputValue(value)` | `type="select-only"` | **no-op** |
-| `commitActive()` (single) | `activeId!=null`, enabled, `multiple=false` | `selectedId=activeId`; `selectedIds=[activeId]`; `inputValue=selected label`; closes when `closeOnSelect=true` |
-| `commitActive()` (multi) | `activeId!=null`, enabled, `multiple=true` | `toggleOption(activeId)`; `inputValue=""`; closes when `closeOnSelect=true` |
-| `handleKeyDown(Space)` (closed) | `type="select-only"`, `isOpen=false` | `open()` |
-| `handleKeyDown(Space)` (open) | `type="select-only"`, `isOpen=true` | `commitActive()` |
-| `handleKeyDown(printable char)` | `type="select-only"` | typeahead navigation (jump to matching option by label prefix) |
+| Event / action                  | Preconditions                               | Next state                                                                                                     |
+| ------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `setInputValue(value)`          | `type="select-only"`                        | **no-op**                                                                                                      |
+| `commitActive()` (single)       | `activeId!=null`, enabled, `multiple=false` | `selectedId=activeId`; `selectedIds=[activeId]`; `inputValue=selected label`; closes when `closeOnSelect=true` |
+| `commitActive()` (multi)        | `activeId!=null`, enabled, `multiple=true`  | `toggleOption(activeId)`; `inputValue=""`; closes when `closeOnSelect=true`                                    |
+| `handleKeyDown(Space)` (closed) | `type="select-only"`, `isOpen=false`        | `open()`                                                                                                       |
+| `handleKeyDown(Space)` (open)   | `type="select-only"`, `isOpen=true`         | `commitActive()`                                                                                               |
+| `handleKeyDown(printable char)` | `type="select-only"`                        | typeahead navigation (jump to matching option by label prefix)                                                 |
 
 ### Multi-Select Transitions
 
-| Event / action | Preconditions | Next state |
-| --- | --- | --- |
-| `toggleOption(id)` | `id` exists, enabled, `multiple=true` | if `id` in `selectedIds`: remove it; else: add it. `activeId` set to `id`. |
-| `toggleOption(id)` | `multiple=false` | **no-op** |
-| `removeSelected(id)` | `id` in `selectedIds` | removes `id` from `selectedIds`; `selectedId` recomputed |
-| `removeSelected(id)` | `id` not in `selectedIds` | **no-op** |
+| Event / action       | Preconditions                         | Next state                                                                 |
+| -------------------- | ------------------------------------- | -------------------------------------------------------------------------- |
+| `toggleOption(id)`   | `id` exists, enabled, `multiple=true` | if `id` in `selectedIds`: remove it; else: add it. `activeId` set to `id`. |
+| `toggleOption(id)`   | `multiple=false`                      | **no-op**                                                                  |
+| `removeSelected(id)` | `id` in `selectedIds`                 | removes `id` from `selectedIds`; `selectedId` recomputed                   |
+| `removeSelected(id)` | `id` not in `selectedIds`             | **no-op**                                                                  |
 
 ## Typeahead Contract
 
@@ -329,6 +329,7 @@ These invariants are machine-checkable through deterministic assertions in
 UIKit adapter will:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.inputValue()` — current input text
 - `state.isOpen()` — popup visibility
 - `state.activeId()` — highlighted option id
@@ -339,6 +340,7 @@ UIKit adapter will:
 - `state.multiple()` — determines single vs multi rendering
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open()` / `actions.close()` — popup toggle
 - `actions.setInputValue(value)` — on input change (editable mode)
 - `actions.setActive(id)` — on pointer hover over option
@@ -353,6 +355,7 @@ UIKit adapter will:
 - `actions.handleKeyDown(event)` — keyboard delegation
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getInputProps()` — spread onto trigger/input element
 - `contracts.getListboxProps()` — spread onto popup listbox container
 - `contracts.getOptionProps(id)` — spread onto each option element
@@ -362,6 +365,7 @@ UIKit adapter will:
 - `contracts.getFlatVisibleOptions()` — available for navigation index calculations
 
 **UIKit-only concerns (NOT in headless):**
+
 - Tag/chip rendering for multi-select selected items
 - "+N more" overflow display for multi-select
 - Clear button rendering and visibility (uses `hasSelection` + `clearable` config)
@@ -401,9 +405,9 @@ UIKit adapter will:
 
 ## ADR-001 Compliance
 
-- **Runtime Policy**: Reatom v1000 only; no @statx/* in headless core.
+- **Runtime Policy**: Reatom v1000 only; no @statx/\* in headless core.
 - **Layering**: core -> interactions -> a11y-contracts -> adapters; adapters remain thin mappings.
-- **Independence**: No imports from @project/*, apps/*, or other out-of-package modules.
+- **Independence**: No imports from @project/_, apps/_, or other out-of-package modules.
 - **Verification**: Mandatory adapter integration tests and standalone package test execution.
 
 ## Out of Scope (Current)

@@ -15,10 +15,10 @@
 
 The `orientation` option describes the physical orientation of the **separator bar itself**, not the layout direction. This matches ARIA conventions.
 
-| `orientation` value | Separator bar direction | Layout split | Active arrow keys |
-|---|---|---|---|
-| `'vertical'` | Vertical bar (standing upright) | Left / right panes | `ArrowLeft` (decrease), `ArrowRight` (increase) |
-| `'horizontal'` | Horizontal bar (lying flat) | Top / bottom panes | `ArrowUp` (decrease), `ArrowDown` (increase) |
+| `orientation` value | Separator bar direction         | Layout split       | Active arrow keys                               |
+| ------------------- | ------------------------------- | ------------------ | ----------------------------------------------- |
+| `'vertical'`        | Vertical bar (standing upright) | Left / right panes | `ArrowLeft` (decrease), `ArrowRight` (increase) |
+| `'horizontal'`      | Horizontal bar (lying flat)     | Top / bottom panes | `ArrowUp` (decrease), `ArrowDown` (increase)    |
 
 **Important correction from earlier convention:** Prior versions of this spec had the mapping reversed (horizontal → left/right keys). The ARIA-aligned convention used here treats `orientation` as describing the separator element itself, not the axis of movement. A vertical separator divides content left and right; a horizontal separator divides content top and bottom.
 
@@ -30,53 +30,53 @@ The `aria-orientation` attribute exposed on the separator element reflects this 
 
 ### `CreateWindowSplitterOptions`
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `idBase` | `string` | `'window-splitter'` | Base string used to derive stable element IDs and atom names. |
-| `min` | `number` | `0` | Minimum allowed position value. |
-| `max` | `number` | `100` | Maximum allowed position value. |
-| `position` | `number` | mid-point of `[min, max]` | Initial position. |
-| `step` | `number` | `1` | Amount moved per arrow-key press. |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Orientation of the separator bar (see Orientation Semantics section). |
-| `isFixed` | `boolean` | `false` | When `true`, the splitter is in fixed mode: arrow keys are disabled and `Enter` toggles between min and max. |
-| `ariaLabel` | `string` | — | Value for `aria-label` on the separator element. |
-| `ariaLabelledBy` | `string` | — | Value for `aria-labelledby` on the separator element. |
-| `primaryPaneId` | `string` | `'{idBase}-pane-primary'` | Explicit ID for the primary pane element. |
-| `secondaryPaneId` | `string` | `'{idBase}-pane-secondary'` | Explicit ID for the secondary pane element. |
-| `formatValueText` | `(value: number) => string` | — | Custom formatter for `aria-valuetext`. |
-| `snap` | `string` | — | Optional space-separated list of snap positions. Each token is either a bare number (value in `[min, max]` units) or a percentage string ending in `%` (resolved as `min + pct/100 * (max - min)`). Example: `"25% 50% 75%"` or `"10 50 90"`. |
-| `snapThreshold` | `number` | `12` | Maximum distance (in the same units as position) between the candidate position and a snap point for snapping to activate. |
-| `onPositionChange` | `(value: number) => void` | — | Callback fired after position changes. Receives the post-snap, clamped value. Only called when the value actually changes. |
+| Option             | Type                         | Default                     | Description                                                                                                                                                                                                                                   |
+| ------------------ | ---------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `idBase`           | `string`                     | `'window-splitter'`         | Base string used to derive stable element IDs and atom names.                                                                                                                                                                                 |
+| `min`              | `number`                     | `0`                         | Minimum allowed position value.                                                                                                                                                                                                               |
+| `max`              | `number`                     | `100`                       | Maximum allowed position value.                                                                                                                                                                                                               |
+| `position`         | `number`                     | mid-point of `[min, max]`   | Initial position.                                                                                                                                                                                                                             |
+| `step`             | `number`                     | `1`                         | Amount moved per arrow-key press.                                                                                                                                                                                                             |
+| `orientation`      | `'horizontal' \| 'vertical'` | `'horizontal'`              | Orientation of the separator bar (see Orientation Semantics section).                                                                                                                                                                         |
+| `isFixed`          | `boolean`                    | `false`                     | When `true`, the splitter is in fixed mode: arrow keys are disabled and `Enter` toggles between min and max.                                                                                                                                  |
+| `ariaLabel`        | `string`                     | —                           | Value for `aria-label` on the separator element.                                                                                                                                                                                              |
+| `ariaLabelledBy`   | `string`                     | —                           | Value for `aria-labelledby` on the separator element.                                                                                                                                                                                         |
+| `primaryPaneId`    | `string`                     | `'{idBase}-pane-primary'`   | Explicit ID for the primary pane element.                                                                                                                                                                                                     |
+| `secondaryPaneId`  | `string`                     | `'{idBase}-pane-secondary'` | Explicit ID for the secondary pane element.                                                                                                                                                                                                   |
+| `formatValueText`  | `(value: number) => string`  | —                           | Custom formatter for `aria-valuetext`.                                                                                                                                                                                                        |
+| `snap`             | `string`                     | —                           | Optional space-separated list of snap positions. Each token is either a bare number (value in `[min, max]` units) or a percentage string ending in `%` (resolved as `min + pct/100 * (max - min)`). Example: `"25% 50% 75%"` or `"10 50 90"`. |
+| `snapThreshold`    | `number`                     | `12`                        | Maximum distance (in the same units as position) between the candidate position and a snap point for snapping to activate.                                                                                                                    |
+| `onPositionChange` | `(value: number) => void`    | —                           | Callback fired after position changes. Receives the post-snap, clamped value. Only called when the value actually changes.                                                                                                                    |
 
 ### State Signals
 
-| Signal | Type | Description |
-|---|---|---|
-| `state.position` | `Atom<number>` | Current position, always clamped to `[min, max]`. |
-| `state.min` | `Atom<number>` | Current minimum bound. |
-| `state.max` | `Atom<number>` | Current maximum bound. |
-| `state.orientation` | `Atom<'horizontal' \| 'vertical'>` | Current orientation of the separator bar. |
-| `state.isDragging` | `Atom<boolean>` | Whether a pointer drag is in progress. |
+| Signal              | Type                               | Description                                       |
+| ------------------- | ---------------------------------- | ------------------------------------------------- |
+| `state.position`    | `Atom<number>`                     | Current position, always clamped to `[min, max]`. |
+| `state.min`         | `Atom<number>`                     | Current minimum bound.                            |
+| `state.max`         | `Atom<number>`                     | Current maximum bound.                            |
+| `state.orientation` | `Atom<'horizontal' \| 'vertical'>` | Current orientation of the separator bar.         |
+| `state.isDragging`  | `Atom<boolean>`                    | Whether a pointer drag is in progress.            |
 
 ### Actions
 
-| Action | Signature | Description |
-|---|---|---|
-| `setPosition` | `(value: number) => void` | Set position to `value`. Applies snap logic then range clamping (see Snap Behavior). Fires `onPositionChange` if the value changed. |
-| `moveStep` | `(direction: -1 \| 1) => void` | Move position by one `step` in the given direction. Fires `onPositionChange` if the value changed. |
-| `moveToMin` | `() => void` | Move position to `min`. Fires `onPositionChange` if the value changed. |
-| `moveToMax` | `() => void` | Move position to `max`. Fires `onPositionChange` if the value changed. |
-| `startDragging` | `() => void` | Set `isDragging` to `true`. |
-| `stopDragging` | `() => void` | Set `isDragging` to `false`. |
-| `handleKeyDown` | `(event: Pick<KeyboardEvent, 'key'>) => void` | Dispatch keyboard intent to the appropriate action. |
+| Action          | Signature                                     | Description                                                                                                                         |
+| --------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `setPosition`   | `(value: number) => void`                     | Set position to `value`. Applies snap logic then range clamping (see Snap Behavior). Fires `onPositionChange` if the value changed. |
+| `moveStep`      | `(direction: -1 \| 1) => void`                | Move position by one `step` in the given direction. Fires `onPositionChange` if the value changed.                                  |
+| `moveToMin`     | `() => void`                                  | Move position to `min`. Fires `onPositionChange` if the value changed.                                                              |
+| `moveToMax`     | `() => void`                                  | Move position to `max`. Fires `onPositionChange` if the value changed.                                                              |
+| `startDragging` | `() => void`                                  | Set `isDragging` to `true`.                                                                                                         |
+| `stopDragging`  | `() => void`                                  | Set `isDragging` to `false`.                                                                                                        |
+| `handleKeyDown` | `(event: Pick<KeyboardEvent, 'key'>) => void` | Dispatch keyboard intent to the appropriate action.                                                                                 |
 
 ### Contracts
 
-| Method | Returns | Description |
-|---|---|---|
-| `getSplitterProps()` | `WindowSplitterProps` | ARIA and event props for the separator element. Must be called inside a reactive scope (reads signals). |
-| `getPrimaryPaneProps()` | `WindowSplitterPaneProps` | Data attributes for the primary pane element. |
-| `getSecondaryPaneProps()` | `WindowSplitterPaneProps` | Data attributes for the secondary pane element. |
+| Method                    | Returns                   | Description                                                                                             |
+| ------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `getSplitterProps()`      | `WindowSplitterProps`     | ARIA and event props for the separator element. Must be called inside a reactive scope (reads signals). |
+| `getPrimaryPaneProps()`   | `WindowSplitterPaneProps` | Data attributes for the primary pane element.                                                           |
+| `getSecondaryPaneProps()` | `WindowSplitterPaneProps` | Data attributes for the secondary pane element.                                                         |
 
 ### TypeScript Shapes
 
@@ -123,15 +123,15 @@ export interface WindowSplitterPaneProps {
 
 ## Keyboard Contract
 
-| Key | Orientation condition | Effect |
-|---|---|---|
-| `ArrowLeft` | `orientation === 'vertical'` | Decrease position by one `step` |
-| `ArrowRight` | `orientation === 'vertical'` | Increase position by one `step` |
-| `ArrowUp` | `orientation === 'horizontal'` | Decrease position by one `step` |
-| `ArrowDown` | `orientation === 'horizontal'` | Increase position by one `step` |
-| `Home` | any | Move position to `min` |
-| `End` | any | Move position to `max` |
-| `Enter` | any (`isFixed === true`) | Toggle between min and max (see Fixed Mode) |
+| Key          | Orientation condition          | Effect                                      |
+| ------------ | ------------------------------ | ------------------------------------------- |
+| `ArrowLeft`  | `orientation === 'vertical'`   | Decrease position by one `step`             |
+| `ArrowRight` | `orientation === 'vertical'`   | Increase position by one `step`             |
+| `ArrowUp`    | `orientation === 'horizontal'` | Decrease position by one `step`             |
+| `ArrowDown`  | `orientation === 'horizontal'` | Increase position by one `step`             |
+| `Home`       | any                            | Move position to `min`                      |
+| `End`        | any                            | Move position to `max`                      |
+| `Enter`      | any (`isFixed === true`)       | Toggle between min and max (see Fixed Mode) |
 
 Keys for the **inactive orientation** (e.g., `ArrowLeft`/`ArrowRight` when `orientation === 'horizontal'`) are no-ops and must not change state.
 
@@ -215,20 +215,20 @@ The UIKit adapter (e.g., a Solid.js or Angular binding) is expected to:
 
 ### Signals read by the adapter
 
-| Signal | Usage |
-|---|---|
-| `state.position` | Drive CSS variable or style for pane size |
-| `state.isDragging` | Apply a drag-active CSS class or `user-select: none` |
-| `state.orientation` | Conditionally apply layout CSS |
+| Signal              | Usage                                                |
+| ------------------- | ---------------------------------------------------- |
+| `state.position`    | Drive CSS variable or style for pane size            |
+| `state.isDragging`  | Apply a drag-active CSS class or `user-select: none` |
+| `state.orientation` | Conditionally apply layout CSS                       |
 
 ### Actions called by the adapter
 
-| Action | When |
-|---|---|
-| `startDragging()` | On `pointerdown` on the separator element |
-| `setPosition(value)` | On `pointermove` while dragging (adapter computes pixel-to-unit value) |
-| `stopDragging()` | On `pointerup` |
-| `handleKeyDown(event)` | On `keydown` on the separator element |
+| Action                 | When                                                                   |
+| ---------------------- | ---------------------------------------------------------------------- |
+| `startDragging()`      | On `pointerdown` on the separator element                              |
+| `setPosition(value)`   | On `pointermove` while dragging (adapter computes pixel-to-unit value) |
+| `stopDragging()`       | On `pointerup`                                                         |
+| `handleKeyDown(event)` | On `keydown` on the separator element                                  |
 
 ### Contracts spread by the adapter
 
@@ -257,26 +257,26 @@ The UIKit adapter reads `snap` and `snapThreshold` from element attributes (or c
 
 ## Minimum Test Matrix
 
-| Test case | What is verified |
-|---|---|
-| Arrow keys move position (vertical orientation) | `ArrowLeft` decreases, `ArrowRight` increases; `ArrowUp`/`ArrowDown` are no-ops |
-| Arrow keys move position (horizontal orientation) | `ArrowUp` decreases, `ArrowDown` increases; `ArrowLeft`/`ArrowRight` are no-ops |
-| Inactive-orientation keys are no-ops | Neither signal changes nor `onPositionChange` fires |
-| `Home` moves to `min` | Position becomes `min` regardless of current position |
-| `End` moves to `max` | Position becomes `max` regardless of current position |
-| Clamping at boundaries | `setPosition` beyond `max` clamps to `max`; below `min` clamps to `min` |
-| `aria-valuenow` synchronization | Reflects current position after every update |
-| Drag lifecycle | `startDragging` → `isDragging === true`; `stopDragging` → `isDragging === false` |
-| `aria-controls` linkage | `getSplitterProps()['aria-controls']` contains both pane IDs |
-| `onPositionChange` only fires on actual change | Calling `setPosition(currentValue)` does not invoke the callback |
-| Fixed mode — Enter toggles to max | When `position <= midpoint`, Enter sets position to `max` |
-| Fixed mode — Enter toggles to min | When `position > midpoint`, Enter sets position to `min` |
-| Fixed mode — arrow keys disabled | Arrow keys do nothing when `isFixed === true` |
-| Snap within threshold | `setPosition` value within `snapThreshold` of a snap point → snaps to that point |
-| Snap beyond threshold | `setPosition` value beyond `snapThreshold` of all snap points → no snap |
-| Snap percentage resolution | `"50%"` with `min=0, max=200` resolves to `100` |
-| Snap no-op when `snap` not set | Normal `setPosition` behavior without snap string |
-| `onPositionChange` receives post-snap value | Callback value equals the snapped position, not the raw input |
+| Test case                                         | What is verified                                                                 |
+| ------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Arrow keys move position (vertical orientation)   | `ArrowLeft` decreases, `ArrowRight` increases; `ArrowUp`/`ArrowDown` are no-ops  |
+| Arrow keys move position (horizontal orientation) | `ArrowUp` decreases, `ArrowDown` increases; `ArrowLeft`/`ArrowRight` are no-ops  |
+| Inactive-orientation keys are no-ops              | Neither signal changes nor `onPositionChange` fires                              |
+| `Home` moves to `min`                             | Position becomes `min` regardless of current position                            |
+| `End` moves to `max`                              | Position becomes `max` regardless of current position                            |
+| Clamping at boundaries                            | `setPosition` beyond `max` clamps to `max`; below `min` clamps to `min`          |
+| `aria-valuenow` synchronization                   | Reflects current position after every update                                     |
+| Drag lifecycle                                    | `startDragging` → `isDragging === true`; `stopDragging` → `isDragging === false` |
+| `aria-controls` linkage                           | `getSplitterProps()['aria-controls']` contains both pane IDs                     |
+| `onPositionChange` only fires on actual change    | Calling `setPosition(currentValue)` does not invoke the callback                 |
+| Fixed mode — Enter toggles to max                 | When `position <= midpoint`, Enter sets position to `max`                        |
+| Fixed mode — Enter toggles to min                 | When `position > midpoint`, Enter sets position to `min`                         |
+| Fixed mode — arrow keys disabled                  | Arrow keys do nothing when `isFixed === true`                                    |
+| Snap within threshold                             | `setPosition` value within `snapThreshold` of a snap point → snaps to that point |
+| Snap beyond threshold                             | `setPosition` value beyond `snapThreshold` of all snap points → no snap          |
+| Snap percentage resolution                        | `"50%"` with `min=0, max=200` resolves to `100`                                  |
+| Snap no-op when `snap` not set                    | Normal `setPosition` behavior without snap string                                |
+| `onPositionChange` receives post-snap value       | Callback value equals the snapped position, not the raw input                    |
 
 ---
 

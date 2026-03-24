@@ -43,37 +43,37 @@
 
 Extends `CreateDialogOptions` with:
 
-| Option      | Type                                      | Default  | Description                                     |
-|-------------|-------------------------------------------|----------|-------------------------------------------------|
-| `placement` | `'start' \| 'end' \| 'top' \| 'bottom'` | `'end'`  | Which edge the drawer panel slides from         |
+| Option      | Type                                    | Default | Description                             |
+| ----------- | --------------------------------------- | ------- | --------------------------------------- |
+| `placement` | `'start' \| 'end' \| 'top' \| 'bottom'` | `'end'` | Which edge the drawer panel slides from |
 
 All options from `CreateDialogOptions` are supported and forwarded to the internal dialog:
 
-| Option                  | Type                           | Default       | Description                                            |
-|-------------------------|--------------------------------|---------------|--------------------------------------------------------|
-| `idBase`                | `string`                       | `'drawer'`    | Base id prefix for all generated ids                   |
-| `type`                  | `'dialog' \| 'alertdialog'`   | `'dialog'`    | ARIA role for the content element                      |
-| `initialOpen`           | `boolean`                      | `false`       | Whether the drawer starts open                         |
-| `isModal`               | `boolean`                      | `true`        | Modal mode enables focus trap and scroll lock          |
-| `closeOnEscape`         | `boolean`                      | `true`        | Whether Escape key closes the drawer                   |
-| `closeOnOutsidePointer` | `boolean`                      | `true`        | Whether clicking outside closes the drawer             |
-| `closeOnOutsideFocus`   | `boolean`                      | `true`        | Whether focusing outside closes the drawer             |
-| `initialFocusId`        | `string`                       | ---           | Id of element to receive initial focus on open         |
-| `ariaLabelledBy`        | `string`                       | `{idBase}-title` | Custom id for `aria-labelledby`                     |
-| `ariaDescribedBy`       | `string`                       | `{idBase}-description` | Custom id for `aria-describedby`             |
+| Option                  | Type                        | Default                | Description                                    |
+| ----------------------- | --------------------------- | ---------------------- | ---------------------------------------------- |
+| `idBase`                | `string`                    | `'drawer'`             | Base id prefix for all generated ids           |
+| `type`                  | `'dialog' \| 'alertdialog'` | `'dialog'`             | ARIA role for the content element              |
+| `initialOpen`           | `boolean`                   | `false`                | Whether the drawer starts open                 |
+| `isModal`               | `boolean`                   | `true`                 | Modal mode enables focus trap and scroll lock  |
+| `closeOnEscape`         | `boolean`                   | `true`                 | Whether Escape key closes the drawer           |
+| `closeOnOutsidePointer` | `boolean`                   | `true`                 | Whether clicking outside closes the drawer     |
+| `closeOnOutsideFocus`   | `boolean`                   | `true`                 | Whether focusing outside closes the drawer     |
+| `initialFocusId`        | `string`                    | ---                    | Id of element to receive initial focus on open |
+| `ariaLabelledBy`        | `string`                    | `{idBase}-title`       | Custom id for `aria-labelledby`                |
+| `ariaDescribedBy`       | `string`                    | `{idBase}-description` | Custom id for `aria-describedby`               |
 
 ## State Signal Surface
 
-| Signal                  | Type                                     | Derived? | Source    | Description                                               |
-|-------------------------|------------------------------------------|----------|-----------|-----------------------------------------------------------|
-| `isOpen`                | `Atom<boolean>`                          | No       | dialog    | Single source of truth for visibility                     |
-| `isModal`               | `Atom<boolean>`                          | No       | dialog    | Whether modal behaviors (focus trap, scroll lock) are on  |
-| `type`                  | `Atom<'dialog' \| 'alertdialog'>`        | No       | dialog    | ARIA role type                                            |
-| `restoreTargetId`       | `Atom<string \| null>`                   | No       | dialog    | Element id to return focus to after close                 |
-| `isFocusTrapped`        | `Computed<boolean>`                      | Yes      | dialog    | `isOpen() && isModal()`                                   |
-| `shouldLockScroll`      | `Computed<boolean>`                      | Yes      | dialog    | `isOpen() && isModal()`                                   |
-| `initialFocusTargetId`  | `Atom<string \| null>`                   | No       | dialog    | Id of element to receive focus when drawer opens          |
-| `placement`             | `Atom<DrawerPlacement>`                  | No       | drawer    | Current placement edge                                    |
+| Signal                 | Type                              | Derived? | Source | Description                                              |
+| ---------------------- | --------------------------------- | -------- | ------ | -------------------------------------------------------- |
+| `isOpen`               | `Atom<boolean>`                   | No       | dialog | Single source of truth for visibility                    |
+| `isModal`              | `Atom<boolean>`                   | No       | dialog | Whether modal behaviors (focus trap, scroll lock) are on |
+| `type`                 | `Atom<'dialog' \| 'alertdialog'>` | No       | dialog | ARIA role type                                           |
+| `restoreTargetId`      | `Atom<string \| null>`            | No       | dialog | Element id to return focus to after close                |
+| `isFocusTrapped`       | `Computed<boolean>`               | Yes      | dialog | `isOpen() && isModal()`                                  |
+| `shouldLockScroll`     | `Computed<boolean>`               | Yes      | dialog | `isOpen() && isModal()`                                  |
+| `initialFocusTargetId` | `Atom<string \| null>`            | No       | dialog | Id of element to receive focus when drawer opens         |
+| `placement`            | `Atom<DrawerPlacement>`           | No       | drawer | Current placement edge                                   |
 
 ### DrawerPlacement type
 
@@ -111,6 +111,7 @@ Drawer additions:
 All dialog behaviors are inherited. See Dialog spec for full details.
 
 ### Modal (`isModal: true`, default)
+
 - `Escape` key closes the drawer (configurable via `closeOnEscape`)
 - Outside pointer click closes the drawer (configurable via `closeOnOutsidePointer`)
 - Outside focus closes the drawer (configurable via `closeOnOutsideFocus`)
@@ -119,6 +120,7 @@ All dialog behaviors are inherited. See Dialog spec for full details.
 - Initial focus: defaults to the first focusable element, can be overridden via `initialFocusId`
 
 ### Non-modal (`isModal: false`)
+
 - `Escape` key closes the drawer (configurable via `closeOnEscape`)
 - Outside pointer click closes the drawer (configurable via `closeOnOutsidePointer`)
 - Outside focus closes the drawer (configurable via `closeOnOutsideFocus`)
@@ -128,6 +130,7 @@ All dialog behaviors are inherited. See Dialog spec for full details.
 - Initial focus: same as modal (configurable via `initialFocusId`)
 
 ### Placement
+
 - `placement` determines the edge from which the drawer visually appears
 - Changing placement at runtime (via `setPlacement`) updates the `data-placement` attribute
 - Placement has no effect on ARIA attributes or focus behavior; it is purely a layout/animation hint
@@ -135,7 +138,9 @@ All dialog behaviors are inherited. See Dialog spec for full details.
 ## Contract Prop Shapes
 
 ### `getTriggerProps()`
+
 Delegated from dialog. Same shape as `DialogTriggerProps`.
+
 ```ts
 {
   id: string
@@ -150,7 +155,9 @@ Delegated from dialog. Same shape as `DialogTriggerProps`.
 ```
 
 ### `getOverlayProps()`
+
 Delegated from dialog. Same shape as `DialogOverlayProps`.
+
 ```ts
 {
   id: string
@@ -162,7 +169,9 @@ Delegated from dialog. Same shape as `DialogOverlayProps`.
 ```
 
 ### `getPanelProps()`
+
 Extends dialog content props with `data-placement`.
+
 ```ts
 {
   id: string
@@ -178,7 +187,9 @@ Extends dialog content props with `data-placement`.
 ```
 
 ### `getTitleProps()`
+
 Delegated from dialog. Same shape as `DialogTitleProps`.
+
 ```ts
 {
   id: string
@@ -186,7 +197,9 @@ Delegated from dialog. Same shape as `DialogTitleProps`.
 ```
 
 ### `getDescriptionProps()`
+
 Delegated from dialog. Same shape as `DialogDescriptionProps`.
+
 ```ts
 {
   id: string
@@ -194,7 +207,9 @@ Delegated from dialog. Same shape as `DialogDescriptionProps`.
 ```
 
 ### `getCloseButtonProps()` (footer/generic close)
+
 Delegated from dialog. Same shape as `DialogCloseButtonProps`.
+
 ```ts
 {
   id: string
@@ -205,7 +220,9 @@ Delegated from dialog. Same shape as `DialogCloseButtonProps`.
 ```
 
 ### `getHeaderCloseButtonProps()` (header close icon)
+
 Delegated from dialog. Same shape as `DialogHeaderCloseButtonProps`.
+
 ```ts
 {
   id: string
@@ -222,35 +239,35 @@ All dialog transitions apply. See Dialog spec for the full table.
 
 Drawer-specific additions:
 
-| Event / Action                      | Current State     | Next State / Effect                                          |
-|-------------------------------------|-------------------|--------------------------------------------------------------|
-| `setPlacement(placement)`           | any               | `placement` atom updated to new value                        |
+| Event / Action            | Current State | Next State / Effect                   |
+| ------------------------- | ------------- | ------------------------------------- |
+| `setPlacement(placement)` | any           | `placement` atom updated to new value |
 
 ### Inherited transitions (from dialog)
 
-| Event / Action                      | Current State     | Next State / Effect                                          |
-|-------------------------------------|-------------------|--------------------------------------------------------------|
-| `open(source)`                      | `isOpen = false`  | `isOpen = true`; restore target cleared; focus management begins |
-| `close(intent)`                     | `isOpen = true`   | `isOpen = false`; `restoreTargetId` set to trigger id        |
-| `toggle(source)`                    | `isOpen = false`  | calls `open(source)`                                         |
-| `toggle(source)`                    | `isOpen = true`   | calls `close('programmatic')`                                |
-| `handleTriggerClick()`              | any               | calls `toggle('pointer')`                                    |
-| `handleTriggerKeyDown(Enter/Space)` | any               | calls `toggle('keyboard')`                                   |
-| `handleKeyDown(Escape)`             | `isOpen = true`, `closeOnEscape = true` | calls `close('escape')`                     |
-| `handleKeyDown(Escape)`             | `closeOnEscape = false` | no-op                                                  |
-| `handleOutsidePointer()`            | `isOpen = true`, `closeOnOutsidePointer = true` | calls `close('outside-pointer')` |
-| `handleOutsidePointer()`            | `closeOnOutsidePointer = false` | no-op                                           |
-| `handleOutsideFocus()`              | `isOpen = true`, `closeOnOutsideFocus = true` | calls `close('outside-focus')`    |
-| `handleOutsideFocus()`              | `closeOnOutsideFocus = false` | no-op                                             |
-| `setTriggerId(id)`                  | any               | trigger id updated; affects future `restoreTargetId`         |
+| Event / Action                      | Current State                                   | Next State / Effect                                              |
+| ----------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------- |
+| `open(source)`                      | `isOpen = false`                                | `isOpen = true`; restore target cleared; focus management begins |
+| `close(intent)`                     | `isOpen = true`                                 | `isOpen = false`; `restoreTargetId` set to trigger id            |
+| `toggle(source)`                    | `isOpen = false`                                | calls `open(source)`                                             |
+| `toggle(source)`                    | `isOpen = true`                                 | calls `close('programmatic')`                                    |
+| `handleTriggerClick()`              | any                                             | calls `toggle('pointer')`                                        |
+| `handleTriggerKeyDown(Enter/Space)` | any                                             | calls `toggle('keyboard')`                                       |
+| `handleKeyDown(Escape)`             | `isOpen = true`, `closeOnEscape = true`         | calls `close('escape')`                                          |
+| `handleKeyDown(Escape)`             | `closeOnEscape = false`                         | no-op                                                            |
+| `handleOutsidePointer()`            | `isOpen = true`, `closeOnOutsidePointer = true` | calls `close('outside-pointer')`                                 |
+| `handleOutsidePointer()`            | `closeOnOutsidePointer = false`                 | no-op                                                            |
+| `handleOutsideFocus()`              | `isOpen = true`, `closeOnOutsideFocus = true`   | calls `close('outside-focus')`                                   |
+| `handleOutsideFocus()`              | `closeOnOutsideFocus = false`                   | no-op                                                            |
+| `setTriggerId(id)`                  | any                                             | trigger id updated; affects future `restoreTargetId`             |
 
 ### Derived state reactions
 
-| State Change      | `isFocusTrapped`            | `shouldLockScroll`          |
-|-------------------|-----------------------------|-----------------------------|
-| open + modal      | `true`                      | `true`                      |
-| open + non-modal  | `false`                     | `false`                     |
-| closed (any)      | `false`                     | `false`                     |
+| State Change     | `isFocusTrapped` | `shouldLockScroll` |
+| ---------------- | ---------------- | ------------------ |
+| open + modal     | `true`           | `true`             |
+| open + non-modal | `false`          | `false`            |
+| closed (any)     | `false`          | `false`            |
 
 ## Invariants
 
@@ -267,6 +284,7 @@ Drawer-specific additions:
 UIKit adapters MUST bind to the headless model as follows:
 
 **Signals read (reactive, drive re-renders):**
+
 - `state.isOpen()` — whether the drawer is visible
 - `state.isModal()` — whether modal behaviors are active
 - `state.type()` — dialog type for role assignment
@@ -277,6 +295,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `state.placement()` — current placement edge for layout/animation
 
 **Actions called (event handlers, never mutate state directly):**
+
 - `actions.open(source?)` / `actions.close(intent?)` — programmatic open/close
 - `actions.toggle(source?)` — toggle open state
 - `actions.setTriggerId(id)` — set custom trigger element id
@@ -288,6 +307,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `actions.handleOutsideFocus()` — on focus outside the drawer
 
 **Contracts spread (attribute maps applied directly to DOM elements):**
+
 - `contracts.getTriggerProps()` — spread onto the trigger button element
 - `contracts.getOverlayProps()` — spread onto the overlay/backdrop element
 - `contracts.getPanelProps()` — spread onto the drawer panel element (includes all dialog content attrs plus `data-placement`)
@@ -297,6 +317,7 @@ UIKit adapters MUST bind to the headless model as follows:
 - `contracts.getHeaderCloseButtonProps()` — spread onto a header close icon button (includes `aria-label: 'Close'`)
 
 **UIKit-only concerns (NOT in headless):**
+
 - Lifecycle events (`cv-open`, `cv-close`, `cv-after-open`, `cv-after-close`)
 - CSS transitions and slide animations (direction determined by `data-placement`)
 - Backdrop rendering and styling
