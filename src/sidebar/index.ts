@@ -1,4 +1,5 @@
 import {atom, computed, type Atom, type Computed} from '@reatom/core'
+
 import {createDialog} from '../dialog'
 
 export interface CreateSidebarOptions {
@@ -107,15 +108,9 @@ export function createSidebar(options: CreateSidebarOptions = {}): SidebarModel 
   // Set trigger id to match our toggle id
   dialog.actions.setTriggerId(`${id}-toggle`)
 
-  const isFocusTrappedAtom = computed(
-    () => mobileAtom() && dialog.state.isOpen(),
-    `${id}.isFocusTrapped`,
-  )
+  const isFocusTrappedAtom = computed(() => mobileAtom() && dialog.state.isOpen(), `${id}.isFocusTrapped`)
 
-  const shouldLockScrollAtom = computed(
-    () => mobileAtom() && dialog.state.isOpen(),
-    `${id}.shouldLockScroll`,
-  )
+  const shouldLockScrollAtom = computed(() => mobileAtom() && dialog.state.isOpen(), `${id}.shouldLockScroll`)
 
   const setExpanded = (value: boolean) => {
     const current = expandedAtom()

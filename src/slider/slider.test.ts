@@ -1,6 +1,7 @@
 import {describe, expect, it, vi} from 'vitest'
-import {createSlider} from './index'
+
 import {expectRoleAndAria} from '../testing/apg-contract-harness'
+import {createSlider} from './index'
 
 describe('createSlider', () => {
   it('clamps value at boundaries', () => {

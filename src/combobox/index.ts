@@ -1,4 +1,5 @@
 import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
+
 import {mapListboxKeyboardIntent} from '../interactions/keyboard-intents'
 import {
   advanceTypeaheadState,
@@ -135,8 +136,7 @@ export interface ComboboxModel {
 const normalizeText = (value: string) => value.trim().toLocaleLowerCase()
 
 const createDefaultFilter =
-  (matchMode: ComboboxMatchMode) =>
-  (option: ComboboxOption, inputValue: string) => {
+  (matchMode: ComboboxMatchMode) => (option: ComboboxOption, inputValue: string) => {
     const needle = normalizeText(inputValue)
     if (needle.length === 0) return true
 
@@ -579,8 +579,7 @@ export function createCombobox(options: CreateComboboxOptions): ComboboxModel {
         'aria-haspopup': 'listbox',
         'aria-expanded': isOpenAtom() ? 'true' : 'false',
         'aria-controls': listboxId,
-        'aria-activedescendant':
-          isOpenAtom() && activeId != null ? optionDomId(activeId) : undefined,
+        'aria-activedescendant': isOpenAtom() && activeId != null ? optionDomId(activeId) : undefined,
         'aria-label': options.ariaLabel,
       }
       if (!isSelectOnly) {

@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {expectRoleAndAria} from '../testing/apg-contract-harness'
 import {createProgress} from './index'
 

@@ -1,4 +1,5 @@
 import {atom, type Atom} from '@reatom/core'
+
 import {
   createDialog,
   type CreateDialogOptions,
@@ -55,10 +56,7 @@ export function createDrawer(options: CreateDrawerOptions = {}): DrawerModel {
     idBase,
   })
 
-  const placementAtom = atom<DrawerPlacement>(
-    options.placement ?? 'end',
-    `${idBase}.placement`,
-  )
+  const placementAtom = atom<DrawerPlacement>(options.placement ?? 'end', `${idBase}.placement`)
 
   const state: DrawerState = {
     ...dialog.state,

@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createOverlayFocus, mapOverlayDismissIntent, shouldTrapOverlayFocus} from './overlay-focus'
 
 describe('overlay-focus primitives', () => {

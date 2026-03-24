@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest'
+
 import {createListbox} from './index'
 
 describe('createListbox', () => {
@@ -553,13 +554,7 @@ describe('createListbox', () => {
 
   it('Home and End navigate to first and last enabled options', () => {
     const listbox = createListbox({
-      options: [
-        {id: 'a', disabled: true},
-        {id: 'b'},
-        {id: 'c'},
-        {id: 'd'},
-        {id: 'e', disabled: true},
-      ],
+      options: [{id: 'a', disabled: true}, {id: 'b'}, {id: 'c'}, {id: 'd'}, {id: 'e', disabled: true}],
       initialActiveId: 'c',
     })
 
@@ -615,12 +610,7 @@ describe('createListbox', () => {
 
   it('aria-setsize reflects total flat count when groups are used', () => {
     const listbox = createListbox({
-      options: [
-        {id: 'a', groupId: 'g1'},
-        {id: 'b', groupId: 'g1'},
-        {id: 'c', groupId: 'g2'},
-        {id: 'd'},
-      ],
+      options: [{id: 'a', groupId: 'g1'}, {id: 'b', groupId: 'g1'}, {id: 'c', groupId: 'g2'}, {id: 'd'}],
       groups: [
         {id: 'g1', label: 'Group 1'},
         {id: 'g2', label: 'Group 2'},
@@ -634,11 +624,7 @@ describe('createListbox', () => {
 
   it('aria-posinset is 1-based and reflects flat declaration order', () => {
     const listbox = createListbox({
-      options: [
-        {id: 'x', groupId: 'g1'},
-        {id: 'y'},
-        {id: 'z', groupId: 'g1'},
-      ],
+      options: [{id: 'x', groupId: 'g1'}, {id: 'y'}, {id: 'z', groupId: 'g1'}],
       groups: [{id: 'g1', label: 'Group 1'}],
     })
 
@@ -765,11 +751,7 @@ describe('createListbox', () => {
 
   it('treats options with unknown groupId as ungrouped', () => {
     const listbox = createListbox({
-      options: [
-        {id: 'a', groupId: 'known'},
-        {id: 'b', groupId: 'nonexistent'},
-        {id: 'c'},
-      ],
+      options: [{id: 'a', groupId: 'known'}, {id: 'b', groupId: 'nonexistent'}, {id: 'c'}],
       groups: [{id: 'known', label: 'Known'}],
     })
 

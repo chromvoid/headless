@@ -117,11 +117,9 @@ export function createInput(options: CreateInputOptions = {}): InputModel {
     return t === 'password' && visible ? 'text' : t
   }
 
-  const showClearButton = () =>
-    clearableAtom() && filled() && !disabledAtom() && !readonlyAtom()
+  const showClearButton = () => clearableAtom() && filled() && !disabledAtom() && !readonlyAtom()
 
-  const showPasswordToggle = () =>
-    typeAtom() === 'password' && passwordToggleAtom()
+  const showPasswordToggle = () => typeAtom() === 'password' && passwordToggleAtom()
 
   // --- Actions ---
 

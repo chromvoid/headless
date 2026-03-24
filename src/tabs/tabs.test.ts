@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createTabs} from './index'
 
 describe('createTabs', () => {
@@ -202,7 +203,10 @@ describe('createTabs', () => {
 
   it('keeps both ids null-safe when no enabled tabs exist', () => {
     const tabs = createTabs({
-      tabs: [{id: 'a', disabled: true}, {id: 'b', disabled: true}],
+      tabs: [
+        {id: 'a', disabled: true},
+        {id: 'b', disabled: true},
+      ],
     })
 
     expect(tabs.state.activeTabId()).toBeNull()

@@ -1,7 +1,11 @@
 import {describe, expect, it, vi, beforeEach, afterEach} from 'vitest'
+
 import {createMenu} from './index'
 
-const mkEvent = (key: string, mods?: Partial<{shiftKey: boolean; ctrlKey: boolean; metaKey: boolean; altKey: boolean}>) => ({
+const mkEvent = (
+  key: string,
+  mods?: Partial<{shiftKey: boolean; ctrlKey: boolean; metaKey: boolean; altKey: boolean}>,
+) => ({
   key,
   shiftKey: false,
   ctrlKey: false,
@@ -748,7 +752,10 @@ describe('createMenu', () => {
 
     it('checkbox toggle updates checkedIds', () => {
       const menu = createMenu({
-        items: [{id: 'a', type: 'checkbox'}, {id: 'b', type: 'checkbox'}],
+        items: [
+          {id: 'a', type: 'checkbox'},
+          {id: 'b', type: 'checkbox'},
+        ],
         initialOpen: true,
       })
 
@@ -1118,9 +1125,7 @@ describe('createMenu', () => {
         initialOpen: true,
       })
 
-      menu.actions.setSubmenuItems('file', [
-        {id: 'new', label: 'New'},
-      ])
+      menu.actions.setSubmenuItems('file', [{id: 'new', label: 'New'}])
 
       menu.actions.handleItemPointerEnter('file')
       expect(menu.state.openSubmenuId()).toBeNull() // not yet
@@ -1139,9 +1144,7 @@ describe('createMenu', () => {
         initialOpen: true,
       })
 
-      menu.actions.setSubmenuItems('file', [
-        {id: 'new', label: 'New'},
-      ])
+      menu.actions.setSubmenuItems('file', [{id: 'new', label: 'New'}])
 
       menu.actions.handleItemPointerEnter('file')
       vi.advanceTimersByTime(100)
@@ -1160,9 +1163,7 @@ describe('createMenu', () => {
         initialOpen: true,
       })
 
-      menu.actions.setSubmenuItems('file', [
-        {id: 'new', label: 'New'},
-      ])
+      menu.actions.setSubmenuItems('file', [{id: 'new', label: 'New'}])
 
       menu.actions.openSubmenu('file')
       expect(menu.state.openSubmenuId()).toBe('file')

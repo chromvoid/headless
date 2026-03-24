@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest'
+
 import {createSidebar} from './index'
 
 describe('createSidebar', () => {

@@ -1,4 +1,5 @@
 import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
+
 import {createCompositeNavigation} from '../interactions/composite-navigation'
 
 export interface AccordionSection {
@@ -98,10 +99,7 @@ export function createAccordion(options: CreateAccordionOptions): AccordionModel
   const ariaLabelAtom = atom<string | undefined>(options.ariaLabel, `${idBase}.ariaLabel`)
   const sectionsAtom = atom<readonly AccordionSection[]>([...options.sections], `${idBase}.sections`)
 
-  const sectionIdsComputed = computed(
-    () => new Set(sectionsAtom().map((s) => s.id)),
-    `${idBase}.sectionIds`,
-  )
+  const sectionIdsComputed = computed(() => new Set(sectionsAtom().map((s) => s.id)), `${idBase}.sectionIds`)
   const sectionByIdComputed = computed(
     () => new Map(sectionsAtom().map((s) => [s.id, s])),
     `${idBase}.sectionById`,
@@ -360,9 +358,9 @@ export function createAccordion(options: CreateAccordionOptions): AccordionModel
       return {
         id: triggerId(id),
         role: 'button' as const,
-        tabindex: (navigation.state.activeId() === id && section.disabled !== true
-          ? '0'
-          : '-1') as '0' | '-1',
+        tabindex: (navigation.state.activeId() === id && section.disabled !== true ? '0' : '-1') as
+          | '0'
+          | '-1',
         'aria-expanded': (expanded ? 'true' : 'false') as 'true' | 'false',
         'aria-controls': panelId(id),
         'aria-disabled': (disabled ? 'true' : 'false') as 'true' | 'false',

@@ -1,5 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
-import {createMenu, type MenuItem} from '../menu'
+
 import {
   isTypeaheadEvent,
   advanceTypeaheadState,
@@ -8,6 +8,7 @@ import {
   normalizeTypeaheadText,
   type TypeaheadItem,
 } from '../interactions/typeahead'
+import {createMenu, type MenuItem} from '../menu'
 
 export type ContextMenuOpenSource = 'pointer' | 'keyboard' | 'programmatic'
 
@@ -132,7 +133,11 @@ export interface ContextMenuModel {
 
 /** Returns true if the item is actionable (participates in navigation/selection) */
 const isActionableItem = (item: ContextMenuItem): boolean =>
-  item.type == null || item.type === 'item' || item.type === 'checkbox' || item.type === 'radio' || item.type === 'submenu'
+  item.type == null ||
+  item.type === 'item' ||
+  item.type === 'checkbox' ||
+  item.type === 'radio' ||
+  item.type === 'submenu'
 
 /** Collects all items (including submenu children) into a flat id->item map */
 const buildItemMap = (items: readonly ContextMenuItem[]): Map<string, ContextMenuItem> => {
@@ -394,9 +399,8 @@ export function createContextMenu(options: CreateContextMenuOptions): ContextMen
       typeaheadState = next
 
       const currentActiveId = menu.state.activeId()
-      const startIndex = currentActiveId != null
-        ? typeaheadItems.findIndex((item) => item.id === currentActiveId)
-        : 0
+      const startIndex =
+        currentActiveId != null ? typeaheadItems.findIndex((item) => item.id === currentActiveId) : 0
 
       const matchId = findTypeaheadMatch(query, typeaheadItems, startIndex >= 0 ? startIndex : 0)
       if (matchId != null) {
@@ -479,7 +483,7 @@ export function createContextMenu(options: CreateContextMenuOptions): ContextMen
           ...baseItem,
           role: 'menuitem' as const,
           'aria-haspopup': 'menu' as const,
-          'aria-expanded': isSubOpen ? 'true' as const : 'false' as const,
+          'aria-expanded': isSubOpen ? ('true' as const) : ('false' as const),
           onClick: () => select(id),
         }
       }
@@ -491,7 +495,7 @@ export function createContextMenu(options: CreateContextMenuOptions): ContextMen
         return {
           ...baseItem,
           role: 'menuitemcheckbox' as const,
-          'aria-checked': isChecked ? 'true' as const : 'false' as const,
+          'aria-checked': isChecked ? ('true' as const) : ('false' as const),
           onClick: () => select(id),
         }
       }
@@ -503,7 +507,7 @@ export function createContextMenu(options: CreateContextMenuOptions): ContextMen
         return {
           ...baseItem,
           role: 'menuitemradio' as const,
-          'aria-checked': isChecked ? 'true' as const : 'false' as const,
+          'aria-checked': isChecked ? ('true' as const) : ('false' as const),
           onClick: () => select(id),
         }
       }
@@ -518,7 +522,7 @@ export function createContextMenu(options: CreateContextMenuOptions): ContextMen
           id: `${idBase}-item-${id}`,
           role: 'menuitem' as const,
           tabindex: '-1' as const,
-          'aria-disabled': contextItem.disabled ? 'true' as const : undefined,
+          'aria-disabled': contextItem.disabled ? ('true' as const) : undefined,
           'data-active': (subActiveId === id ? 'true' : 'false') as 'true' | 'false',
           onClick: () => select(id),
         }

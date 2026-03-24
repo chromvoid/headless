@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest'
+
 import {createCombobox} from './index'
 
 describe('createCombobox', () => {
@@ -341,9 +342,7 @@ describe('createCombobox', () => {
 
   it('commitActive is a no-op when activeId is null', () => {
     const combobox = createCombobox({
-      options: [
-        {id: 'a', label: 'Alpha', disabled: true},
-      ],
+      options: [{id: 'a', label: 'Alpha', disabled: true}],
     })
 
     // All options disabled → activeId must be null
@@ -727,7 +726,7 @@ describe('createCombobox', () => {
   })
 
   describe('multi-select', () => {
-    const key = (k: string) => ({key: k, shiftKey: false, ctrlKey: false, metaKey: false, altKey: false})
+    const _key = (k: string) => ({key: k, shiftKey: false, ctrlKey: false, metaKey: false, altKey: false})
 
     it('toggleOption adds and removes from selectedIds', () => {
       const combobox = createCombobox({
@@ -1091,14 +1090,22 @@ describe('createCombobox', () => {
 
       const visible = combobox.contracts.getVisibleOptions()
       expect(visible).toEqual([
-        {id: 'fruits', label: 'Fruits', options: [
-          {id: 'apple', label: 'Apple'},
-          {id: 'banana', label: 'Banana'},
-        ]},
-        {id: 'vegs', label: 'Vegetables', options: [
-          {id: 'carrot', label: 'Carrot'},
-          {id: 'potato', label: 'Potato'},
-        ]},
+        {
+          id: 'fruits',
+          label: 'Fruits',
+          options: [
+            {id: 'apple', label: 'Apple'},
+            {id: 'banana', label: 'Banana'},
+          ],
+        },
+        {
+          id: 'vegs',
+          label: 'Vegetables',
+          options: [
+            {id: 'carrot', label: 'Carrot'},
+            {id: 'potato', label: 'Potato'},
+          ],
+        },
       ])
     })
 
@@ -1111,11 +1118,7 @@ describe('createCombobox', () => {
       const visible = combobox.contracts.getVisibleOptions()
 
       // Fruits group should be gone (no match), only vegs with carrot
-      expect(visible).toEqual([
-        {id: 'vegs', label: 'Vegetables', options: [
-          {id: 'carrot', label: 'Carrot'},
-        ]},
-      ])
+      expect(visible).toEqual([{id: 'vegs', label: 'Vegetables', options: [{id: 'carrot', label: 'Carrot'}]}])
     })
 
     it('getGroupProps returns correct ARIA', () => {
@@ -1167,19 +1170,20 @@ describe('createCombobox', () => {
 
     it('mixed flat and grouped options work together', () => {
       const combobox = createCombobox({
-        options: [
-          {id: 'standalone', label: 'Standalone'},
-          fruitGroup,
-        ],
+        options: [{id: 'standalone', label: 'Standalone'}, fruitGroup],
       })
 
       const visible = combobox.contracts.getVisibleOptions()
       expect(visible).toEqual([
         {id: 'standalone', label: 'Standalone'},
-        {id: 'fruits', label: 'Fruits', options: [
-          {id: 'apple', label: 'Apple'},
-          {id: 'banana', label: 'Banana'},
-        ]},
+        {
+          id: 'fruits',
+          label: 'Fruits',
+          options: [
+            {id: 'apple', label: 'Apple'},
+            {id: 'banana', label: 'Banana'},
+          ],
+        },
       ])
 
       const flat = combobox.contracts.getFlatVisibleOptions()
@@ -1188,15 +1192,17 @@ describe('createCombobox', () => {
 
     it('disabled options within groups are skipped during navigation', () => {
       const combobox = createCombobox({
-        options: [{
-          id: 'fruits',
-          label: 'Fruits',
-          options: [
-            {id: 'apple', label: 'Apple'},
-            {id: 'banana', label: 'Banana', disabled: true},
-            {id: 'cherry', label: 'Cherry'},
-          ],
-        }],
+        options: [
+          {
+            id: 'fruits',
+            label: 'Fruits',
+            options: [
+              {id: 'apple', label: 'Apple'},
+              {id: 'banana', label: 'Banana', disabled: true},
+              {id: 'cherry', label: 'Cherry'},
+            ],
+          },
+        ],
       })
 
       combobox.actions.open()

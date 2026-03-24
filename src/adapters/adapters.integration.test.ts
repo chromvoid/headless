@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createCommandPalette} from '../command-palette'
 import {createListbox} from '../listbox'
 import {createMenu} from '../menu'

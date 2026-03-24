@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createToolbar} from './index'
 
 describe('createToolbar', () => {
@@ -100,12 +101,7 @@ describe('createToolbar', () => {
 
   it('skips separator items during Home/End navigation', () => {
     const toolbar = createToolbar({
-      items: [
-        {id: 'sep-start', separator: true},
-        {id: 'a'},
-        {id: 'b'},
-        {id: 'sep-end', separator: true},
-      ],
+      items: [{id: 'sep-start', separator: true}, {id: 'a'}, {id: 'b'}, {id: 'sep-end', separator: true}],
     })
 
     expect(toolbar.state.activeId()).toBe('a')
@@ -413,7 +409,10 @@ describe('createToolbar', () => {
 
   it('activeId is null when no navigable items exist', () => {
     const toolbar = createToolbar({
-      items: [{id: 'sep1', separator: true}, {id: 'a', disabled: true}],
+      items: [
+        {id: 'sep1', separator: true},
+        {id: 'a', disabled: true},
+      ],
     })
 
     expect(toolbar.state.activeId()).toBeNull()

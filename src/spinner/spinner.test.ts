@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createSpinner} from './index'
 
 describe('createSpinner', () => {

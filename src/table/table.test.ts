@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createTable} from './index'
 
 describe('createTable', () => {
@@ -282,9 +283,7 @@ describe('createTable', () => {
       ariaLabel: 'Test table',
     })
 
-    expect(() => table.contracts.getColumnHeaderProps('unknown')).toThrow(
-      'Unknown table column id',
-    )
+    expect(() => table.contracts.getColumnHeaderProps('unknown')).toThrow('Unknown table column id')
   })
 
   it('throws for unknown ids in getRowHeaderProps', () => {
@@ -294,12 +293,8 @@ describe('createTable', () => {
       ariaLabel: 'Test table',
     })
 
-    expect(() => table.contracts.getRowHeaderProps('unknown', 'a')).toThrow(
-      'Unknown table row id',
-    )
-    expect(() => table.contracts.getRowHeaderProps('r1', 'unknown')).toThrow(
-      'Unknown table column id',
-    )
+    expect(() => table.contracts.getRowHeaderProps('unknown', 'a')).toThrow('Unknown table row id')
+    expect(() => table.contracts.getRowHeaderProps('r1', 'unknown')).toThrow('Unknown table column id')
   })
 
   // === ID generation ===
@@ -316,9 +311,7 @@ describe('createTable', () => {
     expect(table.contracts.getRowProps('row1').id).toBe('my-table-row-row1')
     expect(table.contracts.getCellProps('row1', 'col1').id).toBe('my-table-cell-row1-col1')
     expect(table.contracts.getColumnHeaderProps('col1').id).toBe('my-table-column-header-col1')
-    expect(table.contracts.getRowHeaderProps('row1', 'col1').id).toBe(
-      'my-table-row-header-row1-col1',
-    )
+    expect(table.contracts.getRowHeaderProps('row1', 'col1').id).toBe('my-table-row-header-row1-col1')
   })
 
   // === Selection: selectable=false (default) ===

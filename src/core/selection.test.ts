@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {normalizeSelection, selectOnly, selectRangeByOrder, toggleSelection} from './selection'
 
 describe('selection primitives', () => {

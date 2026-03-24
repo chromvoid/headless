@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {mapListboxKeyboardIntent} from '../interactions/keyboard-intents'
 
 export type TabsOrientation = 'horizontal' | 'vertical'

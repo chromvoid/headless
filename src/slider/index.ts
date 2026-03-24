@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {createValueRange, type ValueRangeActions, type ValueRangeState} from '../core/value-range'
 
 export type SliderOrientation = 'horizontal' | 'vertical'

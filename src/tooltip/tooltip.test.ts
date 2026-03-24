@@ -1,5 +1,10 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
+
 import {createTooltip} from './index'
+
+function getOptionalProp(props: object, key: string) {
+  return (props as unknown as Record<string, unknown>)[key]
+}
 
 describe('createTooltip', () => {
   afterEach(() => {
@@ -331,9 +336,9 @@ describe('createTooltip', () => {
     const props = model.contracts.getTriggerProps()
     expect(props.onPointerEnter).toBeDefined()
     expect(props.onPointerLeave).toBeDefined()
-    expect((props as Record<string, unknown>).onClick).toBeUndefined()
-    expect((props as Record<string, unknown>).onFocus).toBeUndefined()
-    expect((props as Record<string, unknown>).onBlur).toBeUndefined()
+    expect(getOptionalProp(props, 'onClick')).toBeUndefined()
+    expect(getOptionalProp(props, 'onFocus')).toBeUndefined()
+    expect(getOptionalProp(props, 'onBlur')).toBeUndefined()
   })
 
   it('getTriggerProps: focus mode includes focus handlers, no pointer handlers', () => {
@@ -345,9 +350,9 @@ describe('createTooltip', () => {
     const props = model.contracts.getTriggerProps()
     expect(props.onFocus).toBeDefined()
     expect(props.onBlur).toBeDefined()
-    expect((props as Record<string, unknown>).onPointerEnter).toBeUndefined()
-    expect((props as Record<string, unknown>).onPointerLeave).toBeUndefined()
-    expect((props as Record<string, unknown>).onClick).toBeUndefined()
+    expect(getOptionalProp(props, 'onPointerEnter')).toBeUndefined()
+    expect(getOptionalProp(props, 'onPointerLeave')).toBeUndefined()
+    expect(getOptionalProp(props, 'onClick')).toBeUndefined()
   })
 
   it('getTriggerProps: click mode includes onClick, no pointer/focus handlers', () => {
@@ -357,11 +362,11 @@ describe('createTooltip', () => {
     })
 
     const props = model.contracts.getTriggerProps()
-    expect((props as Record<string, unknown>).onClick).toBeDefined()
-    expect((props as Record<string, unknown>).onPointerEnter).toBeUndefined()
-    expect((props as Record<string, unknown>).onPointerLeave).toBeUndefined()
-    expect((props as Record<string, unknown>).onFocus).toBeUndefined()
-    expect((props as Record<string, unknown>).onBlur).toBeUndefined()
+    expect(getOptionalProp(props, 'onClick')).toBeDefined()
+    expect(getOptionalProp(props, 'onPointerEnter')).toBeUndefined()
+    expect(getOptionalProp(props, 'onPointerLeave')).toBeUndefined()
+    expect(getOptionalProp(props, 'onFocus')).toBeUndefined()
+    expect(getOptionalProp(props, 'onBlur')).toBeUndefined()
   })
 
   it('getTriggerProps: manual-only mode returns only id, aria-describedby, onKeyDown', () => {
@@ -373,11 +378,11 @@ describe('createTooltip', () => {
     const props = model.contracts.getTriggerProps()
     expect(props.id).toBeDefined()
     expect(props.onKeyDown).toBeDefined()
-    expect((props as Record<string, unknown>).onPointerEnter).toBeUndefined()
-    expect((props as Record<string, unknown>).onPointerLeave).toBeUndefined()
-    expect((props as Record<string, unknown>).onFocus).toBeUndefined()
-    expect((props as Record<string, unknown>).onBlur).toBeUndefined()
-    expect((props as Record<string, unknown>).onClick).toBeUndefined()
+    expect(getOptionalProp(props, 'onPointerEnter')).toBeUndefined()
+    expect(getOptionalProp(props, 'onPointerLeave')).toBeUndefined()
+    expect(getOptionalProp(props, 'onFocus')).toBeUndefined()
+    expect(getOptionalProp(props, 'onBlur')).toBeUndefined()
+    expect(getOptionalProp(props, 'onClick')).toBeUndefined()
   })
 
   it('getTriggerProps: hover+focus default mode has all four interaction handlers, no onClick', () => {
@@ -391,7 +396,7 @@ describe('createTooltip', () => {
     expect(props.onPointerLeave).toBeDefined()
     expect(props.onFocus).toBeDefined()
     expect(props.onBlur).toBeDefined()
-    expect((props as Record<string, unknown>).onClick).toBeUndefined()
+    expect(getOptionalProp(props, 'onClick')).toBeUndefined()
   })
 
   it('getTriggerProps: click+hover mode has pointer and click handlers', () => {
@@ -403,9 +408,9 @@ describe('createTooltip', () => {
     const props = model.contracts.getTriggerProps()
     expect(props.onPointerEnter).toBeDefined()
     expect(props.onPointerLeave).toBeDefined()
-    expect((props as Record<string, unknown>).onClick).toBeDefined()
-    expect((props as Record<string, unknown>).onFocus).toBeUndefined()
-    expect((props as Record<string, unknown>).onBlur).toBeUndefined()
+    expect(getOptionalProp(props, 'onClick')).toBeDefined()
+    expect(getOptionalProp(props, 'onFocus')).toBeUndefined()
+    expect(getOptionalProp(props, 'onBlur')).toBeUndefined()
   })
 
   it('getTriggerProps: onKeyDown is always present regardless of mode', () => {
@@ -532,21 +537,15 @@ describe('createTooltip', () => {
     })
 
     expect(model.state.isOpen()).toBe(false)
-    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe(
-      'tooltip-aria-persist-content'
-    )
+    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe('tooltip-aria-persist-content')
 
     model.actions.open()
     expect(model.state.isOpen()).toBe(true)
-    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe(
-      'tooltip-aria-persist-content'
-    )
+    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe('tooltip-aria-persist-content')
 
     model.actions.close()
     expect(model.state.isOpen()).toBe(false)
-    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe(
-      'tooltip-aria-persist-content'
-    )
+    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe('tooltip-aria-persist-content')
   })
 
   it('tooltip has role=tooltip and is not in tab order', () => {
@@ -623,9 +622,7 @@ describe('createTooltip', () => {
     model.actions.setDisabled(false)
     model.actions.handlePointerEnter()
     expect(model.state.isOpen()).toBe(true)
-    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe(
-      'tooltip-reenable-content'
-    )
+    expect(model.contracts.getTriggerProps()['aria-describedby']).toBe('tooltip-reenable-content')
   })
 
   // ─── Defaults ──────────────────────────────────────────────────────────────
@@ -644,6 +641,6 @@ describe('createTooltip', () => {
     expect(trigger.onPointerLeave).toBeDefined()
     expect(trigger.onFocus).toBeDefined()
     expect(trigger.onBlur).toBeDefined()
-    expect((trigger as Record<string, unknown>).onClick).toBeUndefined()
+    expect(getOptionalProp(trigger, 'onClick')).toBeUndefined()
   })
 })

@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createMenuButton} from './index'
 
 describe('createMenuButton', () => {

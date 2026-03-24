@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {expectAriaLinkage, expectRoleAndAria} from '../testing/apg-contract-harness'
 import {createPopover} from './index'
 
@@ -84,7 +85,11 @@ describe('createPopover', () => {
 
   describe('handleNativeToggle', () => {
     it('syncs state from open to closed when native fires toggle with "closed"', () => {
-      const popover = createPopover({idBase: 'popover-toggle-close', initialOpen: true, useNativePopover: true})
+      const popover = createPopover({
+        idBase: 'popover-toggle-close',
+        initialOpen: true,
+        useNativePopover: true,
+      })
       expect(popover.state.isOpen()).toBe(true)
 
       popover.actions.handleNativeToggle('closed')
@@ -101,7 +106,11 @@ describe('createPopover', () => {
     })
 
     it('is idempotent when state is already in sync', () => {
-      const popover = createPopover({idBase: 'popover-toggle-noop', initialOpen: true, useNativePopover: true})
+      const popover = createPopover({
+        idBase: 'popover-toggle-noop',
+        initialOpen: true,
+        useNativePopover: true,
+      })
 
       popover.actions.handleNativeToggle('open')
       expect(popover.state.isOpen()).toBe(true)

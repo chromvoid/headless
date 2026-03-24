@@ -1,4 +1,5 @@
 import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
+
 import {mapListboxKeyboardIntent} from '../interactions/keyboard-intents'
 import {
   advanceTypeaheadState,
@@ -307,8 +308,7 @@ export function createMenu(options: CreateMenuOptions): MenuModel {
     activeIdAtom.set(enabledIds[enabledIds.length - 1] ?? null)
   }, `${idBase}.moveLast`)
 
-  const isCheckableItem = (item: MenuItem) =>
-    item.type === 'checkbox' || item.type === 'radio'
+  const isCheckableItem = (item: MenuItem) => item.type === 'checkbox' || item.type === 'radio'
 
   const performCheckToggle = (item: MenuItem) => {
     const current = new Set(checkedIdsAtom())
@@ -397,9 +397,7 @@ export function createMenu(options: CreateMenuOptions): MenuModel {
       const subItems = submenuItemsMap.get(parentId) ?? []
       const typeaheadItems = buildTypeaheadItems(subItems)
       const currentId = submenuActiveIdAtom()
-      const startIndex = currentId
-        ? typeaheadItems.findIndex((item) => item.id === currentId) + 1
-        : 0
+      const startIndex = currentId ? typeaheadItems.findIndex((item) => item.id === currentId) + 1 : 0
       const matchId = findTypeaheadMatch(query, typeaheadItems, startIndex % typeaheadItems.length)
       if (matchId != null) {
         submenuActiveIdAtom.set(matchId)
@@ -408,9 +406,7 @@ export function createMenu(options: CreateMenuOptions): MenuModel {
       // Search within main menu items
       const typeaheadItems = buildTypeaheadItems(options.items)
       const currentId = activeIdAtom()
-      const startIndex = currentId
-        ? typeaheadItems.findIndex((item) => item.id === currentId) + 1
-        : 0
+      const startIndex = currentId ? typeaheadItems.findIndex((item) => item.id === currentId) + 1 : 0
       const matchId = findTypeaheadMatch(query, typeaheadItems, startIndex % typeaheadItems.length)
       if (matchId != null) {
         activeIdAtom.set(matchId)
@@ -436,139 +432,136 @@ export function createMenu(options: CreateMenuOptions): MenuModel {
     }
   }, `${idBase}.handleTriggerKeyDown`)
 
-  const handleMenuKeyDown = action(
-    (event: MenuKeyboardEventLike) => {
-      if (!isOpenAtom()) return
+  const handleMenuKeyDown = action((event: MenuKeyboardEventLike) => {
+    if (!isOpenAtom()) return
 
-      const submenuOpen = openSubmenuIdAtom() != null
+    const submenuOpen = openSubmenuIdAtom() != null
 
-      // Handle typeahead first (for printable chars that aren't handled by intent mapper)
-      const typeaheadEvent = {
-        key: event.key,
-        shiftKey: event.shiftKey ?? false,
-        ctrlKey: event.ctrlKey ?? false,
-        metaKey: event.metaKey ?? false,
-        altKey: event.altKey ?? false,
-      }
+    // Handle typeahead first (for printable chars that aren't handled by intent mapper)
+    const typeaheadEvent = {
+      key: event.key,
+      shiftKey: event.shiftKey ?? false,
+      ctrlKey: event.ctrlKey ?? false,
+      metaKey: event.metaKey ?? false,
+      altKey: event.altKey ?? false,
+    }
 
-      // Handle submenu-specific keys
-      if (submenuOpen) {
-        if (event.key === 'Escape') {
-          closeSubmenu()
-          return
-        }
-        if (event.key === 'ArrowLeft') {
-          closeSubmenu()
-          return
-        }
-        if (event.key === 'ArrowDown') {
-          moveSubmenu(1)
-          return
-        }
-        if (event.key === 'ArrowUp') {
-          moveSubmenu(-1)
-          return
-        }
-        if (event.key === 'Home') {
-          const parentId = openSubmenuIdAtom()
-          if (parentId) {
-            const enabled = submenuEnabledIds.get(parentId)
-            submenuActiveIdAtom.set(enabled?.[0] ?? null)
-          }
-          return
-        }
-        if (event.key === 'End') {
-          const parentId = openSubmenuIdAtom()
-          if (parentId) {
-            const enabled = submenuEnabledIds.get(parentId)
-            submenuActiveIdAtom.set(enabled?.[enabled.length - 1] ?? null)
-          }
-          return
-        }
-        if (event.key === 'Enter' || event.key === ' ') {
-          const subActiveId = submenuActiveIdAtom()
-          if (subActiveId != null) {
-            select(subActiveId)
-          }
-          return
-        }
-
-        // Typeahead in submenu
-        if (isTypeaheadEvent(typeaheadEvent)) {
-          handleTypeahead(event.key)
-          return
-        }
+    // Handle submenu-specific keys
+    if (submenuOpen) {
+      if (event.key === 'Escape') {
+        closeSubmenu()
         return
       }
-
-      // ArrowRight opens submenu if current item has one
-      if (event.key === 'ArrowRight') {
-        const currentActiveId = activeIdAtom()
-        if (currentActiveId != null) {
-          const item = itemById.get(currentActiveId)
-          if (item?.hasSubmenu) {
-            openSubmenu(currentActiveId)
-          }
-        }
-        return
-      }
-
-      // ArrowLeft is no-op at top level
       if (event.key === 'ArrowLeft') {
+        closeSubmenu()
+        return
+      }
+      if (event.key === 'ArrowDown') {
+        moveSubmenu(1)
+        return
+      }
+      if (event.key === 'ArrowUp') {
+        moveSubmenu(-1)
+        return
+      }
+      if (event.key === 'Home') {
+        const parentId = openSubmenuIdAtom()
+        if (parentId) {
+          const enabled = submenuEnabledIds.get(parentId)
+          submenuActiveIdAtom.set(enabled?.[0] ?? null)
+        }
+        return
+      }
+      if (event.key === 'End') {
+        const parentId = openSubmenuIdAtom()
+        if (parentId) {
+          const enabled = submenuEnabledIds.get(parentId)
+          submenuActiveIdAtom.set(enabled?.[enabled.length - 1] ?? null)
+        }
+        return
+      }
+      if (event.key === 'Enter' || event.key === ' ') {
+        const subActiveId = submenuActiveIdAtom()
+        if (subActiveId != null) {
+          select(subActiveId)
+        }
         return
       }
 
-      // Check for typeahead before falling through to intent mapper
-      if (typeaheadEnabled && isTypeaheadEvent(typeaheadEvent)) {
+      // Typeahead in submenu
+      if (isTypeaheadEvent(typeaheadEvent)) {
         handleTypeahead(event.key)
         return
       }
+      return
+    }
 
-      const intent = mapListboxKeyboardIntent(typeaheadEvent, {
-        orientation: 'vertical',
-        selectionMode: 'single',
-        rangeSelectionEnabled: false,
-      })
-
-      if (intent == null) return
-
-      switch (intent) {
-        case 'NAV_NEXT':
-          moveNext()
-          return
-        case 'NAV_PREV':
-          movePrev()
-          return
-        case 'NAV_FIRST':
-          moveFirst()
-          return
-        case 'NAV_LAST':
-          moveLast()
-          return
-        case 'ACTIVATE': {
-          const activeId = activeIdAtom()
-          if (activeId != null) {
-            select(activeId)
-          }
-          return
+    // ArrowRight opens submenu if current item has one
+    if (event.key === 'ArrowRight') {
+      const currentActiveId = activeIdAtom()
+      if (currentActiveId != null) {
+        const item = itemById.get(currentActiveId)
+        if (item?.hasSubmenu) {
+          openSubmenu(currentActiveId)
         }
-        case 'TOGGLE_SELECTION': {
-          // Space for selection
-          const activeId = activeIdAtom()
-          if (activeId != null) {
-            select(activeId)
-          }
-          return
-        }
-        case 'DISMISS':
-          close()
-          return
-        default:
-          return
       }
-    },
-    `${idBase}.handleMenuKeyDown`,
-  )
+      return
+    }
+
+    // ArrowLeft is no-op at top level
+    if (event.key === 'ArrowLeft') {
+      return
+    }
+
+    // Check for typeahead before falling through to intent mapper
+    if (typeaheadEnabled && isTypeaheadEvent(typeaheadEvent)) {
+      handleTypeahead(event.key)
+      return
+    }
+
+    const intent = mapListboxKeyboardIntent(typeaheadEvent, {
+      orientation: 'vertical',
+      selectionMode: 'single',
+      rangeSelectionEnabled: false,
+    })
+
+    if (intent == null) return
+
+    switch (intent) {
+      case 'NAV_NEXT':
+        moveNext()
+        return
+      case 'NAV_PREV':
+        movePrev()
+        return
+      case 'NAV_FIRST':
+        moveFirst()
+        return
+      case 'NAV_LAST':
+        moveLast()
+        return
+      case 'ACTIVATE': {
+        const activeId = activeIdAtom()
+        if (activeId != null) {
+          select(activeId)
+        }
+        return
+      }
+      case 'TOGGLE_SELECTION': {
+        // Space for selection
+        const activeId = activeIdAtom()
+        if (activeId != null) {
+          select(activeId)
+        }
+        return
+      }
+      case 'DISMISS':
+        close()
+        return
+      default:
+        return
+    }
+  }, `${idBase}.handleMenuKeyDown`)
 
   const cancelHoverIntent = () => {
     if (hoverIntentTimer != null) {

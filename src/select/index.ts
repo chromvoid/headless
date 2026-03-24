@@ -1,4 +1,5 @@
 import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
+
 import {createListbox, type ListboxOption, type ListboxSelectionMode} from '../listbox'
 
 export interface CreateSelectOptions {
@@ -113,8 +114,8 @@ export function createSelect(options: CreateSelectOptions): SelectModel {
     options: options.options,
     selectionMode,
     ariaLabel: options.ariaLabel,
-    initialSelectedIds: options.initialSelectedIds
-      ?? (options.initialSelectedId != null ? [options.initialSelectedId] : []),
+    initialSelectedIds:
+      options.initialSelectedIds ?? (options.initialSelectedId != null ? [options.initialSelectedId] : []),
   })
 
   const isOpenAtom = atom<boolean>(options.initialOpen ?? false, `${idBase}.isOpen`)
@@ -135,10 +136,11 @@ export function createSelect(options: CreateSelectOptions): SelectModel {
   }, `${idBase}.selectedLabel`)
 
   const selectedLabelsAtom = computed<string[]>(() => {
-    return listbox.state.selectedIds()
-      .map(id => optionById.get(id))
+    return listbox.state
+      .selectedIds()
+      .map((id) => optionById.get(id))
       .filter((opt): opt is ListboxOption => opt != null)
-      .map(opt => opt.label ?? opt.id)
+      .map((opt) => opt.label ?? opt.id)
   }, `${idBase}.selectedLabels`)
 
   const openWithFocus = (focus: 'selected' | 'first' | 'last') => {
@@ -304,8 +306,8 @@ export function createSelect(options: CreateSelectOptions): SelectModel {
         'aria-controls': `${idBase}-listbox`,
         'aria-activedescendant': activedescendant,
         'aria-label': options.ariaLabel,
-        'aria-disabled': isDisabled ? 'true' as const : undefined,
-        'aria-required': isRequired ? 'true' as const : undefined,
+        'aria-disabled': isDisabled ? ('true' as const) : undefined,
+        'aria-required': isRequired ? ('true' as const) : undefined,
         'data-selected-id': selectedIdAtom() ?? undefined,
         'data-selected-label': selectedLabelAtom() ?? undefined,
         onClick: toggle,
@@ -321,7 +323,7 @@ export function createSelect(options: CreateSelectOptions): SelectModel {
         tabindex: isOpenAtom() ? '0' : '-1',
         'aria-label': rootProps['aria-label'],
         'aria-activedescendant': rootProps['aria-activedescendant'],
-        'aria-multiselectable': isMultiple ? 'true' as const : undefined,
+        'aria-multiselectable': isMultiple ? ('true' as const) : undefined,
         hidden: !isOpenAtom(),
         onKeyDown: handleListboxKeyDown,
       }

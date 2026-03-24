@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createBreadcrumb, normalizeBreadcrumbItems} from './index'
 
 describe('createBreadcrumb', () => {
@@ -123,7 +124,9 @@ describe('createBreadcrumb', () => {
   it('throws for unknown item id in getSeparatorProps', () => {
     const model = createBreadcrumb({items: sampleItems})
 
-    expect(() => model.contracts.getSeparatorProps('unknown')).toThrow('Unknown breadcrumb item id for separator')
+    expect(() => model.contracts.getSeparatorProps('unknown')).toThrow(
+      'Unknown breadcrumb item id for separator',
+    )
   })
 
   it('does not expose actions on the model (spec: actions: none)', () => {

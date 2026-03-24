@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {expectAriaLinkage, expectRoleAndAria} from '../testing/apg-contract-harness'
 import {createSelect} from './index'
 

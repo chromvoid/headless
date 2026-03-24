@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {createValueRange, clampValue, type ValueRangeState} from '../core/value-range'
 
 export type WindowSplitterOrientation = 'horizontal' | 'vertical'

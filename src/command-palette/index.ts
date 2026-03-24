@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {
   createCombobox,
   type ComboboxInputProps,

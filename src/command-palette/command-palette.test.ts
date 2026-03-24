@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {expectAriaLinkage, expectRoleAndAria} from '../testing/apg-contract-harness'
 import {createCommandPalette} from './index'
 
@@ -337,11 +338,7 @@ describe('createCommandPalette', () => {
     })
 
     // All visible initially
-    expect(model.contracts.getVisibleCommands().map((c) => c.id)).toEqual([
-      'open',
-      'close',
-      'save',
-    ])
+    expect(model.contracts.getVisibleCommands().map((c) => c.id)).toEqual(['open', 'close', 'save'])
 
     // Filter by input
     model.actions.setInputValue('close')
@@ -349,11 +346,7 @@ describe('createCommandPalette', () => {
 
     // Clear filter shows all
     model.actions.setInputValue('')
-    expect(model.contracts.getVisibleCommands().map((c) => c.id)).toEqual([
-      'open',
-      'close',
-      'save',
-    ])
+    expect(model.contracts.getVisibleCommands().map((c) => c.id)).toEqual(['open', 'close', 'save'])
   })
 
   // === Combobox delegation ===

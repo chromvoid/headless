@@ -3,7 +3,13 @@ import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
 export type BadgeVariant = 'primary' | 'success' | 'neutral' | 'warning' | 'danger'
 export type BadgeSize = 'small' | 'medium' | 'large'
 
-const VALID_VARIANTS: ReadonlySet<BadgeVariant> = new Set(['primary', 'success', 'neutral', 'warning', 'danger'])
+const VALID_VARIANTS: ReadonlySet<BadgeVariant> = new Set([
+  'primary',
+  'success',
+  'neutral',
+  'warning',
+  'danger',
+])
 const VALID_SIZES: ReadonlySet<BadgeSize> = new Set(['small', 'medium', 'large'])
 
 export interface CreateBadgeOptions {

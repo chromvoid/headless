@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createAccordion} from './index'
 
 describe('createAccordion', () => {

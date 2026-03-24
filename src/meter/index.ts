@@ -137,7 +137,7 @@ export function createMeter(options: CreateMeterOptions = {}): MeterModel {
     if (span <= 0) return 0
 
     const clamped = clamp(valueAtom(), min, max)
-    return Number(((clamped - min) / span * 100).toFixed(4))
+    return Number((((clamped - min) / span) * 100).toFixed(4))
   }, `${idBase}.percentage`)
 
   const statusAtom = computed(() => {

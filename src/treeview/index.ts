@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {selectOnly as selectOnlyPrimitive, toggleSelection} from '../core/selection'
 import {mapListboxKeyboardIntent} from '../interactions/keyboard-intents'
 

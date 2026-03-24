@@ -2,7 +2,13 @@ import {action, atom, type Atom} from '@reatom/core'
 
 export type CalloutVariant = 'info' | 'success' | 'warning' | 'danger' | 'neutral'
 
-const VALID_VARIANTS: ReadonlySet<CalloutVariant> = new Set(['info', 'success', 'warning', 'danger', 'neutral'])
+const VALID_VARIANTS: ReadonlySet<CalloutVariant> = new Set([
+  'info',
+  'success',
+  'warning',
+  'danger',
+  'neutral',
+])
 
 export interface CreateCalloutOptions {
   idBase?: string

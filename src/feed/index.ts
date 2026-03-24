@@ -109,10 +109,7 @@ export function createFeed(options: CreateFeedOptions): FeedModel {
 
   const articlesAtom = atom<FeedArticle[]>(dedupe(options.articles), `${idBase}.articles`)
 
-  const articleIdsAtom = computed(
-    () => articlesAtom().map((a) => a.id),
-    `${idBase}.articleIds`,
-  )
+  const articleIdsAtom = computed(() => articlesAtom().map((a) => a.id), `${idBase}.articleIds`)
 
   const articleByIdAtom = computed(
     () => new Map(articlesAtom().map((a, i) => [a.id, {article: a, index: i}])),
@@ -120,7 +117,10 @@ export function createFeed(options: CreateFeedOptions): FeedModel {
   )
 
   const enabledIdsAtom = computed(
-    () => articlesAtom().filter((a) => !a.disabled).map((a) => a.id),
+    () =>
+      articlesAtom()
+        .filter((a) => !a.disabled)
+        .map((a) => a.id),
     `${idBase}.enabledIds`,
   )
 

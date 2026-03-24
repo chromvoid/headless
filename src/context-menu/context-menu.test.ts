@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest'
+
 import {expectRoleAndAria} from '../testing/apg-contract-harness'
 import {createContextMenu} from './index'
 
@@ -351,11 +352,7 @@ describe('createContextMenu', () => {
     it('separators are excluded from navigation', () => {
       const model = createContextMenu({
         idBase: 'ctx-sep-nav',
-        items: [
-          {id: 'cut'},
-          {id: 'sep-1', type: 'separator'},
-          {id: 'paste'},
-        ],
+        items: [{id: 'cut'}, {id: 'sep-1', type: 'separator'}, {id: 'paste'}],
       })
 
       model.actions.openAt(0, 0)
@@ -368,11 +365,7 @@ describe('createContextMenu', () => {
     it('getSeparatorProps returns separator role', () => {
       const model = createContextMenu({
         idBase: 'ctx-sep-props',
-        items: [
-          {id: 'cut'},
-          {id: 'sep-1', type: 'separator'},
-          {id: 'paste'},
-        ],
+        items: [{id: 'cut'}, {id: 'sep-1', type: 'separator'}, {id: 'paste'}],
       })
 
       const sepProps = model.contracts.getSeparatorProps('sep-1')
@@ -383,11 +376,7 @@ describe('createContextMenu', () => {
     it('separators cannot be selected', () => {
       const model = createContextMenu({
         idBase: 'ctx-sep-select',
-        items: [
-          {id: 'cut'},
-          {id: 'sep-1', type: 'separator'},
-          {id: 'paste'},
-        ],
+        items: [{id: 'cut'}, {id: 'sep-1', type: 'separator'}, {id: 'paste'}],
       })
 
       model.actions.openAt(0, 0)
@@ -404,11 +393,7 @@ describe('createContextMenu', () => {
     it('group labels are excluded from navigation', () => {
       const model = createContextMenu({
         idBase: 'ctx-grp-nav',
-        items: [
-          {id: 'grp-edit', type: 'group-label', label: 'Edit'},
-          {id: 'cut'},
-          {id: 'copy'},
-        ],
+        items: [{id: 'grp-edit', type: 'group-label', label: 'Edit'}, {id: 'cut'}, {id: 'copy'}],
       })
 
       model.actions.openAt(0, 0)
@@ -419,10 +404,7 @@ describe('createContextMenu', () => {
     it('getGroupLabelProps returns presentation role', () => {
       const model = createContextMenu({
         idBase: 'ctx-grp-props',
-        items: [
-          {id: 'grp-edit', type: 'group-label', label: 'Edit'},
-          {id: 'cut'},
-        ],
+        items: [{id: 'grp-edit', type: 'group-label', label: 'Edit'}, {id: 'cut'}],
       })
 
       const grpProps = model.contracts.getGroupLabelProps('grp-edit')

@@ -1,5 +1,6 @@
 import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
-import type {FocusStrategy, ItemA11yProps, RootA11yProps} from '../a11y-contracts'
+
+import type {FocusStrategy, RootA11yProps} from '../a11y-contracts'
 import {
   normalizeSelection,
   selectOnly as selectOnlyPrimitive,
@@ -486,9 +487,7 @@ export function createListbox(options: CreateListboxOptions): ListboxModel {
       return optionsByGroupId.get(groupId) ?? []
     },
     getUngroupedOptions(): readonly ListboxOption[] {
-      return options.options.filter(
-        (option) => option.groupId == null || !groupsById.has(option.groupId),
-      )
+      return options.options.filter((option) => option.groupId == null || !groupsById.has(option.groupId))
     },
   }
 

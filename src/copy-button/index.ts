@@ -118,10 +118,7 @@ export function createCopyButton(options: CreateCopyButtonOptions = {}): CopyBut
   const isIdleAtom = computed(() => statusAtom() === 'idle', 'copyButton.isIdle')
   const isSuccessAtom = computed(() => statusAtom() === 'success', 'copyButton.isSuccess')
   const isErrorAtom = computed(() => statusAtom() === 'error', 'copyButton.isError')
-  const isUnavailableAtom = computed(
-    () => isDisabledAtom() || isCopyingAtom(),
-    'copyButton.isUnavailable',
-  )
+  const isUnavailableAtom = computed(() => isDisabledAtom() || isCopyingAtom(), 'copyButton.isUnavailable')
 
   // --- timer management -----------------------------------------------------
   let revertTimer: ReturnType<typeof setTimeout> | null = null

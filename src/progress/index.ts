@@ -1,4 +1,5 @@
 import {action, atom, computed, type Atom, type Computed} from '@reatom/core'
+
 import {createValueRange} from '../core/value-range'
 
 export interface CreateProgressOptions {
@@ -122,7 +123,9 @@ export function createProgress(options: CreateProgressOptions = {}): ProgressMod
         'aria-valuenow': indeterminate ? undefined : String(value),
         'aria-valuemin': indeterminate ? undefined : String(range.state.min()),
         'aria-valuemax': indeterminate ? undefined : String(range.state.max()),
-        'aria-valuetext': indeterminate ? undefined : (options.valueText ?? options.formatValueText?.(value) ?? percentageText),
+        'aria-valuetext': indeterminate
+          ? undefined
+          : (options.valueText ?? options.formatValueText?.(value) ?? percentageText),
         'aria-label': options.ariaLabel,
         'aria-labelledby': options.ariaLabelledBy,
         'aria-describedby': options.ariaDescribedBy,

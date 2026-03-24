@@ -46,14 +46,11 @@ export function createLink(options: CreateLinkOptions = {}): LinkModel {
     press()
   }, `${idBase}.handleClick`)
 
-  const handleKeyDown = action(
-    (event: Pick<KeyboardEvent, 'key'> & {preventDefault?: () => void}) => {
-      if (event.key === 'Enter') {
-        press()
-      }
-    },
-    `${idBase}.handleKeyDown`,
-  )
+  const handleKeyDown = action((event: Pick<KeyboardEvent, 'key'> & {preventDefault?: () => void}) => {
+    if (event.key === 'Enter') {
+      press()
+    }
+  }, `${idBase}.handleKeyDown`)
 
   const actions: LinkActions = {
     press,

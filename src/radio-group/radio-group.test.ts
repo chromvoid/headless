@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createRadioGroup} from './index'
 
 describe('createRadioGroup', () => {
@@ -102,10 +103,7 @@ describe('createRadioGroup', () => {
   it('returns aria-describedby in getRadioProps when item has describedBy', () => {
     const group = createRadioGroup({
       idBase: 'radio-desc',
-      items: [
-        {id: 'a', describedBy: 'desc-a'},
-        {id: 'b'},
-      ],
+      items: [{id: 'a', describedBy: 'desc-a'}, {id: 'b'}],
     })
 
     const propsA = group.contracts.getRadioProps('a')

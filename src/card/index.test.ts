@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest'
+
 import {createCard} from './index'
 
 describe('createCard', () => {

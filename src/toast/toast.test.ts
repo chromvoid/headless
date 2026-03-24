@@ -1,4 +1,5 @@
 import {afterEach, describe, expect, it, vi} from 'vitest'
+
 import {expectRoleAndAria} from '../testing/apg-contract-harness'
 import {createToast} from './index'
 
@@ -221,11 +222,12 @@ describe('createToast', () => {
 
     const id1 = toast.actions.push({message: 'First'})
     const id2 = toast.actions.push({message: 'Second'})
+    const items = toast.state.items()
 
     expect(typeof id1).toBe('string')
     expect(typeof id2).toBe('string')
     expect(id1).not.toBe(id2)
-    expect(toast.state.items()[0].message).toBe('Second')
-    expect(toast.state.items()[1].message).toBe('First')
+    expect(items[0]?.message).toBe('Second')
+    expect(items[1]?.message).toBe('First')
   })
 })

@@ -129,10 +129,7 @@ export function createCarousel(options: CreateCarouselOptions): CarouselModel {
   const isPointerInsideAtom = atom<boolean>(false, `${idBase}.isPointerInside`)
   const isFocusWithinAtom = atom<boolean>(false, `${idBase}.isFocusWithin`)
   const userPausedAtom = atom<boolean>(options.initialPaused ?? false, `${idBase}.userPaused`)
-  const liveModeAtom = atom<'off' | 'polite'>(
-    autoplayEnabled ? 'off' : 'polite',
-    `${idBase}.liveMode`,
-  )
+  const liveModeAtom = atom<'off' | 'polite'>(autoplayEnabled ? 'off' : 'polite', `${idBase}.liveMode`)
 
   const isPausedAtom = computed(
     () => autoplayEnabled && (userPausedAtom() || isPointerInsideAtom() || isFocusWithinAtom()),

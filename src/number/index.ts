@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {createSpinbutton, type SpinbuttonKeyboardEventLike, type SpinbuttonModel} from '../spinbutton'
 
 export type NumberKeyboardEventLike = Pick<KeyboardEvent, 'key'> & {preventDefault?: () => void}

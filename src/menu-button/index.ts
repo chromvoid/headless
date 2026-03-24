@@ -1,4 +1,5 @@
 import {action, atom, type Atom} from '@reatom/core'
+
 import {createMenu, type MenuItem} from '../menu'
 
 export interface CreateMenuButtonOptions {

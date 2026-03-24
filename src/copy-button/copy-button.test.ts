@@ -1,4 +1,5 @@
 import {describe, expect, it, vi, beforeEach, afterEach} from 'vitest'
+
 import {createCopyButton} from './index'
 
 describe('createCopyButton', () => {
@@ -181,9 +182,10 @@ describe('createCopyButton', () => {
       let resolveClip!: () => void
       const clip = {
         writeText: vi.fn().mockImplementation(
-          () => new Promise<void>((resolve) => {
-            resolveClip = resolve
-          }),
+          () =>
+            new Promise<void>((resolve) => {
+              resolveClip = resolve
+            }),
         ),
       }
       const cb = createCopyButton({value: 'test', clipboard: clip})
@@ -225,9 +227,10 @@ describe('createCopyButton', () => {
       let resolveClip!: () => void
       const clip = {
         writeText: vi.fn().mockImplementation(
-          () => new Promise<void>((resolve) => {
-            resolveClip = resolve
-          }),
+          () =>
+            new Promise<void>((resolve) => {
+              resolveClip = resolve
+            }),
         ),
       }
       const cb = createCopyButton({value: 'test', clipboard: clip})
@@ -329,9 +332,10 @@ describe('createCopyButton', () => {
       let resolveClip!: () => void
       const clip = {
         writeText: vi.fn().mockImplementation(
-          () => new Promise<void>((resolve) => {
-            resolveClip = resolve
-          }),
+          () =>
+            new Promise<void>((resolve) => {
+              resolveClip = resolve
+            }),
         ),
       }
       const cb = createCopyButton({value: 'test', clipboard: clip})

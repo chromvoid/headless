@@ -1,5 +1,6 @@
 import {atom} from '@reatom/core'
 import {describe, expect, it} from 'vitest'
+
 import {
   type LandmarkType,
   createLandmark,

@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest'
+
 import {createMeter} from './index'
 
 describe('createMeter', () => {
@@ -136,35 +137,60 @@ describe('createMeter', () => {
   describe('optimum status derivation', () => {
     it('returns optimum when optimum is in normal range and value is in normal range', () => {
       const meter = createMeter({
-        min: 0, max: 100, low: 20, high: 80, optimum: 50, value: 55,
+        min: 0,
+        max: 100,
+        low: 20,
+        high: 80,
+        optimum: 50,
+        value: 55,
       })
       expect(meter.state.status()).toBe('optimum')
     })
 
     it('returns optimum when optimum is in low region and value is in low region', () => {
       const meter = createMeter({
-        min: 0, max: 100, low: 20, high: 80, optimum: 10, value: 5,
+        min: 0,
+        max: 100,
+        low: 20,
+        high: 80,
+        optimum: 10,
+        value: 5,
       })
       expect(meter.state.status()).toBe('optimum')
     })
 
     it('returns optimum when optimum is in high region and value is in high region', () => {
       const meter = createMeter({
-        min: 0, max: 100, low: 20, high: 80, optimum: 90, value: 85,
+        min: 0,
+        max: 100,
+        low: 20,
+        high: 80,
+        optimum: 90,
+        value: 85,
       })
       expect(meter.state.status()).toBe('optimum')
     })
 
     it('returns low when optimum is in normal range but value is in low region', () => {
       const meter = createMeter({
-        min: 0, max: 100, low: 20, high: 80, optimum: 50, value: 10,
+        min: 0,
+        max: 100,
+        low: 20,
+        high: 80,
+        optimum: 50,
+        value: 10,
       })
       expect(meter.state.status()).toBe('low')
     })
 
     it('returns high when optimum is in normal range but value is in high region', () => {
       const meter = createMeter({
-        min: 0, max: 100, low: 20, high: 80, optimum: 50, value: 90,
+        min: 0,
+        max: 100,
+        low: 20,
+        high: 80,
+        optimum: 50,
+        value: 90,
       })
       expect(meter.state.status()).toBe('high')
     })
@@ -263,7 +289,11 @@ describe('createMeter', () => {
 
     it('updates status reactively after setValue', () => {
       const meter = createMeter({
-        min: 0, max: 100, low: 20, high: 80, value: 10,
+        min: 0,
+        max: 100,
+        low: 20,
+        high: 80,
+        value: 10,
       })
       expect(meter.state.status()).toBe('low')
 
@@ -276,7 +306,9 @@ describe('createMeter', () => {
 
     it('formatValueText reflects current value on each getMeterProps call', () => {
       const meter = createMeter({
-        min: 0, max: 100, value: 25,
+        min: 0,
+        max: 100,
+        value: 25,
         formatValueText: (v) => `${v}%`,
       })
 

@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest'
+
 import {createSliderMultiThumb} from './index'
 
 describe('createSliderMultiThumb', () => {
@@ -295,7 +296,7 @@ describe('createSliderMultiThumb', () => {
       min: 0,
       max: 100,
       step: 5,
-      formatValueText: (value, index) => `$${value}`,
+      formatValueText: (value, _index) => `$${value}`,
     })
 
     expect(slider.contracts.getThumbProps(0)['aria-valuetext']).toBe('$20')

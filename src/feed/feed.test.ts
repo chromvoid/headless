@@ -1,4 +1,5 @@
-import {describe, expect, it, vi} from 'vitest'
+import {describe, expect, it} from 'vitest'
+
 import {createFeed, type FeedArticle, type FeedKeyboardResult} from './index'
 
 describe('createFeed', () => {
@@ -51,7 +52,10 @@ describe('createFeed', () => {
 
     it('handles navigation when all articles are disabled', () => {
       const feed = createFeed({
-        articles: [{id: 'a1', disabled: true}, {id: 'a2', disabled: true}],
+        articles: [
+          {id: 'a1', disabled: true},
+          {id: 'a2', disabled: true},
+        ],
       })
       expect(feed.state.activeArticleId()).toBe(null)
       feed.actions.focusNextArticle()
@@ -125,7 +129,10 @@ describe('createFeed', () => {
       let resolveLoad!: (value: FeedArticle[]) => void
       const feed = createFeed({
         articles: threeArticles,
-        onLoadMore: () => new Promise((r) => { resolveLoad = r }),
+        onLoadMore: () =>
+          new Promise((r) => {
+            resolveLoad = r
+          }),
       })
 
       const p = feed.actions.loadMore()
@@ -143,7 +150,10 @@ describe('createFeed', () => {
       let resolveLoad!: (value: FeedArticle[]) => void
       const feed = createFeed({
         articles: threeArticles,
-        onLoadNewer: () => new Promise((r) => { resolveLoad = r }),
+        onLoadNewer: () =>
+          new Promise((r) => {
+            resolveLoad = r
+          }),
       })
 
       const p = feed.actions.loadNewer()
@@ -403,7 +413,10 @@ describe('createFeed', () => {
       let resolveLoad!: (value: FeedArticle[]) => void
       const feed = createFeed({
         articles: threeArticles,
-        onLoadMore: () => new Promise((r) => { resolveLoad = r }),
+        onLoadMore: () =>
+          new Promise((r) => {
+            resolveLoad = r
+          }),
       })
 
       expect(feed.state.canLoadMore()).toBe(true)
@@ -419,7 +432,10 @@ describe('createFeed', () => {
       let resolveLoad!: (value: FeedArticle[]) => void
       const feed = createFeed({
         articles: threeArticles,
-        onLoadNewer: () => new Promise((r) => { resolveLoad = r }),
+        onLoadNewer: () =>
+          new Promise((r) => {
+            resolveLoad = r
+          }),
       })
 
       expect(feed.state.canLoadNewer()).toBe(true)
@@ -453,7 +469,9 @@ describe('createFeed', () => {
     it('loadMore sets error on rejection', async () => {
       const feed = createFeed({
         articles: threeArticles,
-        onLoadMore: async () => { throw new Error('Load failed') },
+        onLoadMore: async () => {
+          throw new Error('Load failed')
+        },
       })
 
       await feed.actions.loadMore()
@@ -466,7 +484,9 @@ describe('createFeed', () => {
     it('loadNewer sets error on rejection', async () => {
       const feed = createFeed({
         articles: threeArticles,
-        onLoadNewer: async () => { throw new Error('Refresh failed') },
+        onLoadNewer: async () => {
+          throw new Error('Refresh failed')
+        },
       })
 
       await feed.actions.loadNewer()
@@ -488,7 +508,9 @@ describe('createFeed', () => {
         articles: threeArticles,
         onLoadMore: () => {
           loadCalls++
-          return new Promise<FeedArticle[]>((r) => { resolveLoad = r })
+          return new Promise<FeedArticle[]>((r) => {
+            resolveLoad = r
+          })
         },
       })
 
@@ -511,7 +533,9 @@ describe('createFeed', () => {
         articles: threeArticles,
         onLoadMore: () => {
           loadMoreCalls++
-          return new Promise<FeedArticle[]>((r) => { resolveMore = r })
+          return new Promise<FeedArticle[]>((r) => {
+            resolveMore = r
+          })
         },
         onLoadNewer: async () => {
           loadNewerCalls++
@@ -542,7 +566,9 @@ describe('createFeed', () => {
         },
         onLoadNewer: () => {
           loadNewerCalls++
-          return new Promise<FeedArticle[]>((r) => { resolveNewer = r })
+          return new Promise<FeedArticle[]>((r) => {
+            resolveNewer = r
+          })
         },
       })
 
@@ -591,7 +617,10 @@ describe('createFeed', () => {
       let resolveLoad!: (value: FeedArticle[]) => void
       const feed = createFeed({
         articles: threeArticles,
-        onLoadMore: () => new Promise((r) => { resolveLoad = r }),
+        onLoadMore: () =>
+          new Promise((r) => {
+            resolveLoad = r
+          }),
       })
 
       expect(feed.state.isLoading()).toBe(false)
@@ -636,7 +665,10 @@ describe('createFeed', () => {
       let resolveLoad!: (value: FeedArticle[]) => void
       const feed = createFeed({
         articles: threeArticles,
-        onLoadNewer: () => new Promise((r) => { resolveLoad = r }),
+        onLoadNewer: () =>
+          new Promise((r) => {
+            resolveLoad = r
+          }),
       })
 
       expect(feed.state.isLoading()).toBe(false)

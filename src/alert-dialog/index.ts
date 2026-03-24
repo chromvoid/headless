@@ -1,4 +1,5 @@
 import {action, type Atom, type Computed} from '@reatom/core'
+
 import {createDialog} from '../dialog'
 
 export interface CreateAlertDialogOptions {
